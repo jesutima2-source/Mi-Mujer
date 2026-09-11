@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestro Rincón Especial ♥</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background-color: #070913;
+      color: #00f0ff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
 
+    .main-container {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .menu-col {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+    }
+
+    .card:hover {
+      border-color: #00f0ff;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .center-content {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.15);
+    }
+
+    .center-content h1 {
+      font-size: 2.2rem;
+      color: #00f0ff;
+      text-shadow: 0 0 10px #00f0ff;
+      margin-bottom: 5px;
+    }
+
+    .date-highlight {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+      margin: 15px 0;
+    }
+
+    .yellow-flowers-msg {
+      color: #ffe600;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-top: 20px;
+      text-shadow: 0 0 8px rgba(255, 230, 0, 0.4);
+    }
+
+    .audio-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(7, 9, 19, 0.8);
+      border: 1px solid #00f0ff;
+      border-radius: 30px;
+      padding: 10px 20px;
+      color: #00f0ff;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    @media (max-width: 850px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reproductor de música -->
+  <audio id="bgMusic" loop autoplay>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="audio-control" id="musicBtn">🎵 Música: ON</button>
+
+  <div class="main-container">
+    <!-- Columna Izquierda -->
+    <div class="menu-col">
+      <div class="card">
+        <h3>PROGRAMACIÓN INTERACTIVA 1</h3>
+      </div>
+      <div class="card">
+        <h3>VIDEOS</h3>
+      </div>
+      <div class="card">
+        <h3>PROGRAMACIÓN INTERACTIVA 2</h3>
+      </div>
+    </div>
+
+    <!-- Panel Central -->
+    <div class="center-content">
+      <h1>BIENVENIDOS</h1>
+      <div class="date-highlight">10 / 08 / 2018 ♥</div>
+      
+      <p class="yellow-flowers-msg">
+        🌻 ESTAS FLORES AMARILLAS SON PARA TI. SABES QUE TE AMO Y GRACIAS POR SER TÚ LA QUE ILUMINA. ESTE DETALLE ES POR TODAS LAS COSAS QUE PASAMOS JUNTOS, TE MERECES EL MUNDO ENTERO ♥
+      </p>
+    </div>
+
+    <!-- Columna Derecha -->
+    <div class="menu-col">
+      <div class="card">
+        <h3>PROGRAMACIÓN INTERACTIVA 3</h3>
+      </div>
+      <div class="card">
+        <h3>FOTOS</h3>
+      </div>
+      <div class="card">
+        <h3>PROGRAMACIÓN INTERACTIVA 4</h3>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicBtn');
+
+    // Intentar reproducir automáticamente al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      music.play().catch(() => {
+        // Si el navegador bloquea el autoplay, se ajusta el texto del botón
+        btn.innerHTML = '🎵 Música: OFF';
+      });
+    });
+
+    btn.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        btn.innerHTML = '🎵 Música: ON';
+      } else {
+        music.pause();
+        btn.innerHTML = '🎵 Música: OFF';
+      }
+    });
+  </script>
+</body>
+</html>

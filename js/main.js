@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Define aquí los 2 usuarios y sus contraseñas
       const credenciales = {
-        "jesus": "1234",
-        "pareja": "1234"
+        "jesus": "10082018",
+        "betzi": "10082018",
+        "amorcito": "10082018"
       };
 
       if (credenciales[user] && credenciales[user] === pass) {

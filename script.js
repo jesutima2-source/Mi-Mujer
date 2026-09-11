@@ -1,47 +1,37 @@
-const cord = document.getElementById('lamp-cord');
-const loginCard = document.getElementById('login-card');
+const lamp = document.getElementById('lamp');
+const radioOn = document.getElementById('on');
+const radioOff = document.getElementById('off');
 
-cord.addEventListener('click', () => {
-  document.body.classList.toggle('light-on');
-  loginCard.classList.toggle('hidden');
+// Alternar encendido y apagado de la lámpara
+lamp.addEventListener('click', () => {
+  if (document.body.classList.contains('on')) {
+    document.body.classList.remove('on');
+    document.body.classList.add('off');
+    radioOff.checked = true;
+  } else {
+    document.body.classList.remove('off');
+    document.body.classList.add('on');
+    radioOn.checked = true;
+  }
 });
 
-// Credenciales para ambos
-const users = {
-  "jesus": "2109",  // Modifica tus credenciales
-  "mi_amor": "2109"
-};
+// Validación de inicio de sesión
+function handleLogin(event) {
+  event.preventDefault();
+  
+  const usernameInput = document.getElementById('username').value.trim();
+  const passwordInput = document.getElementById('password').value.trim();
 
-function login() {
-  const u = document.getElementById('username').value;
-  const p = document.getElementById('password').value;
-  const error = document.getElementById('error-msg');
+  // Credenciales autorizadas
+  const validUsers = {
+    "jesus": "2109",
+    "mi_amor": "2109"
+  };
 
-  if (users[u] && users[u] === p) {
-    document.getElementById('login-screen').classList.remove('active');
-    document.getElementById('main-menu').classList.add('active');
+  if (validUsers[usernameInput] && validUsers[usernameInput] === passwordInput) {
+    alert("¡Bienvenido/a a nuestro lugar especial! ❤️");
+    // Redirección o carga del menú principal (ej. window.location.href = "menu.html";)
   } else {
-    error.textContent = "Credenciales incorrectas ❤️";
+    alert("Usuario o contraseña incorrectos");
   }
 }
-function createPetal() {
-  const container = document.getElementById('flowers-screen');
-  const petal = document.createElement('div');
-  petal.classList.add('petal');
-  
-  // Mensajes aleatorios que aparecen al hacer clic o caer
-  const messages = ["Te amo", "Eres mi lugar seguro", "Lima & Huancayo 💖", "21 de Setiembre"];
-  petal.innerText = messages[Math.floor(Math.random() * messages.length)];
-  
-  petal.style.left = Math.random() * 100 + 'vw';
-  petal.style.animationDuration = Math.random() * 3 + 2 + 's';
-  
-  container.appendChild(petal);
-  
-  setTimeout(() => {
-    petal.remove();
-  }, 5000);
-}
-
-// Generar pétalos continuamente
-setInterval(createPetal, 600);

@@ -1,10 +1,19 @@
 :root {
-  --bg-off: #121316;
-  --bg-on: #1a221d;
-  --glow-color: #4caf50;
-  --lamp-color: #72a376;
-  --input-bg: rgba(255, 255, 255, 0.05);
-  --border-color: rgba(255, 255, 255, 0.1);
+  /* Fondo cuando la lámpara está apagada (oscuro con tinte azulado) */
+  --bg-off: #13141f; 
+  /* Fondo cuando la lámpara está encendida (un rosa pálido suave y romántico) */
+  --bg-on: #fce4ec; 
+
+  /* Color principal de brillo y acentos (Celeste bonito) */
+  --glow-color: #00d2ff; 
+  /* Color secundario / Hover de botones (Magenta) */
+  --magenta-color: #ff2a8d;
+  /* Color del cuerpo de la lámpara (Rosa suave) */
+  --lamp-color: #ff85c0; 
+
+  /* Fondo de los campos de texto e insumos */
+  --input-bg: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.15);
 }
 
 * {
@@ -28,6 +37,7 @@ body.on {
   background-color: var(--bg-on);
 }
 
+/* Ocultar accesibilidad de radio controls */
 .radio-controls {
   position: absolute;
   width: 1px;
@@ -50,7 +60,7 @@ body.on {
   padding: 20px;
 }
 
-/* Lámpara */
+/* --- LÁMPARA --- */
 .lamp {
   position: relative;
   display: flex;
@@ -70,8 +80,10 @@ body.on {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 10px rgba(255, 133, 192, 0.3);
 }
 
+/* Carita feliz de la lámpara */
 .face {
   position: relative;
   width: 40px;
@@ -82,7 +94,7 @@ body.on {
   position: absolute;
   width: 6px;
   height: 6px;
-  background: #111;
+  background: #222;
   border-radius: 50%;
   top: 2px;
 }
@@ -96,7 +108,7 @@ body.on {
   transform: translateX(-50%);
   width: 14px;
   height: 7px;
-  border-bottom: 3px solid #111;
+  border-bottom: 3px solid #222;
   border-radius: 0 0 10px 10px;
 }
 
@@ -122,16 +134,17 @@ body.on {
 .lamp-base {
   width: 70px;
   height: 10px;
-  background: #ccc;
+  background: #ddd;
   border-radius: 5px 5px 0 0;
 }
 
+/* Haz de luz de la lámpara (Celeste desvanecido) */
 .light-beam {
   position: absolute;
   top: 85px;
   width: 220px;
   height: 250px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), transparent);
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.3), transparent);
   clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -142,11 +155,11 @@ body.on .light-beam {
   opacity: 1;
 }
 
-/* Tarjeta del Formulario */
+/* --- TARJETA DE FORMULARIO --- */
 .login-card {
   width: 320px;
   padding: 30px;
-  background: #181c19;
+  background: #181924;
   border: 1px solid var(--border-color);
   border-radius: 16px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -155,10 +168,11 @@ body.on .light-beam {
   pointer-events: none;
 }
 
+/* Al encender la lámpara se ilumina la tarjeta con resplandor Celeste/Magenta */
 body.on .login-card {
   opacity: 1;
   pointer-events: all;
-  box-shadow: 0 0 20px var(--glow-color);
+  box-shadow: 0 0 25px var(--glow-color);
   border-color: var(--glow-color);
 }
 
@@ -167,7 +181,7 @@ body.on .login-card {
   font-size: 1.8rem;
   margin: 0 0 1.5rem 0;
   text-align: center;
-  text-shadow: 0 0 8px var(--glow-color);
+  text-shadow: 0 0 10px var(--glow-color);
 }
 
 .form-group {
@@ -176,7 +190,7 @@ body.on .login-card {
 
 .form-group label {
   display: block;
-  color: #aaa;
+  color: #e0e0e0;
   font-size: 0.85rem;
   margin-bottom: 0.5rem;
   text-shadow: 0 0 8px var(--glow-color);
@@ -186,7 +200,7 @@ body.on .login-card {
   width: 100%;
   padding: 0.75rem 1rem;
   background: var(--input-bg);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
   border-radius: 10px;
   color: #fff;
   font-size: 0.95rem;
@@ -196,9 +210,10 @@ body.on .login-card {
 
 .form-group input:focus {
   border-color: var(--glow-color);
-  box-shadow: 0 0 8px var(--glow-color);
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
+/* Botón de inicio de sesión */
 .login-btn {
   width: 100%;
   padding: 0.8rem;
@@ -209,11 +224,17 @@ body.on .login-card {
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
 }
 
 .login-btn:hover {
-  background: #43a047;
+  background: var(--magenta-color);
+  box-shadow: 0 0 15px var(--magenta-color);
+}
+
+.login-btn:active {
+  transform: scale(0.98);
 }
 
 .form-footer {
@@ -222,13 +243,13 @@ body.on .login-card {
 }
 
 .forgot-link {
-  color: #888;
+  color: #aaa;
   font-size: 0.85rem;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .forgot-link:hover {
-  color: var(--glow-color);
-  text-shadow: 0 0 10px var(--glow-color);
+  color: var(--magenta-color);
+  text-shadow: 0 0 10px var(--magenta-color);
 }

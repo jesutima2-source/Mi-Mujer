@@ -1,38 +1,235 @@
+:root {
+  --bg-off: #121316;
+  --bg-on: #1a221d;
+  --glow-color: #4caf50;
+  --lamp-color: #72a376;
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
 body {
   margin: 0;
-  background-color: #111;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-off);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   transition: background-color 0.5s ease;
+  overflow: hidden;
 }
 
-body.light-on {
-  background-color: #fdf6e3;
-  color: #333;
+body.on {
+  background-color: var(--bg-on);
 }
 
-.lamp-cord {
-  width: 4px;
-  height: 100px;
-  background: #888;
-  margin: 0 auto;
+/* Ocultar accesibilidad de radio controls */
+.radio-controls {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Lámpara */
+.lamp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 40vmin;
+  overflow: visible !important;
   cursor: pointer;
 }
 
-.login-card.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
+.lamp-shade {
+  width: 100px;
+  height: 90px;
+  background-color: var(--lamp-color);
+  border-radius: 40px 40px 10px 10px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Carita feliz de la lámpara */
+.face {
+  position: relative;
+  width: 40px;
+  height: 20px;
+}
+
+.eye {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #111;
+  border-radius: 50%;
+  top: 2px;
+}
+.eye.left { left: 4px; }
+.eye.right { right: 4px; }
+
+.mouth {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 7px;
+  border-bottom: 3px solid #111;
+  border-radius: 0 0 10px 10px;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 50px;
+  background: #aaa;
+  position: relative;
+  z-index: 1;
+}
+
+.lamp-cord::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  width: 9px;
+  height: 9px;
+  background: #aaa;
+  border-radius: 50%;
+}
+
+.lamp-base {
+  width: 70px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 5px 5px 0 0;
+}
+
+/* Haz de luz */
+.light-beam {
+  position: absolute;
+  top: 80px;
+  width: 180px;
+  height: 220px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), transparent);
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+body.on .light-beam {
+  opacity: 1;
+}
+
+/* Tarjeta de Formulario */
 .login-card {
+  width: 320px;
+  padding: 30px;
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s ease;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+body.on .login-card {
   opacity: 1;
   pointer-events: all;
-  width: 300px;
-  margin: 20px auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 0 20px var(--glow-color);
+  border-color: var(--glow-color);
+}
+
+.login-form h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin: 0 0 2rem 0;
   text-align: center;
+  text-shadow: 0 0 8px var(--glow-color);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: var(--glow-color);
+  box-shadow: 0 0 8px var(--glow-color);
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--glow-color);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #43a047;
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+.form-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.forgot-link {
+  color: #888;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.forgot-link:hover {
+  color: var(--glow-color);
+  text-shadow: 0 0 10px var(--glow-color);
 }

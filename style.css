@@ -1,16 +1,16 @@
 :root {
-  /* Fondos oscuros equilibrados para pantallas móviles */
-  --bg-off: #0b0d17; 
-  --bg-on: #151828; 
+  /* Fondo azul noche muy profundo y elegante */
+  --bg-off: #080911; 
+  --bg-on: #0d111d; 
 
-  /* Neones y acentos */
-  --glow-color: #00d2ff;       /* Celeste brillante para bordes y títulos */
-  --magenta-color: #ff2a8d;    /* Rosa magenta para interacciones */
-  --lamp-color: #ff5c8d;       /* Rosa pastel para el cuerpo de la lámpara */
+  /* Neones ultra vibrantes */
+  --glow-cyan: #00f0ff;       /* Celeste cian neón eléctrico */
+  --glow-pink: #ff007f;       /* Magenta/Rosa neón encendido */
+  --lamp-color: #ff3385;      /* Rosa vibrante para la lámpara */
 
-  /* Campos de entrada */
+  /* Transparencias de formulario */
   --input-bg: rgba(255, 255, 255, 0.05);
-  --border-color: rgba(255, 255, 255, 0.12);
+  --border-color: rgba(0, 240, 255, 0.3);
 }
 
 * {
@@ -34,7 +34,6 @@ body.on {
   background-color: var(--bg-on);
 }
 
-/* Ocultar elementos de radio accesibles */
 .radio-controls {
   position: absolute;
   width: 1px;
@@ -51,13 +50,13 @@ body.on {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 50px;
+  gap: 60px;
   width: 100%;
-  max-width: 850px;
+  max-width: 900px;
   padding: 20px;
 }
 
-/* --- LÁMPARA --- */
+/* --- LÁMPARA VIBRANTE --- */
 .lamp {
   position: relative;
   display: flex;
@@ -68,29 +67,30 @@ body.on {
 }
 
 .lamp-shade {
-  width: 100px;
-  height: 85px;
+  width: 110px;
+  height: 95px;
   background-color: var(--lamp-color);
-  border-radius: 35px 35px 10px 10px;
+  border-radius: 40px 40px 10px 10px;
   position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 15px rgba(255, 92, 141, 0.4);
+  /* Brillo potente en la lámpara */
+  box-shadow: 0 0 25px var(--lamp-color), 0 0 50px rgba(255, 51, 133, 0.5);
+  transition: box-shadow 0.4s ease;
 }
 
-/* Carita feliz de la lámpara */
 .face {
   position: relative;
-  width: 36px;
-  height: 18px;
+  width: 40px;
+  height: 20px;
 }
 
 .eye {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: #111;
   border-radius: 50%;
   top: 2px;
@@ -103,16 +103,16 @@ body.on {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 12px;
-  height: 6px;
-  border-bottom: 2.5px solid #111;
+  width: 14px;
+  height: 7px;
+  border-bottom: 3px solid #111;
   border-radius: 0 0 10px 10px;
 }
 
 .lamp-cord {
   width: 3px;
-  height: 55px;
-  background: #777;
+  height: 60px;
+  background: #aaa;
   position: relative;
   z-index: 1;
 }
@@ -124,141 +124,144 @@ body.on {
   left: -3px;
   width: 9px;
   height: 9px;
-  background: #aaa;
+  background: #fff;
+  box-shadow: 0 0 8px #fff;
   border-radius: 50%;
 }
 
 .lamp-base {
-  width: 65px;
-  height: 8px;
-  background: #aaa;
-  border-radius: 4px 4px 0 0;
+  width: 70px;
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px 5px 0 0;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-/* Haz de luz sutil en modo oscuro */
+/* Haz de luz de alto impacto neón */
 .light-beam {
   position: absolute;
-  top: 75px;
-  width: 200px;
-  height: 230px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.18), transparent);
+  top: 85px;
+  width: 230px;
+  height: 260px;
+  background: linear-gradient(to bottom, rgba(0, 240, 255, 0.45), rgba(0, 240, 255, 0.05) 80%, transparent);
   clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
+  filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.6));
 }
 
 body.on .light-beam {
   opacity: 1;
 }
 
-/* --- TARJETA DE FORMULARIO --- */
+/* --- TARJETA CON EFECTO NEÓN CIAN / MAGENTA --- */
 .login-card {
-  width: 310px;
-  padding: 28px;
-  background: rgba(18, 22, 36, 0.9);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  width: 330px;
+  padding: 32px;
+  background: rgba(12, 16, 28, 0.95);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
   transition: all 0.4s ease;
-  opacity: 0.25;
+  opacity: 0.2;
   pointer-events: none;
 }
 
+/* Al encender la lámpara el formulario explota en neón */
 body.on .login-card {
   opacity: 1;
   pointer-events: all;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.35);
-  border-color: rgba(0, 210, 255, 0.5);
+  border-color: var(--glow-cyan);
+  box-shadow: 0 0 20px var(--glow-cyan), 
+              0 0 40px rgba(0, 240, 255, 0.4), 
+              inset 0 0 15px rgba(0, 240, 255, 0.15);
 }
 
 .login-form h2 {
-  color: #ffffff;
-  font-size: 1.6rem;
-  margin: 0 0 1.2rem 0;
+  color: #fff;
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem 0;
   text-align: center;
-  text-shadow: 0 0 8px var(--glow-color);
+  text-shadow: 0 0 10px var(--glow-cyan), 0 0 20px var(--glow-cyan);
 }
 
 .form-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
 }
 
 .form-group label {
   display: block;
-  color: #c5d1ec;
-  font-size: 0.82rem;
-  margin-bottom: 0.4rem;
-  text-shadow: 0 0 6px var(--glow-color);
+  color: #e0f7fc;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 8px var(--glow-cyan);
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.7rem 0.9rem;
+  padding: 0.8rem 1rem;
   background: var(--input-bg);
   border: 1.5px solid var(--border-color);
-  border-radius: 9px;
+  border-radius: 12px;
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
   outline: none;
 }
 
 .form-group input:focus {
-  border-color: var(--glow-color);
-  box-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
+  border-color: var(--glow-cyan);
+  box-shadow: 0 0 12px var(--glow-cyan);
+  background: rgba(0, 240, 255, 0.05);
 }
 
-/* Botón de inicio de sesión */
+/* Botón Neón Cian con Hover a Magenta */
 .login-btn {
   width: 100%;
-  padding: 0.75rem;
-  background: var(--glow-color);
+  padding: 0.85rem;
+  background: var(--glow-cyan);
   border: none;
-  border-radius: 9px;
-  color: #0b0d17;
-  font-size: 0.95rem;
-  font-weight: bold;
+  border-radius: 12px;
+  color: #050b14;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px var(--glow-cyan), 0 0 30px rgba(0, 240, 255, 0.4);
 }
 
 .login-btn:hover {
-  background: var(--magenta-color);
+  background: var(--glow-pink);
   color: #fff;
-  box-shadow: 0 0 15px rgba(255, 42, 141, 0.5);
+  box-shadow: 0 0 20px var(--glow-pink), 0 0 40px rgba(255, 0, 127, 0.6);
 }
 
 .login-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .form-footer {
-  margin-top: 1.2rem;
+  margin-top: 1.5rem;
   text-align: center;
 }
 
 .forgot-link {
-  color: #8fa0c0;
-  font-size: 0.8rem;
+  color: #a0c4ff;
+  font-size: 0.85rem;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .forgot-link:hover {
-  color: var(--magenta-color);
-  text-shadow: 0 0 8px var(--magenta-color);
+  color: var(--glow-pink);
+  text-shadow: 0 0 10px var(--glow-pink);
 }
 
-/* --- ADAPTABILIDAD PARA MÓVILES (Responsive) --- */
 @media (max-width: 600px) {
   .login-container {
     flex-direction: column;
-    gap: 20px;
-  }
-  
-  .light-beam {
-    height: 180px;
+    gap: 25px;
   }
 }

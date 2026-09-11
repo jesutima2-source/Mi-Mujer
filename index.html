@@ -3,55 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NUESTRO RINCON</title>
- <link rel="stylesheet" href="style.css?v=7.0">
+  <title>BIENVENIDOS A NUESTRO RINCON ♥</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="off">
+<body>
 
-  <!-- Control de estado mediante radio buttons ocultos -->
-  <form class="radio-controls">
-    <input type="radio" id="on" name="status" value="on" />
-    <label for="on">ON</label>
-    <input type="radio" id="off" name="status" value="off" checked />
-    <label for="off">OFF</label>
-  </form>
-
-  <div class="login-container">
-    <!-- Lámpara interactiva -->
-    <div class="lamp" id="lamp">
-      <div class="lamp-shade">
-        <div class="face">
-          <span class="eye left"></span>
-          <span class="eye right"></span>
-          <span class="mouth"></span>
-        </div>
-      </div>
-      <div class="lamp-cord" id="lamp-cord"></div>
-      <div class="lamp-base"></div>
-      <div class="light-beam"></div>
-    </div>
-
-    <!-- Formulario de Login -->
-    <div class="login-card">
-      <form class="login-form" onsubmit="handleLogin(event)">
-        <h2>BIENVENIDOS A NUESTRO RINCON ♥</h2>
-
-        <div class="form-group">
-          <label for="username">♥TU USUARIO♥</label>
-          <input type="text" id="username" placeholder="Enter your username" required>
-        </div>
-
-        <div class="form-group">
-          <label for="password">♥TU CONTRASEÑA♥</label>
-          <input type="password" id="password" placeholder="Enter your password" required>
-        </div>
-
-        <button type="submit" class="login-btn">INICIAR</button>
-        
-      </form>
-    </div>
+  <div class="theme-toggle">
+    <label><input type="radio" name="theme" id="radio-on"> ON</label>
+    <label><input type="radio" name="theme" id="radio-off" checked> OFF</label>
   </div>
 
-  <script src="script.js"></script>
+  <div class="login-container">
+    <h2>BIENVENIDOS A NUESTRO RINCON ♥</h2>
+    
+    <form id="loginForm">
+      <div class="input-group">
+        <label for="username">♥TU USUARIO♥</label>
+        <input type="text" id="username" placeholder="Enter your username" required>
+      </div>
+
+      <div class="input-group">
+        <label for="password">♥TU CONTRASEÑA♥</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="btn-submit">INICIAR</button>
+    </form>
+  </div>
+
+  <script src="js/main.js"></script>
 </body>
 </html>

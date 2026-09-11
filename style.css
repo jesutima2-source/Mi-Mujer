@@ -1,19 +1,16 @@
 :root {
-  /* Fondo cuando la lámpara está apagada (oscuro con tinte azulado) */
-  --bg-off: #13141f; 
-  /* Fondo cuando la lámpara está encendida (un rosa pálido suave y romántico) */
-  --bg-on: #fce4ec; 
+  /* Fondos oscuros equilibrados para pantallas móviles */
+  --bg-off: #0b0d17; 
+  --bg-on: #151828; 
 
-  /* Color principal de brillo y acentos (Celeste bonito) */
-  --glow-color: #00d2ff; 
-  /* Color secundario / Hover de botones (Magenta) */
-  --magenta-color: #ff2a8d;
-  /* Color del cuerpo de la lámpara (Rosa suave) */
-  --lamp-color: #ff85c0; 
+  /* Neones y acentos */
+  --glow-color: #00d2ff;       /* Celeste brillante para bordes y títulos */
+  --magenta-color: #ff2a8d;    /* Rosa magenta para interacciones */
+  --lamp-color: #ff5c8d;       /* Rosa pastel para el cuerpo de la lámpara */
 
-  /* Fondo de los campos de texto e insumos */
-  --input-bg: rgba(255, 255, 255, 0.08);
-  --border-color: rgba(255, 255, 255, 0.15);
+  /* Campos de entrada */
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.12);
 }
 
 * {
@@ -37,7 +34,7 @@ body.on {
   background-color: var(--bg-on);
 }
 
-/* Ocultar accesibilidad de radio controls */
+/* Ocultar elementos de radio accesibles */
 .radio-controls {
   position: absolute;
   width: 1px;
@@ -54,9 +51,9 @@ body.on {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 60px;
+  gap: 50px;
   width: 100%;
-  max-width: 900px;
+  max-width: 850px;
   padding: 20px;
 }
 
@@ -71,30 +68,30 @@ body.on {
 }
 
 .lamp-shade {
-  width: 110px;
-  height: 95px;
+  width: 100px;
+  height: 85px;
   background-color: var(--lamp-color);
-  border-radius: 40px 40px 10px 10px;
+  border-radius: 35px 35px 10px 10px;
   position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(255, 133, 192, 0.3);
+  box-shadow: 0 0 15px rgba(255, 92, 141, 0.4);
 }
 
 /* Carita feliz de la lámpara */
 .face {
   position: relative;
-  width: 40px;
-  height: 20px;
+  width: 36px;
+  height: 18px;
 }
 
 .eye {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #222;
+  width: 5px;
+  height: 5px;
+  background: #111;
   border-radius: 50%;
   top: 2px;
 }
@@ -106,16 +103,16 @@ body.on {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 14px;
-  height: 7px;
-  border-bottom: 3px solid #222;
+  width: 12px;
+  height: 6px;
+  border-bottom: 2.5px solid #111;
   border-radius: 0 0 10px 10px;
 }
 
 .lamp-cord {
   width: 3px;
-  height: 60px;
-  background: #aaa;
+  height: 55px;
+  background: #777;
   position: relative;
   z-index: 1;
 }
@@ -132,19 +129,19 @@ body.on {
 }
 
 .lamp-base {
-  width: 70px;
-  height: 10px;
-  background: #ddd;
-  border-radius: 5px 5px 0 0;
+  width: 65px;
+  height: 8px;
+  background: #aaa;
+  border-radius: 4px 4px 0 0;
 }
 
-/* Haz de luz de la lámpara (Celeste desvanecido) */
+/* Haz de luz sutil en modo oscuro */
 .light-beam {
   position: absolute;
-  top: 85px;
-  width: 220px;
-  height: 250px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.3), transparent);
+  top: 75px;
+  width: 200px;
+  height: 230px;
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.18), transparent);
   clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -157,80 +154,80 @@ body.on .light-beam {
 
 /* --- TARJETA DE FORMULARIO --- */
 .login-card {
-  width: 320px;
-  padding: 30px;
-  background: #181924;
+  width: 310px;
+  padding: 28px;
+  background: rgba(18, 22, 36, 0.9);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   transition: all 0.4s ease;
-  opacity: 0.3;
+  opacity: 0.25;
   pointer-events: none;
 }
 
-/* Al encender la lámpara se ilumina la tarjeta con resplandor Celeste/Magenta */
 body.on .login-card {
   opacity: 1;
   pointer-events: all;
-  box-shadow: 0 0 25px var(--glow-color);
-  border-color: var(--glow-color);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.35);
+  border-color: rgba(0, 210, 255, 0.5);
 }
 
 .login-form h2 {
-  color: #fff;
-  font-size: 1.8rem;
-  margin: 0 0 1.5rem 0;
+  color: #ffffff;
+  font-size: 1.6rem;
+  margin: 0 0 1.2rem 0;
   text-align: center;
-  text-shadow: 0 0 10px var(--glow-color);
+  text-shadow: 0 0 8px var(--glow-color);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .form-group label {
   display: block;
-  color: #e0e0e0;
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 8px var(--glow-color);
+  color: #c5d1ec;
+  font-size: 0.82rem;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 0 6px var(--glow-color);
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.7rem 0.9rem;
   background: var(--input-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 10px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 9px;
   color: #fff;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   outline: none;
 }
 
 .form-group input:focus {
   border-color: var(--glow-color);
-  box-shadow: 0 0 10px var(--glow-color);
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
 }
 
 /* Botón de inicio de sesión */
 .login-btn {
   width: 100%;
-  padding: 0.8rem;
+  padding: 0.75rem;
   background: var(--glow-color);
   border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 1rem;
+  border-radius: 9px;
+  color: #0b0d17;
+  font-size: 0.95rem;
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
 }
 
 .login-btn:hover {
   background: var(--magenta-color);
-  box-shadow: 0 0 15px var(--magenta-color);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 42, 141, 0.5);
 }
 
 .login-btn:active {
@@ -238,18 +235,30 @@ body.on .login-card {
 }
 
 .form-footer {
-  margin-top: 1.5rem;
+  margin-top: 1.2rem;
   text-align: center;
 }
 
 .forgot-link {
-  color: #aaa;
-  font-size: 0.85rem;
+  color: #8fa0c0;
+  font-size: 0.8rem;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .forgot-link:hover {
   color: var(--magenta-color);
-  text-shadow: 0 0 10px var(--magenta-color);
+  text-shadow: 0 0 8px var(--magenta-color);
+}
+
+/* --- ADAPTABILIDAD PARA MÓVILES (Responsive) --- */
+@media (max-width: 600px) {
+  .login-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .light-beam {
+    height: 180px;
+  }
 }

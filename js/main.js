@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const lamp = document.querySelector('.lamp');
   if (lamp) {
     lamp.addEventListener('click', function () {
-      document.body.classList.toggle('on');
+      document.body.classList.toggle('off');
     });
   }
 

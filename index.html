@@ -1,23 +1,60 @@
-<div id="login-screen" class="screen active">
-  <div class="lamp-container">
-    <div class="lamp-cord" id="lamp-cord"></div>
-    <div class="lamp-head"></div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Nuestro Rincón</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="off">
+
+  <!-- Control de estado mediante radio buttons ocultos -->
+  <form class="radio-controls">
+    <input type="radio" id="on" name="status" value="on" />
+    <label for="on">ON</label>
+    <input type="radio" id="off" name="status" value="off" checked />
+    <label for="off">OFF</label>
+  </form>
+
+  <div class="login-container">
+    <!-- Lámpara interactiva -->
+    <div class="lamp" id="lamp">
+      <div class="lamp-shade">
+        <div class="face">
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+          <span class="mouth"></span>
+        </div>
+      </div>
+      <div class="lamp-cord" id="lamp-cord"></div>
+      <div class="lamp-base"></div>
+      <div class="light-beam"></div>
+    </div>
+
+    <!-- Formulario de Login -->
+    <div class="login-card">
+      <form class="login-form" onsubmit="handleLogin(event)">
+        <h2>Welcome Back</h2>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+
+        <div class="form-footer">
+          <a href="#" class="forgot-link">Forgot Password?</a>
+        </div>
+      </form>
+    </div>
   </div>
-  
-  <div class="login-card hidden" id="login-card">
-    <h2>Nuestro Rincón</h2>
-    <input type="text" id="username" placeholder="Usuario">
-    <input type="password" id="password" placeholder="Contraseña">
-    <button onclick="login()">Ingresar</button>
-    <p id="error-msg" class="error"></p>
-  </div>
-</div>
-<div id="main-menu" class="screen">
-  <h1>Nuestras Memorias</h1>
-  <div class="grid-menu">
-    <button onclick="showScreen('flowers-screen')">🌻 Ramo Amarillo (21 Set)</button>
-    <button onclick="showScreen('world-love-screen')">🌍 Te Amo en el Mundo</button>
-    <button onclick="showScreen('timeline-screen')">📅 Nuestra Historia</button>
-    <button onclick="showScreen('videos-screen')">🎬 Nuestros Videos</button>
-  </div>
-</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -24,3 +24,24 @@ function login() {
     error.textContent = "Credenciales incorrectas ❤️";
   }
 }
+function createPetal() {
+  const container = document.getElementById('flowers-screen');
+  const petal = document.createElement('div');
+  petal.classList.add('petal');
+  
+  // Mensajes aleatorios que aparecen al hacer clic o caer
+  const messages = ["Te amo", "Eres mi lugar seguro", "Lima & Huancayo 💖", "21 de Setiembre"];
+  petal.innerText = messages[Math.floor(Math.random() * messages.length)];
+  
+  petal.style.left = Math.random() * 100 + 'vw';
+  petal.style.animationDuration = Math.random() * 3 + 2 + 's';
+  
+  container.appendChild(petal);
+  
+  setTimeout(() => {
+    petal.remove();
+  }, 5000);
+}
+
+// Generar pétalos continuamente
+setInterval(createPetal, 600);

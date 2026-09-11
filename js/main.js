@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
       const pass = document.getElementById('password').value.trim();
 
       const credenciales = {
-        "jesus": "jesus10082018",
-        "betzi": "betzi10082018",
-        "amorcito": "amorcito10082018"
+        "jesus": "10082018",
+        "betzi": "0082018",
+        "amorcito": "10082018"
       };
 
       if (credenciales[user] && credenciales[user] === pass) {

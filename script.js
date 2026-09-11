@@ -2,7 +2,7 @@ const lamp = document.getElementById('lamp');
 const radioOn = document.getElementById('on');
 const radioOff = document.getElementById('off');
 
-// Alternar encendido y apagado de la lámpara
+// Evento para prender/apagar la lámpara al dar clic
 lamp.addEventListener('click', () => {
   if (document.body.classList.contains('on')) {
     document.body.classList.remove('on');
@@ -15,23 +15,23 @@ lamp.addEventListener('click', () => {
   }
 });
 
-// Validación de inicio de sesión
+// Lógica de autenticación
 function handleLogin(event) {
   event.preventDefault();
   
   const usernameInput = document.getElementById('username').value.trim();
   const passwordInput = document.getElementById('password').value.trim();
 
-  // Credenciales autorizadas
   const validUsers = {
     "jesus": "2109",
     "mi_amor": "2109"
   };
 
   if (validUsers[usernameInput] && validUsers[usernameInput] === passwordInput) {
-    alert("¡Bienvenido/a a nuestro lugar especial! ❤️");
-    // Redirección o carga del menú principal (ej. window.location.href = "menu.html";)
+    alert("¡Credenciales correctas! Redirigiendo...");
+    // Aquí puedes cambiar de pantalla o hacer redirección:
+    // window.location.href = "menu.html";
   } else {
-    alert("Usuario o contraseña incorrectos");
+    alert("Usuario o contraseña incorrectos ❤️");
   }
 }

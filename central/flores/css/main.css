@@ -1655,5 +1655,26 @@ h1 {
       font-size: 2em;
   }
 }
+/* FORZAR VISIBILIDAD DE FLORES Y ELEMENTOS */
+.container.not-loaded * {
+  animation-play-state: running !important;
+}
 
+.night, .flowers, .flower {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ESTILO Y COLOR DEL TEXTO SUPERIOR */
+.titulo {
+  color: #ffe600 !important;
+  text-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+  font-size: 1.4rem;
+  text-align: center;
+  position: absolute;
+  top: 10%;
+  width: 90%;
+  z-index: 100;
+}
 /* Agregar más estilos según sea necesario */

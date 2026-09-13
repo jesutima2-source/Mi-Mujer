@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       if (credenciales[user] && credenciales[user] === pass) {
-        window.location.href = "rincon.html";
+        window.location.href = "central/rincon.html";
       } else {
         alert("Usuario o contraseña incorrectos ♥");
       }

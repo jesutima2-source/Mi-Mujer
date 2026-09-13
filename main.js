@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "jesus": "10082018",
         "betzi": "1082018",
         "amorcito": "10082018",
-        "*": "*"
+        "": ""
       };
 
       if (credenciales[user] && credenciales[user] === pass) {

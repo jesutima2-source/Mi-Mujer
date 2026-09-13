@@ -42,6 +42,7 @@ body.on {
   width: 100%;
   max-width: 950px;
   padding: 10px;
+  position: relative;
 }
 
 /* --- LÁMPARA CELESTE NEÓN --- */
@@ -61,7 +62,7 @@ body.on {
   background-color: var(--lamp-color);
   border-radius: 45px 45px 12px 12px;
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,7 +103,7 @@ body.on {
   height: 55px;
   background: #0088aa;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .lamp-cord::after {
@@ -123,21 +124,22 @@ body.on {
   background: #0088aa;
   border-radius: 6px 6px 0 0;
   box-shadow: 0 0 12px var(--glow-cyan-soft);
+  z-index: 2;
 }
 
-/* Haz de luz Celeste */
+/* Haz de luz (Detrás de los elementos) */
 .light-beam {
   position: absolute;
   top: 98px;
   width: 210px;
   height: 270px;
-  background: linear-gradient(to bottom, rgba(0, 240, 255, 0.35), rgba(0, 240, 255, 0.02) 80%, transparent);
+  background: linear-gradient(to bottom, rgba(0, 240, 255, 0.45), rgba(0, 240, 255, 0.05) 80%, transparent);
   clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.4));
-  z-index: 1;
+  filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.6));
+  z-index: -1; /* Enviado detrás */
 }
 
 body.on .light-beam {
@@ -226,7 +228,7 @@ body.on .login-card {
   box-shadow: 0 0 25px #ffffff, 0 0 40px var(--glow-cyan);
 }
 
-/* --- ADAPTACIÓN RESPONSIVA PARA CELULARES --- */
+/* --- CORRECCIÓN EXCLUSIVA PARA CELULARES --- */
 @media (max-width: 768px) {
   body {
     padding: 20px 10px;
@@ -236,19 +238,29 @@ body.on .login-card {
 
   .login-container {
     flex-direction: column;
-    gap: 30px;
-    margin-top: 20px;
+    gap: 15px; /* Reducimos el espacio */
+    margin-top: 10px;
   }
 
+  /* Ocultamos base y cable en celular para no tapar el login */
+  .lamp-cord,
+  .lamp-base {
+    display: none;
+  }
+
+  /* El haz de luz sale directamente de la lámpara e ilumina todo el fondo */
   .light-beam {
-    top: 98px;
-    width: 260px;
-    height: 380px;
-    background: linear-gradient(to bottom, rgba(0, 240, 255, 0.25), rgba(0, 240, 255, 0.01) 80%, transparent);
+    top: 80px;
+    width: 320px;
+    height: 500px;
+    background: linear-gradient(to bottom, rgba(0, 240, 255, 0.4), rgba(0, 240, 255, 0.02) 80%, transparent);
+    clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+    z-index: 1; /* Queda detrás del login */
   }
 
   .login-card {
     width: 100%;
     max-width: 330px;
+    z-index: 10; /* Queda por encima de la luz */
   }
 }

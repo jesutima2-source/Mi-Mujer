@@ -1,97 +1,132 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,900&display=swap');
-*{
-    font-family: 'Poppins',cursive;
-}
-body{
-    color: azure;
-    width: 100%;
-    height: 82vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: black;
-    /* padding-top: -30; */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', cursive, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.botones{
-    padding: 9px;
-    border-radius: 80px;
-    background-color: transparent;
-    border: none;
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000000;
+  color: azure;
+  position: fixed;
+  inset: 0;
 }
 
-.botones a{
-    background-color: #0a2be9;
-    padding: 9px;
-    border-radius: 80px;
-    -webkit-border-radius: 80px;
-    -moz-border-radius: 80px;
-    -ms-border-radius: 80px;
-    -o-border-radius: 80px;
-
+body.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 15px;
 }
 
-.botones a:focus{
-    background-color: rgb(50, 194, 194);
+/* TEXTO MENSAJE / DEDICATORIA */
+.titulo {
+  position: relative;
+  z-index: 10;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  color: #ffeb3b;
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+  margin-top: 15px;
+  max-width: 90%;
+  line-height: 1.4;
 }
 
-.greetings{
-    font-size: 7rem;
-    font-weight: 900;
-}
-.greetings > span{
-    animation: glow 2.5s ease-in-out infinite;
-}
-@keyframes glow{
-    0%, 100%{
-        color: #fff;
-        text-shadow: 0 0 12px #39c6d6, 0 0 50px #39c6d6, 0 0 100px #39c6d6;
-    }
-    10%, 90%{
-        color: #111;
-        text-shadow: none;
-    }
-}
-.greetings > span:nth-child(2){
-    animation-delay: .2s ;
-}
-.greetings > span:nth-child(3){
-    animation-delay: .4s ;
-}
-.greetings > span:nth-child(4){
-    animation-delay: .6s;
-}
-.greetings > span:nth-child(5){
-    animation-delay: .8s;
-}
-.greetings > span:nth-child(6){
-    animation-delay: 1s;
+#lyrics {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #ffffff;
 }
 
-.description{
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+/* BOTÓN DE NAVEGACIÓN */
+.nav-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
 }
 
-.button a{
-    text-decoration: none;
-    font-size: 1rem;
+.btn-nav {
+  display: inline-block;
+  background: rgba(10, 16, 28, 0.85);
+  border: 1.5px solid #00f0ff;
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-nav:active {
+  transform: scale(0.95);
+  background: #00f0ff;
+  color: #000;
+}
+
+/* CONTENEDOR FLORES Y ANIMACIONES */
+.flowers {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px;
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1;
+}
+
+.greetings {
+  font-size: 4rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.greetings > span {
+  animation: glow 2.5s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    color: #fff;
+    text-shadow: 0 0 12px #39c6d6, 0 0 50px #39c6d6, 0 0 100px #39c6d6;
+  }
+  10%, 90% {
     color: #111;
+    text-shadow: none;
+  }
 }
 
-@media screen and (max-width:574px){
-    .greetings{
-        display: block;
-        font-size: 4rem;
-        font-weight: 800;
-        text-align: center;
-    }
-    .description{
-        font-size: 2rem;
-    }
-    
-    .button a{
-        font-size: 1rem;
-    }
+.greetings > span:nth-child(2) { animation-delay: .2s; }
+.greetings > span:nth-child(3) { animation-delay: .4s; }
+.greetings > span:nth-child(4) { animation-delay: .6s; }
+.greetings > span:nth-child(5) { animation-delay: .8s; }
+.greetings > span:nth-child(6) { animation-delay: 1s; }
+
+/* OPTIMIZACIÓN RESPONSIVA MÓVIL */
+@media screen and (max-width: 574px) {
+  .titulo {
+    font-size: 0.95rem;
+  }
+  
+  .flowers {
+    height: 60vh;
+  }
 }

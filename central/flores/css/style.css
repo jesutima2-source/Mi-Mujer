@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap');
 
 * {
-    font-family: 'Poppins', cursive, sans-serif;
+    font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -12,106 +12,87 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-color: black;
+    background-color: #000;
     touch-action: manipulation;
 }
 
-/* Título centrado en la zona media-alta */
+/* Texto centrado en la zona superior con mayor legibilidad */
 .greetings {
     position: fixed;
-    top: 18%;
+    top: 8%;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    max-width: 700px;
+    max-width: 500px;
     text-align: center;
-    font-size: 1.2rem;
-    font-weight: 500;
-    line-height: 1.6;
-    z-index: 200;
-    pointer-events: none;
+    z-index: 100;
+    pointer-events: none; /* Permite hacer clics a través del texto */
 }
 
-.greetings > span {
+.greetings span {
     display: inline-block;
     color: #ffe600;
-    animation: glow 2.5s ease-in-out infinite;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5;
+    text-shadow: 0 0 10px rgba(255, 230, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.9);
 }
 
-@keyframes glow {
-    0%, 100% {
-        color: #ffe600;
-        text-shadow: 0 0 12px #ffe600, 0 0 35px #ffe600;
-    }
-    10%, 90% {
-        color: #b3a200;
-        text-shadow: none;
-    }
-}
-
-.greetings > span:nth-child(2) { animation-delay: .2s; }
-.greetings > span:nth-child(3) { animation-delay: .4s; }
-.greetings > span:nth-child(4) { animation-delay: .6s; }
-.greetings > span:nth-child(5) { animation-delay: .8s; }
-.greetings > span:nth-child(6) { animation-delay: 1s; }
-
-/* Ajuste del contenedor de flores para que estén en el fondo */
+/* Escalado y posición de las flores para móviles */
 .flowers {
     position: absolute;
-    bottom: 0;
+    bottom: 90px; /* Eleva las flores por encima de los botones */
     left: 50%;
-    transform: translateX(-50%) scale(0.85);
+    transform: translateX(-50%) scale(1.1); /* Tamaño aumentado */
     transform-origin: bottom center;
     z-index: 10;
+    pointer-events: none; /* Evita que el contenedor de las flores bloquee los clics */
 }
 
-/* Botones originales en la parte inferior */
+/* Botones interactivos alineados abajo */
 .botones {
     position: fixed;
-    bottom: 30px;
+    bottom: 25px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 15px;
-    z-index: 300;
-    padding: 0;
-    background-color: transparent;
-    border: none;
+    z-index: 500; /* Prioridad máxima de clic */
+    width: 85%;
+    max-width: 320px;
 }
 
 .botones a {
+    flex: 1;
+    text-align: center;
     background-color: #0a2be9;
-    padding: 10px 24px;
-    border-radius: 80px;
+    padding: 12px 20px;
+    border-radius: 50px;
     color: #ffffff;
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(10, 43, 233, 0.4);
-    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(10, 43, 233, 0.5);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
 
-.botones a:focus, .botones a:hover, .botones a:active {
+.botones a:active, .botones a:hover {
     background-color: rgb(50, 194, 194);
-    color: #ffffff;
-    transform: translateY(-2px);
+    transform: scale(1.05);
 }
 
-/* Responsivo para celulares */
-@media screen and (max-width: 574px) {
+/* Responsivo ajustado para pantallas pequeñas */
+@media screen and (max-width: 480px) {
     .greetings {
-        top: 12%;
-        font-size: 0.95rem;
-        line-height: 1.5;
+        top: 6%;
     }
-
+    .greetings span {
+        font-size: 1.1rem;
+    }
     .flowers {
-        transform: translateX(-50%) scale(0.68);
-    }
-
-    .botones a {
-        padding: 8px 18px;
-        font-size: 0.85rem;
+        bottom: 80px;
+        transform: translateX(-50%) scale(1);
     }
 }

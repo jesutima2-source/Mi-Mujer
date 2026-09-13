@@ -5,7 +5,7 @@
 
   /* Celeste / Cian Neón */
   --glow-cyan: #00f0ff;       
-  --glow-cyan-soft: rgba(0, 240, 255, 0.35);
+  --glow-cyan-soft: rgba(0, 240, 255, 0.25);
   --lamp-color: #00d2ff;      
 
   /* Formulario */
@@ -19,7 +19,7 @@
 
 body {
   margin: 0;
-  padding: 15px;
+  padding: 20px 15px;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -34,14 +34,14 @@ body.on {
   background-color: var(--bg-on);
 }
 
+/* CONTENEDOR PRINCIPAL */
 .login-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 50px;
   width: 100%;
-  max-width: 950px;
-  padding: 10px;
+  max-width: 420px;
   position: relative;
 }
 
@@ -54,8 +54,10 @@ body.on {
   cursor: pointer;
   user-select: none;
   z-index: 10;
+  margin-bottom: 5px; /* Espacio justo para no tapar la tarjeta */
 }
 
+/* Campana de la lámpara */
 .lamp-shade {
   width: 130px;
   height: 105px;
@@ -66,10 +68,15 @@ body.on {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 25px var(--glow-cyan), 0 0 50px rgba(0, 240, 255, 0.4);
+  box-shadow: 0 0 20px var(--glow-cyan-soft);
   transition: box-shadow 0.4s ease, background-color 0.4s ease;
 }
 
+body.on .lamp-shade {
+  box-shadow: 0 0 25px var(--glow-cyan), 0 0 45px rgba(0, 240, 255, 0.4);
+}
+
+/* Cara de la lámpara */
 .face {
   position: relative;
   width: 44px;
@@ -98,9 +105,10 @@ body.on {
   border-radius: 0 0 10px 10px;
 }
 
+/* Cable y Botón de la lámpara */
 .lamp-cord {
   width: 3px;
-  height: 55px;
+  height: 45px;
   background: #0088aa;
   position: relative;
   z-index: 2;
@@ -118,66 +126,75 @@ body.on {
   border-radius: 50%;
 }
 
+/* Base de la lámpara */
 .lamp-base {
   width: 80px;
   height: 12px;
   background: #0088aa;
   border-radius: 6px 6px 0 0;
-  box-shadow: 0 0 12px var(--glow-cyan-soft);
+  box-shadow: 0 0 10px var(--glow-cyan-soft);
   z-index: 2;
 }
 
-/* Haz de luz (Detrás de los elementos) */
-.light-beam {
+/* HAZ DE LUZ TRAPEZOIDAL (Suave y delicado) */
+.light-beam, 
+.light {
   position: absolute;
-  top: 98px;
-  width: 210px;
-  height: 270px;
-  background: linear-gradient(to bottom, rgba(0, 240, 255, 0.45), rgba(0, 240, 255, 0.05) 80%, transparent);
-  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  top: 95px;
+  width: 220px;
+  height: 280px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 240, 255, 0.28) 0%,
+    rgba(0, 240, 255, 0.06) 75%,
+    transparent 100%
+  );
+  clip-path: polygon(28% 0%, 72% 0%, 100% 100%, 0% 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.6));
-  z-index: -1; /* Enviado detrás */
+  filter: blur(1.5px); /* Suaviza los bordes para un resplandor elegante */
+  z-index: 1; /* Pasa detrás del login */
 }
 
-body.on .light-beam {
+body.on .light-beam,
+body.on .light {
   opacity: 1;
 }
 
 /* --- TARJETA DE LOGIN --- */
 .login-card {
-  width: 340px;
-  padding: 30px 24px;
+  width: 100%;
+  max-width: 340px;
+  padding: 28px 22px;
   background: rgba(10, 16, 28, 0.95);
-  border: 2px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   border-radius: 20px;
   transition: all 0.4s ease;
   opacity: 0.2;
   pointer-events: none;
   z-index: 5;
+  margin-top: 15px; /* Crea el espacio para ver el soporte completo */
 }
 
 body.on .login-card {
   opacity: 1;
   pointer-events: all;
   border-color: var(--glow-cyan);
-  box-shadow: 0 0 25px var(--glow-cyan), 
-              0 0 50px rgba(0, 240, 255, 0.35), 
-              inset 0 0 15px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.35), 
+              inset 0 0 12px rgba(0, 240, 255, 0.12);
 }
 
 .login-form h2 {
   color: #fff;
-  font-size: 1.5rem;
-  margin: 0 0 1.2rem 0;
+  font-size: 1.35rem;
+  margin: 0 0 1.1rem 0;
   text-align: center;
-  text-shadow: 0 0 12px var(--glow-cyan);
+  text-shadow: 0 0 10px var(--glow-cyan);
 }
 
 .form-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.1rem;
 }
 
 .form-group label {
@@ -203,7 +220,7 @@ body.on .login-card {
 
 .form-group input:focus {
   border-color: var(--glow-cyan);
-  box-shadow: 0 0 12px var(--glow-cyan);
+  box-shadow: 0 0 10px var(--glow-cyan);
   background: rgba(0, 240, 255, 0.05);
 }
 
@@ -219,48 +236,28 @@ body.on .login-card {
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 0 15px var(--glow-cyan), 0 0 30px rgba(0, 240, 255, 0.4);
+  box-shadow: 0 0 12px var(--glow-cyan), 0 0 25px rgba(0, 240, 255, 0.3);
 }
 
 .login-btn:hover {
   background: #ffffff;
   color: #050d1a;
-  box-shadow: 0 0 25px #ffffff, 0 0 40px var(--glow-cyan);
+  box-shadow: 0 0 20px #ffffff, 0 0 30px var(--glow-cyan);
 }
 
-/* --- CORRECCIÓN EXCLUSIVA PARA CELULARES --- */
-@media (max-width: 768px) {
+/* AJUSTES RESPONSIVOS PARA MÓVILES */
+@media (max-width: 480px) {
   body {
-    padding: 20px 10px;
-    align-items: flex-start;
-    overflow-y: auto;
-  }
-
-  .login-container {
-    flex-direction: column;
-    gap: 15px; /* Reducimos el espacio */
-    margin-top: 10px;
-  }
-
-  /* Ocultamos base y cable en celular para no tapar el login */
-  .lamp-cord,
-  .lamp-base {
-    display: none;
-  }
-
-  /* El haz de luz sale directamente de la lámpara e ilumina todo el fondo */
-  .light-beam {
-    top: 80px;
-    width: 320px;
-    height: 500px;
-    background: linear-gradient(to bottom, rgba(0, 240, 255, 0.4), rgba(0, 240, 255, 0.02) 80%, transparent);
-    clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
-    z-index: 1; /* Queda detrás del login */
+    padding: 15px 10px;
   }
 
   .login-card {
-    width: 100%;
-    max-width: 330px;
-    z-index: 10; /* Queda por encima de la luz */
+    padding: 24px 18px;
+  }
+
+  .light-beam,
+  .light {
+    width: 260px;
+    height: 320px;
   }
 }

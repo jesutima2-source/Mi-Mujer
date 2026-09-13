@@ -1,3 +1,11 @@
+// Activar la animación de florecimiento al cargar la página
+onload = () => {
+  const c = setTimeout(() => {
+    document.body.classList.remove("not-loaded");
+    clearTimeout(c);
+  }, 1000);
+};
+
 // Sincronizar las letras con la canción
 var audio = document.querySelector("audio");
 var lyrics = document.querySelector("#lyrics");
@@ -30,7 +38,7 @@ var lyricsData = [
   { text: "Nice butterflies in my hands", time: 176 },
   { text: "Too much light for twilight", time: 183 },
   { text: "In the mood for the flowers", time: 188 },
-  { text: "Love.", time: 140 },
+  { text: "Love.", time: 193 },
 ];
 
 // Animar las letras
@@ -41,15 +49,11 @@ function updateLyrics() {
   );
 
   if (currentLine) {
-    // Calcula la opacidad basada en el tiempo en la línea actual
-    var fadeInDuration = 0.1; // Duración del efecto de aparición en segundos
+    var fadeInDuration = 0.1;
     var opacity = Math.min(1, (time - currentLine.time) / fadeInDuration);
-
-    // Aplica el efecto de aparición
     lyrics.style.opacity = opacity;
     lyrics.innerHTML = currentLine.text;
   } else {
-    // Restablece la opacidad y el contenido si no hay una línea actual
     lyrics.style.opacity = 0;
     lyrics.innerHTML = "";
   }
@@ -57,16 +61,15 @@ function updateLyrics() {
 
 setInterval(updateLyrics, 1000);
 
-//funcion titulo
 // Función para ocultar el título después de 216 segundos
 function ocultarTitulo() {
   var titulo = document.querySelector(".titulo");
-  titulo.style.animation =
-    "fadeOut 3s ease-in-out forwards"; /* Duración y función de temporización de la desaparición */
-  setTimeout(function () {
-    titulo.style.display = "none";
-  }, 3000); // Espera 3 segundos antes de ocultar completamente
+  if (titulo) {
+    titulo.style.animation = "fadeOut 3s ease-in-out forwards";
+    setTimeout(function () {
+      titulo.style.display = "none";
+    }, 3000);
+  }
 }
 
-// Llama a la función después de 216 segundos (216,000 milisegundos)
 setTimeout(ocultarTitulo, 216000);

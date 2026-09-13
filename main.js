@@ -1,16 +1,20 @@
-// Clic en la lámpara para encender/apagar la luz
+// Clic en la lámpara para encender/apagar la luz y el formulario
 const lamp = document.querySelector('.lamp');
-if (lamp) {
-  lamp.addEventListener('click', () => {
-    document.body.classList.toggle('on');
-  });
-}
+lamp.addEventListener('click', () => {
+  document.body.classList.toggle('on');
+});
 
-// Redirección directa al botón de Iniciar Sesión (para pruebas rápidas)
-const loginBtn = document.querySelector('.login-btn');
-if (loginBtn) {
-  loginBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    window.location.href = "central/flores/flower.html";
-  });
-}
+// Validación de usuario y contraseña
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const user = document.getElementById('username').value.trim();
+  const pass = document.getElementById('password').value.trim();
+
+  // Reemplaza con tus credenciales reales
+  if (user === "betzi" && pass === "2109") {
+    window.location.href = "central/rincon.html";
+  } else {
+    alert("Usuario o contraseña incorrectos. Inténtalo de nuevo.");
+  }
+});

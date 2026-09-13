@@ -7,81 +7,79 @@
     font-family: 'Poppins', cursive;
 }
 
-body {
-    color: azure;
-    width: 100vw;
+html, body {
+    width: 100%;
+    /* 100dvh se adapta automáticamente cuando la barra del navegador sube/baja */
     height: 100vh;
+    height: 100dvh; 
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     background-color: #000;
     position: relative;
 }
 
-/* Evitamos que capas transparentes bloqueen los clics de los botones */
-.night, 
-.flowers {
+/* Evitar que elementos decorativos bloqueen eventos */
+.night, .flowers {
     pointer-events: none;
 }
 
-/* 1. Mensaje principal arriba en COLOR AMARILLO */
+/* 1. Mensaje principal amarillo (Solo parte superior) */
 .titulo {
     position: absolute;
-    top: 5vh;
+    top: 25px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    max-width: 500px;
+    max-width: 480px;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    line-height: 1.4;
-    color: #ffe600; /* Amarillo */
-    text-shadow: 0 0 10px rgba(255, 230, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.95);
+    line-height: 1.35;
+    color: #ffe600;
+    text-shadow: 0 0 10px rgba(255, 230, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.9);
     z-index: 25;
     pointer-events: none;
 }
 
-/* 2. Letra de la canción SOBREPUESTA EN LAS FLORES (Abajo) en COLOR BLANCO */
+/* 2. Letra de la canción (Blanca) - Ubicada entre las flores y el texto superior */
 #lyrics {
     position: absolute;
-    bottom: 110px; /* Se posiciona directamente sobre el área de las flores */
+    top: 42%; /* Se ubica en el espacio libre del medio */
     left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 450px;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 400px;
     text-align: center;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #ffffff; /* Blanco */
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 0.95);
-    z-index: 30; /* Por encima de las flores */
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 1);
+    z-index: 30;
     pointer-events: none;
 }
 
 /* Dibujo de las flores */
 .flowers {
     position: absolute;
-    bottom: 0;
+    bottom: 40px; /* Eleva un poco las flores para dar espacio a los botones */
     left: 50%;
-    transform: translateX(-50%) scale(0.85);
+    transform: translateX(-50%) scale(0.75);
     transform-origin: bottom center;
     z-index: 10;
 }
 
-/* 3. Botones visibles en la parte inferior para celulares */
+/* 3. Botones (Elevados para que la barra de navegación del celular no los tape) */
 .botones {
-    position: fixed;
-    bottom: 20px;
+    position: absolute;
+    /* Usa safe-area para respetar la barra gestual/navegador de Android e iOS */
+    bottom: calc(20px + env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     width: 85%;
-    max-width: 300px;
-    z-index: 99999; /* Asegura máxima prioridad de visibilidad */
+    max-width: 280px;
+    z-index: 9999;
     pointer-events: auto;
 }
 
@@ -89,13 +87,13 @@ body {
     flex: 1;
     text-align: center;
     background-color: #0a2be9;
-    padding: 10px 18px;
-    border-radius: 50px;
+    padding: 10px 16px;
+    border-radius: 25px;
     color: #ffffff;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(10, 43, 233, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     transition: transform 0.2s ease, background-color 0.2s ease;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -103,27 +101,25 @@ body {
 
 .botones a:active,
 .botones a:hover {
-    background-color: rgb(50, 194, 194);
-    transform: scale(1.05);
+    background-color: #00c3ff;
+    transform: scale(1.03);
 }
 
-/* Ajustes adaptativos para celulares con pantalla vertical corta */
-@media screen and (max-height: 700px) {
+/* Ajuste extra para pantallas de celular muy pequeñas */
+@media screen and (max-height: 650px) {
     .titulo {
-        top: 3vh;
-        font-size: 1.05rem;
-    }
-
-    #lyrics {
-        bottom: 90px;
+        top: 15px;
         font-size: 0.95rem;
     }
-
-    .flowers {
-        transform: translateX(-50%) scale(0.75);
+    #lyrics {
+        top: 38%;
+        font-size: 1rem;
     }
-
+    .flowers {
+        transform: translateX(-50%) scale(0.65);
+        bottom: 35px;
+    }
     .botones {
-        bottom: 15px;
+        bottom: 12px;
     }
 }

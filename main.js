@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   // 1. Interacción de la lámpara (encender / apagar)
-  const lamp = document.querySelector('.lamp');
+  const lamp = document.getElementById('lampButton') || document.querySelector('.lamp');
   
   if (lamp) {
     lamp.addEventListener('click', function () {

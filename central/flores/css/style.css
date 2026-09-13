@@ -59,20 +59,20 @@ html, body, .container {
     pointer-events: none;
 }
 
-/* 3. Flores centradas y de gran tamaño */
+/* 3. Flores ligeramente mas abajo */
 .flowers {
     position: absolute;
-    bottom: 135px !important; /* Ligeramente más arriba para dar paso a los botones */
+    bottom: 95px !important; /* Bajadas un poco para asentarlas mejor en la vista */
     left: 50%;
     transform: translateX(-50%) scale(0.85);
     transform-origin: bottom center;
     z-index: 10;
 }
 
-/* 4. Botones flotantes un poco más arriba */
+/* 4. Botones flotantes mantenidos en su posición perfecta */
 .botones {
     position: fixed !important;
-    bottom: 75px !important; /* Subidos un poco más para quedar en la posición perfecta */
+    bottom: 75px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     display: flex;
@@ -110,10 +110,10 @@ html, body, .container {
 @media screen and (min-height: 750px) {
     .flowers {
         transform: translateX(-50%) scale(0.92);
-        bottom: 145px !important;
+        bottom: 105px !important; /* Ajuste suave para pantallas más altas */
     }
     .botones {
-        bottom: 85px !important; /* Elevados proporcionalmente en celulares más altos */
+        bottom: 85px !important;
     }
 }
 
@@ -125,7 +125,7 @@ html, body, .container {
     }
     .flowers {
         transform: translateX(-50%) scale(0.72);
-        bottom: 100px !important;
+        bottom: 70px !important;
     }
     .botones {
         bottom: 50px !important;

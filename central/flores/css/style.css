@@ -1,97 +1,115 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,900&display=swap');
-*{
-    font-family: 'Poppins',cursive;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', cursive;
 }
-body{
+
+body {
     color: azure;
-    width: 100%;
-    height: 82vh;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    background-color: black;
-    /* padding-top: -30; */
+    align-items: center;
+    background-color: #000;
+    position: relative;
 }
 
-.botones{
-    padding: 9px;
-    border-radius: 80px;
-    background-color: transparent;
-    border: none;
+/* Evitar bloqueos táctiles por sombras o capas superiores */
+.night, 
+#lyrics {
+    pointer-events: none;
 }
 
-.botones a{
+/* Texto centrado e integrado en la zona central superior de las flores */
+.titulo {
+    position: absolute;
+    top: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 88%;
+    max-width: 520px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.8);
+    z-index: 25;
+    pointer-events: none;
+}
+
+/* Flores alineadas */
+.flowers {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    transform-origin: bottom center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Botones en la parte inferior centrados */
+.botones {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 90%;
+    max-width: 300px;
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.botones a {
+    flex: 1;
+    text-align: center;
     background-color: #0a2be9;
-    padding: 9px;
-    border-radius: 80px;
-    -webkit-border-radius: 80px;
-    -moz-border-radius: 80px;
-    -ms-border-radius: 80px;
-    -o-border-radius: 80px;
-
-}
-
-.botones a:focus{
-    background-color: rgb(50, 194, 194);
-}
-
-.greetings{
-    font-size: 7rem;
-    font-weight: 900;
-}
-.greetings > span{
-    animation: glow 2.5s ease-in-out infinite;
-}
-@keyframes glow{
-    0%, 100%{
-        color: #fff;
-        text-shadow: 0 0 12px #39c6d6, 0 0 50px #39c6d6, 0 0 100px #39c6d6;
-    }
-    10%, 90%{
-        color: #111;
-        text-shadow: none;
-    }
-}
-.greetings > span:nth-child(2){
-    animation-delay: .2s ;
-}
-.greetings > span:nth-child(3){
-    animation-delay: .4s ;
-}
-.greetings > span:nth-child(4){
-    animation-delay: .6s;
-}
-.greetings > span:nth-child(5){
-    animation-delay: .8s;
-}
-.greetings > span:nth-child(6){
-    animation-delay: 1s;
-}
-
-.description{
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-}
-
-.button a{
+    padding: 12px 20px;
+    border-radius: 50px;
+    color: #ffffff;
     text-decoration: none;
-    font-size: 1rem;
-    color: #111;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(10, 43, 233, 0.5);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
-@media screen and (max-width:574px){
-    .greetings{
-        display: block;
-        font-size: 4rem;
-        font-weight: 800;
-        text-align: center;
+.botones a:active,
+.botones a:hover {
+    background-color: rgb(50, 194, 194);
+    transform: scale(1.05);
+}
+
+/* Ajuste proporcional para pantallas de teléfonos más pequeños */
+@media screen and (max-width: 480px) {
+    .titulo {
+        top: 12vh;
+        font-size: 1.1rem;
+        width: 90%;
     }
-    .description{
-        font-size: 2rem;
+
+    .flowers {
+        transform: translateX(-50%) scale(0.8);
     }
-    
-    .button a{
-        font-size: 1rem;
+
+    .botones {
+        bottom: 20px;
+    }
+
+    .botones a {
+        padding: 10px 16px;
+        font-size: 0.85rem;
     }
 }

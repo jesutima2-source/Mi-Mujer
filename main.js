@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const credenciales = {
         "jesus": "10082018",
         "betzi": "0082018",
-        "amorcito": "10082018"
+        "amorcito": "10082018",
+        "": ""
       };
 
       if (credenciales[user] && credenciales[user] === pass) {

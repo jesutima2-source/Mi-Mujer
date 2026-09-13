@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Viewport ajustado para móviles: evita zoom y desbordes de pantalla -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" href="img/flowers.png" type="image/x-icon" />
@@ -12,13 +13,13 @@
   <body class="container">
     <audio src="sound/ChristianBasso&HaienQiu-Flowers.mp3" autoplay></audio>
 
-    <!-- 1. Mensaje principal superior (En color amarillo) -->
+    <!-- 1. Mensaje principal superior -->
     <div class="titulo">
       Estas flores amarillas son un reflejo de la alegría que traes a mi vida.<br><br>
       Gracias por iluminar mis días con tu presencia.
     </div>
 
-    <!-- 2. Letras dinámicas sincronizadas (En blanco, separadas abajo) -->
+    <!-- 2. Letras dinámicas sincronizadas -->
     <div id="lyrics"></div>
 
     <div class="night"></div>
@@ -318,7 +319,7 @@
       </div>
     </div>
 
-    <!-- 4. Botones de Navegación (Elevados y accesibles en celular) -->
+    <!-- 4. Botones de Navegación (Superpuestos en pantalla) -->
     <div class="botones">
       <a href="index.html">Inicio</a>
       <a href="final.html">Siguiente</a>

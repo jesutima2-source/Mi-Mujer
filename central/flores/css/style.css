@@ -7,25 +7,26 @@
     font-family: 'Poppins', cursive;
 }
 
+/* Bloquea completamente el scroll y ajusta al alto real de la pantalla del celular */
 html, body {
-    width: 100%;
-    /* 100dvh se adapta automáticamente cuando la barra del navegador sube/baja */
+    width: 100vw;
     height: 100vh;
-    height: 100dvh; 
+    height: 100dvh; /* Alto dinámico móvil */
     overflow: hidden;
+    position: fixed; /* Evita el rebote de scroll al tocar la pantalla */
+    top: 0;
+    left: 0;
     background-color: #000;
-    position: relative;
 }
 
-/* Evitar que elementos decorativos bloqueen eventos */
 .night, .flowers {
     pointer-events: none;
 }
 
-/* 1. Mensaje principal amarillo (Solo parte superior) */
+/* 1. Mensaje principal superior */
 .titulo {
     position: absolute;
-    top: 25px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
@@ -40,16 +41,16 @@ html, body {
     pointer-events: none;
 }
 
-/* 2. Letra de la canción (Blanca) - Ubicada entre las flores y el texto superior */
+/* 2. Letra de la canción sincronizada */
 #lyrics {
     position: absolute;
-    top: 42%; /* Se ubica en el espacio libre del medio */
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 85%;
     max-width: 400px;
     text-align: center;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #ffffff;
     text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 1);
@@ -57,21 +58,20 @@ html, body {
     pointer-events: none;
 }
 
-/* Dibujo de las flores */
+/* Flores reducidas ligeramente para no empujar la pantalla */
 .flowers {
     position: absolute;
-    bottom: 40px; /* Eleva un poco las flores para dar espacio a los botones */
+    bottom: 50px;
     left: 50%;
-    transform: translateX(-50%) scale(0.75);
+    transform: translateX(-50%) scale(0.7);
     transform-origin: bottom center;
     z-index: 10;
 }
 
-/* 3. Botones (Elevados para que la barra de navegación del celular no los tape) */
+/* 3. Botones fijados al frente sin ocultarse */
 .botones {
-    position: absolute;
-    /* Usa safe-area para respetar la barra gestual/navegador de Android e iOS */
-    bottom: calc(20px + env(safe-area-inset-bottom));
+    position: fixed;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -79,7 +79,7 @@ html, body {
     gap: 12px;
     width: 85%;
     max-width: 280px;
-    z-index: 9999;
+    z-index: 99999;
     pointer-events: auto;
 }
 
@@ -105,21 +105,21 @@ html, body {
     transform: scale(1.03);
 }
 
-/* Ajuste extra para pantallas de celular muy pequeñas */
+/* Ajuste responsive para pantallas pequeñas */
 @media screen and (max-height: 650px) {
     .titulo {
-        top: 15px;
+        top: 10px;
         font-size: 0.95rem;
     }
     #lyrics {
-        top: 38%;
-        font-size: 1rem;
+        top: 36%;
+        font-size: 0.95rem;
     }
     .flowers {
-        transform: translateX(-50%) scale(0.65);
-        bottom: 35px;
+        transform: translateX(-50%) scale(0.6);
+        bottom: 45px;
     }
     .botones {
-        bottom: 12px;
+        bottom: 10px;
     }
 }

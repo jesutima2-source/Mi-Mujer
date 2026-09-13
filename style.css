@@ -15,26 +15,35 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Quita el recuadro gris al hacer tap en celular */
+}
+
+/* PANTALLA FIJA SIN DESPLAZAMIENTO */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Evita cualquier desplazamiento o scroll */
 }
 
 body {
-  margin: 0;
-  padding: 20px 15px;
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--bg-off);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   transition: background-color 0.5s ease;
-  overflow-x: hidden;
+  touch-action: manipulation; /* Evita gestos de zoom/desplazamiento táctil */
+  position: fixed; /* Fija la pantalla en dispositivos móviles */
+  inset: 0;
 }
 
 body.on {
   background-color: var(--bg-on);
 }
 
-/* CONTENEDOR PRINCIPAL */
+/* CONTENEDOR PRINCIPAL CENTRADO Y ESTÁTICO */
 .login-container {
   display: flex;
   flex-direction: column;
@@ -42,7 +51,9 @@ body.on {
   justify-content: center;
   width: 100%;
   max-width: 420px;
+  padding: 0 15px;
   position: relative;
+  touch-action: none; /* Inmoviliza el contenedor frente al toque del dedo */
 }
 
 /* --- LÁMPARA CELESTE NEÓN --- */
@@ -53,8 +64,9 @@ body.on {
   align-items: center;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none; /* Desactiva la selección de texto en iPhone/Android */
   z-index: 10;
-  margin-bottom: 5px; /* Espacio justo para no tapar la tarjeta */
+  margin-bottom: 5px;
 }
 
 /* Campana de la lámpara */
@@ -136,7 +148,7 @@ body.on .lamp-shade {
   z-index: 2;
 }
 
-/* HAZ DE LUZ TRAPEZOIDAL (Suave y delicado) */
+/* HAZ DE LUZ TRAPEZOIDAL (Suave) */
 .light-beam, 
 .light {
   position: absolute;
@@ -153,8 +165,8 @@ body.on .lamp-shade {
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  filter: blur(1.5px); /* Suaviza los bordes para un resplandor elegante */
-  z-index: 1; /* Pasa detrás del login */
+  filter: blur(1.5px);
+  z-index: 1;
 }
 
 body.on .light-beam,
@@ -174,7 +186,7 @@ body.on .light {
   opacity: 0.2;
   pointer-events: none;
   z-index: 5;
-  margin-top: 15px; /* Crea el espacio para ver el soporte completo */
+  margin-top: 15px;
 }
 
 body.on .login-card {
@@ -245,14 +257,10 @@ body.on .login-card {
   box-shadow: 0 0 20px #ffffff, 0 0 30px var(--glow-cyan);
 }
 
-/* AJUSTES RESPONSIVOS PARA MÓVILES */
+/* AJUSTES RESPONSIVOS */
 @media (max-width: 480px) {
-  body {
-    padding: 15px 10px;
-  }
-
   .login-card {
-    padding: 24px 18px;
+    padding: 22px 16px;
   }
 
   .light-beam,

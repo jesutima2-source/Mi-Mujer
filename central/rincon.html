@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nuestro Rincón Especial ♥</title>
-  <link rel="stylesheet" href="login/style.css">
+  <!-- Ruta corregida para acceder a login/style.css desde la carpeta central -->
+  <link rel="stylesheet" href="../login/style.css">
   <style>
     body {
       background-color: #070913;
@@ -96,6 +97,7 @@
       color: #00f0ff;
       cursor: pointer;
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+      z-index: 100;
     }
 
     @media (max-width: 850px) {
@@ -108,11 +110,11 @@
 <body>
 
   <!-- Reproductor de música -->
-  <audio id="bgMusic" loop autoplay>
+  <audio id="bgMusic" loop>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
   </audio>
 
-  <button class="audio-control" id="musicBtn">🎵 Música: ON</button>
+  <button class="audio-control" id="musicBtn">🎵 Música: OFF</button>
 
   <div class="main-container">
     <!-- Columna Izquierda -->
@@ -156,15 +158,32 @@
     const music = document.getElementById('bgMusic');
     const btn = document.getElementById('musicBtn');
 
-    // Intentar reproducir automáticamente al cargar
+    // Intentar reproducir audio al interactuar con cualquier parte de la página
+    function startAudio() {
+      if (music.paused) {
+        music.play().then(() => {
+          btn.innerHTML = '🎵 Música: ON';
+        }).catch(() => {
+          btn.innerHTML = '🎵 Música: OFF';
+        });
+      }
+    }
+
+    // Intenta reproducir si el navegador lo permite
     window.addEventListener('DOMContentLoaded', () => {
-      music.play().catch(() => {
-        // Si el navegador bloquea el autoplay, se ajusta el texto del botón
+      music.play().then(() => {
+        btn.innerHTML = '🎵 Música: ON';
+      }).catch(() => {
         btn.innerHTML = '🎵 Música: OFF';
       });
     });
 
-    btn.addEventListener('click', () => {
+    // Reproduce al primer clic en la pantalla si el autoplay fue bloqueado
+    document.body.addEventListener('click', startAudio, { once: true });
+
+    // Botón manual de control
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Evita interferencias con el evento del body
       if (music.paused) {
         music.play();
         btn.innerHTML = '🎵 Música: ON';

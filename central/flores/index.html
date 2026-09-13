@@ -1,32 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flores Amarillas</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="img/flowers.png" type="image/x-icon">
-    <title>Flowers</title>
-</head>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
+        .mensaje-previo {
+            color: #ffe600;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 35px;
+            text-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
+            line-height: 1.4;
+            max-width: 350px;
+        }
+
+        .btn-inicio {
+            background-color: #0a2be9;
+            color: #ffffff;
+            padding: 14px 32px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(10, 43, 233, 0.5);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-inicio:active,
+        .btn-inicio:hover {
+            background-color: #00c3ff;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
 <body>
-    <div class="greetings">
-        <span>H</span>
-        <span>o</span>
-        <span>l</span>
-        <span>a</span>
-        <span>!</span>
+
+    <div class="mensaje-previo">
+        Presiona el botón para abrir tu regalo 💛
     </div>
-    <div class="description">
-        <span>ESTE DETALLE ES PARA TI :)</span>
-    </div>
-    <div class="button">
-        <button class="botones">
-            <a href="flower.html" style="color: #fff;">CLICK AQUÍ</a>
-        </button>
-    </div>
+
+    <a href="flower.html" class="btn-inicio">CLICK AQUÍ</a>
 
 </body>
-
 </html>

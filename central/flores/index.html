@@ -26,18 +26,50 @@
             padding: 20px;
         }
 
-        /* Fondo con destello sutil romántico */
+        /* Fondo dinámico con brillo central respirando */
         body::before {
             content: '';
             position: absolute;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(255, 230, 0, 0.12) 0%, rgba(10, 43, 233, 0.05) 50%, transparent 70%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 230, 0, 0.16) 0%, rgba(10, 43, 233, 0.08) 55%, transparent 75%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 0;
             pointer-events: none;
+            animation: respirarGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes respirarGlow {
+            0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+
+        /* Contenedor de partículas/estrellas flotantes */
+        .particulas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particula {
+            position: absolute;
+            background: #ffe600;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: flotarParticula linear infinite;
+        }
+
+        @keyframes flotarParticula {
+            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
         .contenido-tarjeta {
@@ -48,24 +80,30 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            animation: entradaSuave 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes entradaSuave {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .badge-amor {
             font-size: 0.85rem;
             color: #00c3ff;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
             margin-bottom: 12px;
             font-weight: 600;
-            text-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
         }
 
         .mensaje-previo {
             color: #ffe600;
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             font-weight: 700;
             margin-bottom: 12px;
-            text-shadow: 0 0 12px rgba(255, 230, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.9);
+            text-shadow: 0 0 14px rgba(255, 230, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.9);
             line-height: 1.35;
         }
 
@@ -81,42 +119,28 @@
         .btn-inicio {
             background-color: #0a2be9;
             color: #ffffff;
-            padding: 14px 36px;
+            padding: 15px 40px;
             border-radius: 30px;
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 600;
-            box-shadow: 0 6px 20px rgba(10, 43, 233, 0.5);
+            box-shadow: 0 6px 22px rgba(10, 43, 233, 0.55);
             transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
         }
 
         .btn-inicio:active,
         .btn-inicio:hover {
             background-color: #00c3ff;
             transform: scale(1.06);
-            box-shadow: 0 8px 25px rgba(0, 195, 255, 0.6);
-        }
-
-        /* Botón opcional para regresar a tarjetas de una vez si lo deseas */
-        .regresar-link {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 0.85rem;
-            z-index: 20;
-            transition: color 0.2s ease;
-        }
-        .regresar-link:hover {
-            color: #fff;
+            box-shadow: 0 8px 28px rgba(0, 195, 255, 0.7);
         }
     </style>
 </head>
 <body>
 
-    <a href="../rincon.html" class="regresar-link">← Volver a tarjetas</a>
+    <!-- Capa de partículas de luz sutiles -->
+    <div class="particulas" id="contenedorParticulas"></div>
 
     <div class="contenido-tarjeta">
         <div class="badge-amor">Para Betzi 💛</div>
@@ -126,5 +150,27 @@
         <a href="flower.html" class="btn-inicio">FLORECER ✨</a>
     </div>
 
+    <script>
+        // Generador dinámico de lucecitas flotantes de fondo
+        const contenedor = document.getElementById('contenedorParticulas');
+        const cantidad = 18;
+        for (let i = 0; i < cantidad; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particula');
+            const size = Math.random() * 3 + 1.5;
+            p.style.width = `${size}px`;
+            p.style.height = `${size}px`;
+            p.style.left = `${Math.random() * 100}%`;
+            p.style.animationDuration = `${Math.random() * 5 + 4}s`;
+            p.style.animationDelay = `${Math.random() * 4}s`;
+            if (Math.random() > 0.5) {
+                p.style.background = '#00c3ff';
+                p.style.boxShadow = '0 0 6px #00c3ff';
+            } else {
+                p.style.boxShadow = '0 0 6px #ffe600';
+            }
+            contenedor.appendChild(p);
+        }
+    </script>
 </body>
 </html>

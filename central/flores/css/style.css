@@ -1,98 +1,97 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap');
-
-* {
-    font-family: 'Poppins', sans-serif;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,900&display=swap');
+*{
+    font-family: 'Poppins',cursive;
 }
-
-body {
+body{
     color: azure;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #000;
-    touch-action: manipulation;
-}
-
-/* Texto centrado en la zona superior con mayor legibilidad */
-.greetings {
-    position: fixed;
-    top: 8%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
-    z-index: 100;
-    pointer-events: none; /* Permite hacer clics a través del texto */
-}
-
-.greetings span {
-    display: inline-block;
-    color: #ffe600;
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.5;
-    text-shadow: 0 0 10px rgba(255, 230, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.9);
-}
-
-/* Escalado y posición de las flores para móviles */
-.flowers {
-    position: absolute;
-    bottom: 90px; /* Eleva las flores por encima de los botones */
-    left: 50%;
-    transform: translateX(-50%) scale(1.1); /* Tamaño aumentado */
-    transform-origin: bottom center;
-    z-index: 10;
-    pointer-events: none; /* Evita que el contenedor de las flores bloquee los clics */
-}
-
-/* Botones interactivos alineados abajo */
-.botones {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
+    height: 82vh;
     display: flex;
-    gap: 15px;
-    z-index: 500; /* Prioridad máxima de clic */
-    width: 85%;
-    max-width: 320px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    /* padding-top: -30; */
 }
 
-.botones a {
-    flex: 1;
-    text-align: center;
+.botones{
+    padding: 9px;
+    border-radius: 80px;
+    background-color: transparent;
+    border: none;
+}
+
+.botones a{
     background-color: #0a2be9;
-    padding: 12px 20px;
-    border-radius: 50px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(10, 43, 233, 0.5);
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    padding: 9px;
+    border-radius: 80px;
+    -webkit-border-radius: 80px;
+    -moz-border-radius: 80px;
+    -ms-border-radius: 80px;
+    -o-border-radius: 80px;
+
 }
 
-.botones a:active, .botones a:hover {
+.botones a:focus{
     background-color: rgb(50, 194, 194);
-    transform: scale(1.05);
 }
 
-/* Responsivo ajustado para pantallas pequeñas */
-@media screen and (max-width: 480px) {
-    .greetings {
-        top: 6%;
+.greetings{
+    font-size: 7rem;
+    font-weight: 900;
+}
+.greetings > span{
+    animation: glow 2.5s ease-in-out infinite;
+}
+@keyframes glow{
+    0%, 100%{
+        color: #fff;
+        text-shadow: 0 0 12px #39c6d6, 0 0 50px #39c6d6, 0 0 100px #39c6d6;
     }
-    .greetings span {
-        font-size: 1.1rem;
+    10%, 90%{
+        color: #111;
+        text-shadow: none;
     }
-    .flowers {
-        bottom: 80px;
-        transform: translateX(-50%) scale(1);
+}
+.greetings > span:nth-child(2){
+    animation-delay: .2s ;
+}
+.greetings > span:nth-child(3){
+    animation-delay: .4s ;
+}
+.greetings > span:nth-child(4){
+    animation-delay: .6s;
+}
+.greetings > span:nth-child(5){
+    animation-delay: .8s;
+}
+.greetings > span:nth-child(6){
+    animation-delay: 1s;
+}
+
+.description{
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.button a{
+    text-decoration: none;
+    font-size: 1rem;
+    color: #111;
+}
+
+@media screen and (max-width:574px){
+    .greetings{
+        display: block;
+        font-size: 4rem;
+        font-weight: 800;
+        text-align: center;
+    }
+    .description{
+        font-size: 2rem;
+    }
+    
+    .button a{
+        font-size: 1rem;
     }
 }

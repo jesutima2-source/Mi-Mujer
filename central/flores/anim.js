@@ -1,4 +1,10 @@
 // Sincronizar las letras con la canción
+onload = () => {
+  const c = setTimeout(() => {
+    document.body.classList.remove("not-loaded");
+    clearTimeout(c);
+  }, 1000);
+};
 var audio = document.querySelector("audio");
 var lyrics = document.querySelector("#lyrics");
 

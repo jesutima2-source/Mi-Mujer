@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Flores Amarillas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Para Betzi ♥</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', cursive;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -26,7 +25,7 @@
             padding: 20px;
         }
 
-        /* Fondo dinámico con brillo central respirando */
+        /* Fondo dinámico respirando */
         body::before {
             content: '';
             position: absolute;
@@ -46,7 +45,7 @@
             50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
         }
 
-        /* Contenedor de partículas/estrellas flotantes */
+        /* Partículas flotantes */
         .particulas {
             position: absolute;
             top: 0;
@@ -72,20 +71,32 @@
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
-        .contenido-tarjeta {
-            position: relative;
-            z-index: 10;
-            max-width: 420px;
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: entradaSuave 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        @keyframes pop-in {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
         }
 
-        @keyframes entradaSuave {
-            from { opacity: 0; transform: translateY(20px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        input[type="radio"] {
+            display: none;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            max-width: 420px;
         }
 
         .badge-amor {
@@ -93,36 +104,35 @@
             color: #00c3ff;
             letter-spacing: 2.5px;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: 700;
             text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
         }
 
-        /* Estilo del sobre interactivo tipo carta */
+        /* Paso 1: Sobre / Botón inicial interactivo */
         .sobre-container {
-            width: 320px;
-            height: 220px;
-            background: #fdfaf6;
-            border-radius: 12px;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 230, 0, 0.15);
+            width: 100%;
+            background: linear-gradient(145deg, #111118, #0a0a0f);
+            border: 2px solid rgba(255, 230, 0, 0.4);
+            border-radius: 16px;
+            padding: 28px 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 230, 0, 0.15);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 25px;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
             cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(255, 230, 0, 0.4);
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
         .sobre-container:hover {
-            transform: scale(1.03) translateY(-5px);
+            transform: translateY(-4px);
+            border-color: rgba(255, 230, 0, 0.8);
         }
 
         .sobre-sello {
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             margin-bottom: 12px;
             animation: latirSello 1.5s ease-in-out infinite;
         }
@@ -133,7 +143,7 @@
         }
 
         .mensaje-previo {
-            color: #1a1a1a;
+            color: #fff;
             font-size: 1.15rem;
             font-weight: 700;
             margin-bottom: 8px;
@@ -141,81 +151,175 @@
         }
 
         .sub-mensaje {
-            color: #4a5568;
+            color: #cbd5e1;
             font-size: 0.88rem;
-            font-weight: 500;
+            font-weight: 400;
             line-height: 1.4;
         }
 
         .indicador-abrir {
-            margin-top: 10px;
-            font-size: 0.75rem;
-            color: #0a2be9;
+            margin-top: 14px;
+            font-size: 0.78rem;
+            color: #00c3ff;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .btn-inicio {
+        .boton {
             background-color: #0a2be9;
             color: #ffffff;
-            padding: 15px 42px;
+            padding: 14px 38px;
             border-radius: 30px;
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             box-shadow: 0 6px 22px rgba(10, 43, 233, 0.55);
-            transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.25s ease, background-color 0.25s ease;
             letter-spacing: 1px;
-            display: inline-block;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .btn-inicio:active,
-        .btn-inicio:hover {
+        .boton:hover {
             background-color: #00c3ff;
-            transform: scale(1.06);
-            box-shadow: 0 8px 28px rgba(0, 195, 255, 0.7);
+            transform: scale(1.05);
         }
+
+        /* Paso 2: Carta pequeña interactiva para revelar mensaje final */
+        .small-gift-message {
+            display: none;
+            font-size: 5rem;
+            cursor: pointer;
+            animation: pop-in 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 12px;
+        }
+
+        .texto-small-gift-message {
+            display: none;
+            font-size: 0.95rem;
+            color: #00c3ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Paso 3: Tarjeta de mensaje final + Botón a Flores */
+        .mensajeFinal {
+            width: 100%;
+            background: linear-gradient(145deg, #111118, #0a0a0f);
+            border: 2px solid rgba(0, 195, 255, 0.4);
+            border-radius: 16px;
+            padding: 24px 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
+            color: #fff;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .textoCarta {
+            font-size: 1rem;
+            text-align: center;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin-bottom: 14px;
+        }
+
+        .textoPd {
+            font-size: 0.88rem;
+            color: #ffe600;
+            margin-bottom: 22px;
+            font-weight: 600;
+        }
+
+        .btn-siguiente-seccion {
+            background-color: #ffe600;
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 230, 0, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-siguiente-seccion:hover {
+            background-color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* Lógica de radio buttons para transiciones en cascada */
+        #paso1:checked ~ .container .paso-1-block { display: block; }
+        
+        #paso2:checked ~ .container .small-gift-message,
+        #paso2:checked ~ .container .texto-small-gift-message { display: block; }
+
+        #paso3:checked ~ .container .mensajeFinal { display: flex; }
     </style>
 </head>
 <body>
 
-    <!-- Audio de fondo -->
+    <!-- Audio de fondo configurado con music1.mp3 -->
     <audio id="musicaFondo" loop>
         <source src="sound/music1.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Capa de partículas de luz sutiles -->
+    <!-- Partículas de luz de fondo -->
     <div class="particulas" id="contenedorParticulas"></div>
 
-    <div class="contenido-tarjeta">
-        <div class="badge-amor">Para Betzi 💛</div>
+    <!-- Inputs de control por estados -->
+    <input type="radio" name="flujoCarta" id="paso1" checked>
+    <input type="radio" name="flujoCarta" id="paso2">
+    <input type="radio" name="flujoCarta" id="paso3">
 
-        <!-- Sobre interactivo con tu frase -->
-        <div class="sobre-container" id="sobreCarta" onclick="tocarMusica()">
-            <div class="sobre-sello">💌</div>
-            <div class="mensaje-previo">Siete años caminando de la mano...</div>
-            <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
-            <div class="indicador-abrir">Toca para abrir audio y continuar ✨</div>
+    <div class="container">
+        <div class="content">
+            <div class="badge-amor">Para Betzi ♥</div>
+
+            <!-- BLOQUE 1: Sobre inicial con frase -->
+            <div class="paso-1-block" style="width: 100%;">
+                <label for="paso2" class="sobre-container" onclick="tocarMusica()">
+                    <div class="sobre-sello">💌</div>
+                    <div class="mensaje-previo">Siete años caminando de la mano...</div>
+                    <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
+                    <div class="indicador-abrir">Toca para abrir sobre ✨</div>
+                </label>
+            </div>
+
+            <!-- BLOQUE 2: Icono intermedio para revelar carta final -->
+            <label for="paso3" class="small-gift-message" onclick="tocarMusica()">✉️</label>
+            <label for="paso3" class="texto-small-gift-message" onclick="tocarMusica()">Toca el sobre abierto para leer tu dedicatoria final</label>
+
+            <!-- BLOQUE 3: Mensaje final + Salto a vista de flores -->
+            <div class="mensajeFinal" id="blockFinal">
+                <span class="textoCarta">
+                    Hola, mi amor. Te quiero muchísimo.<br>
+                    Estoy feliz de que formes parte de mi vida ❤️<br>
+                    Cada segundo a tu lado vale oro.
+                </span>
+                <span class="textoPd">Pd: Estoy muy orgulloso de ti ❤️❤️</span>
+                <a href="flower.html" class="btn-siguiente-seccion" onclick="tocarMusica()">Ver Flores Amarillas ✨</a>
+            </div>
         </div>
-        
-        <a href="flower.html" class="btn-inicio" onclick="tocarMusica()">FLORECER ✨</a>
     </div>
 
     <script>
-        // Reproducir música al interactuar con el sobre o el botón
+        // Reproducir música al primer toque interactivo
         function tocarMusica() {
             const audio = document.getElementById('musicaFondo');
             if (audio.paused) {
                 audio.volume = 0.5;
-                audio.play().catch(e => console.log("Audio play prevented or waiting for interaction", e));
+                audio.play().catch(e => console.log("Audio play waiting interaction", e));
             }
         }
 
-        // Intento de autoplay al primer toque en cualquier parte de la pantalla
         document.addEventListener('click', tocarMusica, { once: true });
 
-        // Generador dinámico de lucecitas flotantes de fondo
+        // Generador dinámico de lucecitas flotantes
         const contenedor = document.getElementById('contenedorParticulas');
         const cantidad = 18;
         for (let i = 0; i < cantidad; i++) {

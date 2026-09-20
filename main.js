@@ -5,13 +5,13 @@ const validUsers = [
   { user: "*", pass: "*" }
 ];
 
-// ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
+// ================= REPRODUCTOR DE MÚSICA =================
 const audio = document.getElementById('loginAudio');
 if (audio) {
   audio.volume = 0.8;
+  // Intenta reproducir al cargar; si el navegador bloquea, suena con el primer clic en la página
   window.addEventListener('DOMContentLoaded', () => {
-    audio.play().catch(err => {
-      console.log("El navegador requiere interacción para reproducir audio:", err);
+    audio.play().catch(() => {
       document.addEventListener('click', () => {
         audio.play();
       }, { once: true });
@@ -19,7 +19,7 @@ if (audio) {
   });
 }
 
-// ================= FONDO DE COPOS CELESTES (CANVAS) =================
+// ================= FONDO DE COPOS CELESTES =================
 const canvas = document.getElementById('starCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -64,7 +64,7 @@ function animateSnowflakes() {
 }
 animateSnowflakes();
 
-// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS DE LA PITITA =================
+// ================= LÁMPARA Y FÍSICAS DE LA PITA =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const usernameInput = document.getElementById('username');
@@ -89,55 +89,57 @@ function updateCord(x, y) {
   cordHandle.style.top = y + 'px';
 }
 
-cordContainer.addEventListener('pointerdown', (e) => {
-  isDragging = true;
-  cordContainer.setPointerCapture(e.pointerId);
-});
+if (cordContainer) {
+  cordContainer.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    cordContainer.setPointerCapture(e.pointerId);
+  });
 
-cordContainer.addEventListener('pointermove', (e) => {
-  if (!isDragging) return;
-  const rect = cordContainer.getBoundingClientRect();
-  let mouseX = e.clientX - rect.left;
-  let mouseY = e.clientY - rect.top;
+  cordContainer.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const rect = cordContainer.getBoundingClientRect();
+    let mouseX = e.clientX - rect.left;
+    let mouseY = e.clientY - rect.top;
 
-  let dx = mouseX - originX;
-  let dy = mouseY - originY;
-  let distance = Math.sqrt(dx * dx + dy * dy);
+    let dx = mouseX - originX;
+    let dy = mouseY - originY;
+    let distance = Math.sqrt(dx * dx + dy * dy);
 
-  if (distance > maxPullDistance) {
-    dx = (dx / distance) * maxPullDistance;
-    dy = (dy / distance) * maxPullDistance;
-  }
-
-  currentX = originX + dx;
-  currentY = originY + dy;
-  updateCord(currentX, currentY);
-});
-
-cordContainer.addEventListener('pointerup', (e) => {
-  if (!isDragging) return;
-  isDragging = false;
-  cordContainer.releasePointerCapture(e.pointerId);
-
-  let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 25, 2));
-
-  if (pullDistance > 25) {
-    toggleLamp();
-  }
-
-  let returnInterval = setInterval(() => {
-    currentX += (originX - currentX) * 0.2;
-    currentY += (25 - currentY) * 0.2;
-    updateCord(currentX, currentY);
-
-    if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 25) < 0.5) {
-      currentX = originX;
-      currentY = 25;
-      updateCord(currentX, currentY);
-      clearInterval(returnInterval);
+    if (distance > maxPullDistance) {
+      dx = (dx / distance) * maxPullDistance;
+      dy = (dy / distance) * maxPullDistance;
     }
-  }, 15);
-});
+
+    currentX = originX + dx;
+    currentY = originY + dy;
+    updateCord(currentX, currentY);
+  });
+
+  cordContainer.addEventListener('pointerup', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    cordContainer.releasePointerCapture(e.pointerId);
+
+    let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 25, 2));
+
+    if (pullDistance > 20) {
+      toggleLamp();
+    }
+
+    let returnInterval = setInterval(() => {
+      currentX += (originX - currentX) * 0.2;
+      currentY += (25 - currentY) * 0.2;
+      updateCord(currentX, currentY);
+
+      if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 25) < 0.5) {
+        currentX = originX;
+        currentY = 25;
+        updateCord(currentX, currentY);
+        clearInterval(returnInterval);
+      }
+    }, 15);
+  });
+}
 
 function toggleLamp() {
   lampContainer.classList.toggle('off');
@@ -156,18 +158,21 @@ function toggleLamp() {
   }
 }
 
-// ================= VALIDACIÓN Y ENRUTAMIENTO =================
+// ================= VALIDACIÓN Y REDIRECCIÓN EXACTA =================
 const loginForm = document.getElementById('loginForm');
-loginForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const userVal = usernameInput.value.trim().toLowerCase();
-  const passVal = passwordInput.value.trim();
+if (loginForm) {
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const userVal = usernameInput.value.trim().toLowerCase();
+    const passVal = passwordInput.value.trim();
 
-  const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
+    const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
 
-  if (isValid) {
-    window.location.href = "central/rincon.html"; 
-  } else {
-    alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
-  }
-});
+    if (isValid) {
+      // Redirección exacta solicitada
+      window.location.href = "central/rincon.html"; 
+    } else {
+      alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
+    }
+  });
+}

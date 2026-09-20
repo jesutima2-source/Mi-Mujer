@@ -18,6 +18,82 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// ================= FONDO DE ESTRELLAS Y ESTRELLAS FUGAZES (CANVAS) =================
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Crear estrellas estáticas de fondo
+const stars = [];
+for (let i = 0; i < 150; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 1.5,
+    alpha: Math.random(),
+    speed: Math.random() * 0.02 + 0.005
+  });
+}
+
+// Crear estrellas fugaces dinámicas
+const shootingStars = [];
+function createShootingStar() {
+  shootingStars.push({
+    x: Math.random() * canvas.width + 200,
+    y: Math.random() * (canvas.height / 2),
+    length: Math.random() * 80 + 80,
+    speed: Math.random() * 6 + 6,
+    opacity: 1
+  });
+}
+
+setInterval(createShootingStar, 1800);
+
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Dibujar estrellas estáticas titilando
+  stars.forEach(star => {
+    star.alpha += star.speed;
+    if (star.alpha > 1 || star.alpha < 0.2) star.speed = -star.speed;
+    ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Dibujar y mover estrellas fugaces
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.lineWidth = 2;
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = '#00d2ff';
+
+  shootingStars.forEach((star, index) => {
+    ctx.beginPath();
+    ctx.moveTo(star.x, star.y);
+    ctx.lineTo(star.x - star.length, star.y + star.length);
+    ctx.stroke();
+
+    star.x -= star.speed;
+    star.y += star.speed;
+    star.opacity -= 0.015;
+
+    if (star.opacity <= 0 || star.x < 0 || star.y > canvas.height) {
+      shootingStars.splice(index, 1);
+    }
+  });
+
+  ctx.shadowBlur = 0; // Resetear sombra
+  requestAnimationFrame(animateStars);
+}
+animateStars();
+
 // ================= FÍSICAS DE LA PITITA 360° =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
@@ -132,7 +208,6 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
   const matchedUser = validUsers.find(u => u.user === userInput && u.pass === passInput);
 
   if (matchedUser) {
-    // Ruta corregida hacia central/rincon.html
     window.location.href = "central/rincon.html";
   } else {
     alert('Usuario o contraseña incorrectos. Intenta de nuevo 💔');

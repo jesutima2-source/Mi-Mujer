@@ -1,62 +1,38 @@
-:root {
-  /* Fondo oscuro profundo */
-  --bg-off: #070913; 
-  --bg-on: #0d1222; 
-
-  /* Celeste / Cian Neón */
-  --glow-cyan: #00f0ff;       
-  --glow-cyan-soft: rgba(0, 240, 255, 0.25);
-  --lamp-color: #00d2ff;      
-
-  /* Formulario */
-  --input-bg: rgba(255, 255, 255, 0.05);
-  --border-color: rgba(0, 240, 255, 0.3);
-}
-
 * {
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent; /* Quita el recuadro gris al hacer tap en celular */
-}
-
-/* PANTALLA FIJA SIN DESPLAZAMIENTO */
-html, body {
-  width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Evita cualquier desplazamiento o scroll */
-}
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--bg-off);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: background-color 0.5s ease;
-  touch-action: manipulation; /* Evita gestos de zoom/desplazamiento táctil */
-  position: fixed; /* Fija la pantalla en dispositivos móviles */
-  inset: 0;
 }
 
-body.on {
-  background-color: var(--bg-on);
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #050b14;
 }
 
-/* CONTENEDOR PRINCIPAL CENTRADO Y ESTÁTICO */
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 420px;
-  padding: 0 15px;
+  height: 100vh;
   position: relative;
-  touch-action: none; /* Inmoviliza el contenedor frente al toque del dedo */
+  z-index: 10;
+  gap: 20px;
 }
 
-/* --- LÁMPARA CELESTE NEÓN --- */
+/* --- ESTILOS DE LA LÁMPARA --- */
 .lamp {
   position: relative;
   display: flex;
@@ -64,208 +40,228 @@ body.on {
   align-items: center;
   cursor: pointer;
   user-select: none;
-  -webkit-user-select: none; /* Desactiva la selección de texto en iPhone/Android */
-  z-index: 10;
-  margin-bottom: 5px;
 }
 
-/* Campana de la lámpara */
 .lamp-shade {
   width: 130px;
-  height: 105px;
-  background-color: var(--lamp-color);
-  border-radius: 45px 45px 12px 12px;
+  height: 90px;
+  background: #00d2ff;
+  border-radius: 70px 70px 15px 15px;
   position: relative;
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.6);
+  transition: background 0.3s, box-shadow 0.3s;
   z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 20px var(--glow-cyan-soft);
-  transition: box-shadow 0.4s ease, background-color 0.4s ease;
 }
 
-body.on .lamp-shade {
-  box-shadow: 0 0 25px var(--glow-cyan), 0 0 45px rgba(0, 240, 255, 0.4);
+/* Estado apagado de la lámpara */
+.lamp.off .lamp-shade {
+  background: #2a3b4c;
+  box-shadow: none;
+}
+.lamp.off .light-beam {
+  opacity: 0;
+}
+.lamp.off .lamp-base {
+  box-shadow: none;
+}
+.lamp.off .cord-handle {
+  background: #555;
+  box-shadow: none;
 }
 
-/* Cara de la lámpara */
 .face {
-  position: relative;
-  width: 44px;
-  height: 22px;
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .eye {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  background: #06101e;
+  width: 6px;
+  height: 6px;
+  background: #050b14;
   border-radius: 50%;
-  top: 2px;
+  position: absolute;
 }
-.eye.left { left: 4px; }
-.eye.right { right: 4px; }
+.eye.left { left: -18px; }
+.eye.right { right: -18px; }
 
 .mouth {
+  width: 12px;
+  height: 6px;
+  border-bottom: 2px solid #050b14;
+  border-radius: 0 0 12px 12px;
+  margin-top: 10px;
+}
+
+/* Haz de luz inferior */
+.light-beam {
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 8px;
-  border-bottom: 3px solid #06101e;
-  border-radius: 0 0 10px 10px;
-}
-
-/* Cable y Botón de la lámpara */
-.lamp-cord {
-  width: 3px;
-  height: 45px;
-  background: #0088aa;
-  position: relative;
-  z-index: 2;
-}
-
-.lamp-cord::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -4px;
-  width: 11px;
-  height: 11px;
-  background: #ffffff;
-  box-shadow: 0 0 10px var(--glow-cyan);
-  border-radius: 50%;
-}
-
-/* Base de la lámpara */
-.lamp-base {
-  width: 80px;
-  height: 12px;
-  background: #0088aa;
-  border-radius: 6px 6px 0 0;
-  box-shadow: 0 0 10px var(--glow-cyan-soft);
-  z-index: 2;
-}
-
-/* HAZ DE LUZ TRAPEZOIDAL (Suave) */
-.light-beam, 
-.light {
-  position: absolute;
-  top: 95px;
-  width: 220px;
-  height: 280px;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 240, 255, 0.28) 0%,
-    rgba(0, 240, 255, 0.06) 75%,
-    transparent 100%
-  );
-  clip-path: polygon(28% 0%, 72% 0%, 100% 100%, 0% 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  top: 90px;
+  width: 180px;
+  height: 140px;
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.35), rgba(0, 210, 255, 0));
+  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
-  filter: blur(1.5px);
-  z-index: 1;
+  transition: opacity 0.3s;
+  z-index: 2;
 }
 
-body.on .light-beam,
-body.on .light {
-  opacity: 1;
+/* --- CORDÓN Y FÍSICAS DE LA PITITA --- */
+.lamp-cord-container {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  width: 20px;
+  height: 90px;
+  transform: translateX(-50%);
+  z-index: 4;
+  touch-action: none;
+}
+
+.lamp-cord {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 55px;
+  background: #fff;
+  transform-origin: top center;
+}
+
+.cord-handle {
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, 0);
+  box-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff;
+  cursor: grab;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.cord-handle:active {
+  cursor: grabbing;
+}
+
+.lamp-base {
+  width: 50px;
+  height: 12px;
+  background: #00d2ff;
+  border-radius: 6px;
+  margin-top: 75px;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
+  transition: background 0.3s, box-shadow 0.3s;
+  z-index: 1;
 }
 
 /* --- TARJETA DE LOGIN --- */
 .login-card {
-  width: 100%;
-  max-width: 340px;
-  padding: 28px 22px;
-  background: rgba(10, 16, 28, 0.95);
-  border: 1.5px solid var(--border-color);
-  border-radius: 20px;
-  transition: all 0.4s ease;
-  opacity: 0.2;
-  pointer-events: none;
-  z-index: 5;
-  margin-top: 15px;
-}
-
-body.on .login-card {
-  opacity: 1;
-  pointer-events: all;
-  border-color: var(--glow-cyan);
-  box-shadow: 0 0 18px rgba(0, 240, 255, 0.35), 
-              inset 0 0 12px rgba(0, 240, 255, 0.12);
+  background: rgba(10, 20, 35, 0.85);
+  border: 2px solid rgba(0, 210, 255, 0.4);
+  border-radius: 16px;
+  padding: 30px;
+  width: 340px;
+  box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .login-form h2 {
   color: #fff;
-  font-size: 1.35rem;
-  margin: 0 0 1.1rem 0;
+  font-size: 16px;
   text-align: center;
-  text-shadow: 0 0 10px var(--glow-cyan);
+  margin-bottom: 22px;
+  letter-spacing: 1px;
 }
 
 .form-group {
-  margin-bottom: 1.1rem;
+  margin-bottom: 16px;
 }
 
 .form-group label {
   display: block;
-  color: #e0f8ff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  text-shadow: 0 0 8px var(--glow-cyan);
+  color: #00d2ff;
+  font-size: 11px;
+  margin-bottom: 6px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.75rem 0.9rem;
-  background: var(--input-bg);
-  border: 1.5px solid var(--border-color);
-  border-radius: 12px;
+  padding: 11px 14px;
+  background: rgba(5, 11, 20, 0.7);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  border-radius: 8px;
   color: #fff;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
+  font-size: 13px;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus {
-  border-color: var(--glow-cyan);
-  box-shadow: 0 0 10px var(--glow-cyan);
-  background: rgba(0, 240, 255, 0.05);
+  border-color: #00d2ff;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
 }
 
 .login-btn {
   width: 100%;
-  padding: 0.85rem;
-  background: var(--glow-cyan);
+  padding: 12px;
+  background: linear-gradient(90deg, #0099ff, #00d2ff);
   border: none;
-  border-radius: 12px;
-  color: #050d1a;
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 1px;
+  border-radius: 8px;
+  color: #050b14;
+  font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 12px var(--glow-cyan), 0 0 25px rgba(0, 240, 255, 0.3);
+  margin-top: 10px;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .login-btn:hover {
-  background: #ffffff;
-  color: #050d1a;
-  box-shadow: 0 0 20px #ffffff, 0 0 30px var(--glow-cyan);
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.8);
 }
 
-/* AJUSTES RESPONSIVOS */
-@media (max-width: 480px) {
-  .login-card {
-    padding: 22px 16px;
-  }
+/* --- REPRODUCTOR FLOTANTE --- */
+.player-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 20, 35, 0.85);
+  border: 1px solid rgba(0, 210, 255, 0.4);
+  border-radius: 999px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+  z-index: 100;
+  backdrop-filter: blur(6px);
+}
 
-  .light-beam,
-  .light {
-    width: 260px;
-    height: 320px;
-  }
+.play-btn {
+  background: none;
+  border: none;
+  color: #00d2ff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.play-btn:hover {
+  transform: scale(1.15);
+}
+
+.song-title {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
 }

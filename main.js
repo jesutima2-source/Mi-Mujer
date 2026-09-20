@@ -9,58 +9,81 @@ const validUsers = [
 const audio = document.getElementById('loginAudio');
 audio.volume = 0.8;
 
-// Intentar reproducir automáticamente al cargar la página
 window.addEventListener('DOMContentLoaded', () => {
   audio.play().catch(err => {
-    console.log("El navegador requiere una interacción para reproducir audio:", err);
-    // Reproducir en cuanto el usuario haga clic en cualquier parte de la página
+    console.log("El navegador requiere interacción para reproducir audio:", err);
     document.addEventListener('click', () => {
       audio.play();
     }, { once: true });
   });
 });
 
-// ================= FÍSICAS DE LA PITITA Y ENCENDIDO/APAGADO =================
+// ================= FÍSICAS DE LA PITITA 360° =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const cordContainer = document.getElementById('cordContainer');
-const lampCord = document.getElementById('lampCord');
+const cordLine = document.getElementById('cordLine');
 const cordHandle = document.getElementById('cordHandle');
 
 let isLightOn = true;
 let isDragging = false;
-let startY = 0;
-let currentPull = 0;
 
-// Variables de físicas de resorte (Hooke)
-let cordVelocity = 0;
-let cordOffset = 0;
-const springK = 0.2;   
-const damping = 0.8;   
+// Centro de origen del cordón dentro del contenedor (X: 50, Y: 0)
+const originX = 50;
+const originY = 0;
+
+let currentX = 50;
+let currentY = 45;
+
+let targetX = 50;
+let targetY = 45;
+
+let velX = 0;
+let velY = 0;
+
+const springK = 0.15; // Elasticidad
+const damping = 0.82; // Amortiguación
 
 cordContainer.addEventListener('pointerdown', (e) => {
   isDragging = true;
-  startY = e.clientY;
   cordContainer.setPointerCapture(e.pointerId);
+  updatePointerPosition(e);
   e.preventDefault();
 });
 
 cordContainer.addEventListener('pointermove', (e) => {
   if (!isDragging) return;
-  const deltaY = e.clientY - startY;
-  currentPull = Math.max(0, Math.min(deltaY, 60)); 
-  cordOffset = currentPull;
+  updatePointerPosition(e);
 });
+
+function updatePointerPosition(e) {
+  const rect = cordContainer.getBoundingClientRect();
+  targetX = e.clientX - rect.left;
+  targetY = e.clientY - rect.top;
+
+  // Limitar distancia máxima de estiramiento (radio de 80px)
+  const dx = targetX - originX;
+  const dy = targetY - originY;
+  const dist = Math.hypot(dx, dy);
+  const maxDist = 80;
+
+  if (dist > maxDist) {
+    targetX = originX + (dx / dist) * maxDist;
+    targetY = originY + (dy / dist) * maxDist;
+  }
+}
 
 function releaseCord() {
   if (!isDragging) return;
   isDragging = false;
 
-  // Si se jaló más de 25 píxeles, conmuta el estado de la luz
-  if (currentPull > 25) {
+  // Calcular cuánto se estiró desde la posición de descanso (50, 45)
+  const pullDistance = Math.hypot(currentX - 50, currentY - 45);
+  
+  // Si se jaló lo suficiente (más de 25 píxeles), conmuta el estado
+  if (pullDistance > 25) {
     toggleLight();
   }
-  currentPull = 0;
 }
 
 cordContainer.addEventListener('pointerup', releaseCord);
@@ -77,39 +100,50 @@ function toggleLight() {
   }
 }
 
-// Bucle de animación de físicas del resorte para la pitita
+// Bucle de físicas de resorte bidimensional (360 grados)
 function updatePhysics() {
-  if (!isDragging) {
-    const force = -springK * cordOffset;
-    cordVelocity += force;
-    cordVelocity *= damping;
-    cordOffset += cordVelocity;
+  if (isDragging) {
+    currentX = targetX;
+    currentY = targetY;
+    velX = 0;
+    velY = 0;
   } else {
-    cordOffset = currentPull;
-    cordVelocity = 0;
+    // Fuerza de resorte hacia el punto de descanso (50, 45)
+    const restX = 50;
+    const restY = 45;
+
+    const forceX = (restX - currentX) * springK;
+    const forceY = (restY - currentY) * springK;
+
+    velX = (velX + forceX) * damping;
+    velY = (velY + forceY) * damping;
+
+    currentX += velX;
+    currentY += velY;
   }
 
-  const cordHeight = 45 + cordOffset;
-  lampCord.style.height = cordHeight + 'px';
-  cordHandle.style.top = cordHeight + 'px';
+  // Actualizar línea SVG y posición de la bolita
+  cordLine.setAttribute('x2', currentX);
+  cordLine.setAttribute('y2', currentY);
+  cordHandle.style.left = currentX + 'px';
+  cordHandle.style.top = currentY + 'px';
 
   requestAnimationFrame(updatePhysics);
 }
 updatePhysics();
 
-// ================= VALIDACIÓN DE LOGIN Y REDIRECCIÓN =================
+// ================= VALIDACIÓN DE LOGIN Y ENRUTAMIENTO CORRECTO =================
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   e.preventDefault();
 
   const userInput = document.getElementById('username').value.trim().toLowerCase();
   const passInput = document.getElementById('password').value;
 
-  // Verificamos si coincide con alguna de las 3 credenciales
   const matchedUser = validUsers.find(u => u.user === userInput && u.pass === passInput);
 
   if (matchedUser) {
-    // Redirige correctamente a rincon.html en la misma ruta
-    window.location.href = "central/rincon.html";
+    // Enrutamiento correcto desde la carpeta universos hacia central/rincon.html
+    window.location.href = "../central/rincon.html";
   } else {
     alert('Usuario o contraseña incorrectos. Intenta de nuevo 💔');
   }

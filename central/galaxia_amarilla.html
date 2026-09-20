@@ -275,6 +275,7 @@ for(let i=0;i<totalBouquets;i++){
  mesh.scale.setScalar(7.5);
  mesh.position.set(x*dist, y*dist, z*dist);
  
+ // Orientación inicial limpia sin distorsión
  mesh.lookAt(0, 0, 0);
  mesh.rotateY(Math.PI);
  
@@ -282,8 +283,7 @@ for(let i=0;i<totalBouquets;i++){
    phi: Math.acos(y),
    theta: theta,
    radius: dist,
-   speed: 0.0005 + (i%3)*0.0002,
-   spinSpeed: 0.008 + ((i % 5) * 0.002) // Velocidad de giro horizontal personalizada para cada ramo
+   speed: 0.0005 + (i%3)*0.0002
  };
  bouquetGroup.add(mesh);
  bouquetsList.push(mesh);
@@ -329,7 +329,7 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
   });
 
-  // Animar ramos: movimiento orbital + giro horizontal constante sobre su eje local
+  // Animar ramos orientados perfectamente hacia afuera sin deformación
   addedBouquets.forEach((mesh)=>{
     mesh.userData.theta += mesh.userData.speed;
     const r = mesh.userData.radius;
@@ -342,12 +342,9 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
 
     mesh.position.set(nx, ny, nz);
     
-    // Mantiene la orientación hacia afuera del centro
+    // Hace que la parte frontal del ramo mire hacia afuera de la galaxia de forma estable
     mesh.lookAt(nx * 2, ny * 2, nz * 2);
     mesh.rotateY(Math.PI);
-
-    // Gira el ramo horizontalmente sobre su propio eje en cada fotograma
-    mesh.rotateY(mesh.userData.spinSpeed);
   });
 
   currentDist+=(targetDist-currentDist)*0.06;

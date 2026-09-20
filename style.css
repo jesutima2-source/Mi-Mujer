@@ -13,16 +13,31 @@ body, html {
   color: #fff;
 }
 
-/* --- FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS) --- */
-#starCanvas {
-  position: fixed;
+/* --- COPOS BLANCOS FLOTANTES (PARTÍCULAS) --- */
+.particulas {
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -100;
-  background: radial-gradient(circle at center, #0a192f 0%, #03070f 100%);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
   pointer-events: none;
+}
+
+.particula {
+  position: absolute;
+  background: #ffffff; /* Copos blancos puros */
+  border-radius: 50%;
+  opacity: 0.2;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  animation: flotarParticula linear infinite;
+}
+
+@keyframes flotarParticula {
+  0% { transform: translateY(105vh) scale(0.4); opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -34,26 +49,26 @@ body, html {
   height: 100vh;
   position: relative;
   z-index: 10;
-  padding: 15px;
+  padding: 10px;
 }
 
-/* --- DISEÑO DE LÁMPARA ESTÉTICA --- */
+/* --- DISEÑO DE LÁMPARA ESTÉTICA (POSICIÓN IDEAL MÓVIL) --- */
 .lamp-container {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: -10px;
+  margin-bottom: 12px; /* Espacio perfecto entre la luz y el login */
   user-select: none;
   transition: all 0.4s ease;
 }
 
 .lamp-glow-bg {
   position: absolute;
-  top: -15px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(0, 210, 255, 0.45) 0%, rgba(0, 150, 255, 0.1) 60%, transparent 75%);
+  top: -12px;
+  width: 170px;
+  height: 170px;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.4) 0%, rgba(0, 150, 255, 0.08) 60%, transparent 75%);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
@@ -62,18 +77,18 @@ body, html {
 
 .lamp-wire-top {
   width: 2px;
-  height: 25px;
+  height: 20px;
   background: linear-gradient(to bottom, rgba(255,255,255,0.2), #00d2ff);
   z-index: 2;
 }
 
 .lamp-shade {
-  width: 150px;
-  height: 85px;
+  width: 135px;
+  height: 75px;
   background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  border-radius: 80px 80px 18px 18px;
+  border-radius: 70px 70px 16px 16px;
   position: relative;
-  box-shadow: 0 0 30px rgba(0, 210, 255, 0.7), inset 0 5px 15px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.6), inset 0 4px 12px rgba(255, 255, 255, 0.4);
   transition: all 0.5s ease;
   z-index: 3;
   border-top: 2px solid rgba(255, 255, 255, 0.6);
@@ -82,17 +97,17 @@ body, html {
 
 .lamp-face {
   position: absolute;
-  top: 22px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
-  gap: 28px;
+  gap: 24px;
 }
 
 .eye {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   background: #03070f;
   border-radius: 50%;
   box-shadow: 0 0 4px rgba(0,0,0,0.5);
@@ -100,25 +115,26 @@ body, html {
 }
 
 .mouth {
-  width: 18px;
-  height: 9px;
+  width: 15px;
+  height: 8px;
   border-bottom: 3px solid #03070f;
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 12px 12px;
   position: absolute;
-  top: 10px;
+  top: 9px;
   left: 50%;
   transform: translateX(-50%);
   transition: all 0.4s ease;
 }
 
+/* HAZ DE LUZ BIEN UBICADO (EMPIEZA LIMPIO SOBRE LA TARJETA) */
 .light-beam {
   position: absolute;
-  top: 125px;
+  top: 95px;
   left: 50%;
   transform: translateX(-50%);
-  width: 260px;
-  height: 170px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.35), rgba(0, 150, 255, 0.03) 80%, transparent);
+  width: 220px;
+  height: 130px;
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.3), rgba(0, 150, 255, 0.02) 80%, transparent);
   clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
   transition: opacity 0.5s ease;
@@ -126,23 +142,23 @@ body, html {
 }
 
 .lamp-base {
-  width: 50px;
-  height: 12px;
+  width: 44px;
+  height: 10px;
   background: #00d2ff;
-  border-radius: 6px;
+  border-radius: 5px;
   margin-top: 0px;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.7);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
   transition: all 0.5s ease;
   z-index: 1;
 }
 
-/* --- PITITA AL RAS DE LA BASE --- */
+/* --- PITITA AL RAS EXACTO DE LA BASE --- */
 .lamp-cord-container {
   position: absolute;
-  top: 110px;
+  top: 95px;
   left: 50%;
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 85px;
   transform: translateX(-50%);
   z-index: 5;
   touch-action: none;
@@ -165,12 +181,12 @@ body, html {
 .cord-handle {
   position: absolute;
   left: 50px;
-  top: 25px;
-  width: 16px;
-  height: 16px;
+  top: 22px;
+  width: 14px;
+  height: 14px;
   background: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 0 12px #00d2ff, 0 0 20px #00d2ff, inset 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px #00d2ff, 0 0 18px #00d2ff, inset 0 2px 3px rgba(0,0,0,0.2);
   transition: background 0.4s ease, box-shadow 0.4s ease;
   transform: translate(-50%, -50%);
 }
@@ -195,38 +211,38 @@ body, html {
   background: rgba(10, 20, 35, 0.85);
   border: 2px solid rgba(0, 210, 255, 0.35);
   border-radius: 16px;
-  padding: 25px 20px;
+  padding: 22px 18px;
   width: 90vw;
-  max-width: 350px;
-  box-shadow: 0 0 40px rgba(0, 210, 255, 0.25);
+  max-width: 330px;
+  box-shadow: 0 0 35px rgba(0, 210, 255, 0.25);
   backdrop-filter: blur(12px);
   transition: all 0.4s ease;
 }
 
 .login-title {
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   letter-spacing: 1px;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   display: block;
   color: #00d2ff;
   font-size: 11px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   font-weight: bold;
   letter-spacing: 0.8px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 13px;
   background: rgba(5, 11, 20, 0.8);
   border: 1px solid rgba(0, 210, 255, 0.4);
   border-radius: 8px;
@@ -238,12 +254,12 @@ body, html {
 
 .form-group input:focus {
   border-color: #00d2ff;
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.5);
 }
 
 .login-btn {
   width: 100%;
-  padding: 13px;
+  padding: 12px;
   background: linear-gradient(90deg, #0099ff, #00d2ff);
   border: none;
   border-radius: 8px;
@@ -251,29 +267,18 @@ body, html {
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
-  margin-top: 10px;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+  margin-top: 8px;
+  box-shadow: 0 0 18px rgba(0, 210, 255, 0.5);
   transition: all 0.2s;
 }
 
 .login-btn:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.8);
 }
 
 .login-card.disabled {
   opacity: 0.25;
   pointer-events: none;
   filter: grayscale(60%);
-}
-
-@media (max-width: 400px) {
-  .lamp-shade {
-    width: 130px;
-    height: 75px;
-  }
-  .light-beam {
-    width: 220px;
-    height: 150px;
-  }
 }

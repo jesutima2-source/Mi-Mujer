@@ -20,7 +20,7 @@
         }
 
         body {
-            background: linear-gradient(rgba(5, 7, 15, 0.75), rgba(5, 7, 15, 0.85)), 
+            background: linear-gradient(rgba(5, 7, 15, 0.65), rgba(5, 7, 15, 0.75)), 
                         url('central/flores/img/cartas.jpg') no-repeat center center;
             background-size: cover;
             display: flex;
@@ -230,8 +230,8 @@
 </head>
 <body>
 
-    <!-- Audio de fondo (sin autoplay directo para aplicar el retraso por JS) -->
-    <audio id="musicaFondo" src="sound/music1.mp3" loop></audio>
+    <!-- Audio de fondo -->
+    <audio id="musicaFondo" src="central/flores/sound/music1.mp3" loop></audio>
 
     <!-- Partículas de luz de fondo -->
     <div class="particulas" id="contenedorParticulas"></div>
@@ -273,23 +273,23 @@
     </div>
 
     <script>
-        // Reproducción de audio con 3 segundos de retraso y respaldo táctil para móviles
         document.addEventListener('DOMContentLoaded', () => {
             const audio = document.getElementById('musicaFondo');
             audio.volume = 0.5;
             
-            // Retraso de 3 segundos (3000 milisegundos)
-            setTimeout(() => {
-                audio.play().catch(() => {
-                    const unlockAudio = () => {
-                        audio.play();
-                        document.removeEventListener('click', unlockAudio);
-                        document.removeEventListener('touchstart', unlockAudio);
-                    };
-                    document.addEventListener('click', unlockAudio);
-                    document.addEventListener('touchstart', unlockAudio);
-                });
-            }, 3000);
+            // Salta los primeros 3 segundos de silencio que trae el archivo original de audio
+            audio.currentTime = 3.0;
+            
+            audio.play().catch(() => {
+                const unlockAudio = () => {
+                    audio.currentTime = 3.0; // Asegura saltar el silencio también si se desbloquea por toque
+                    audio.play();
+                    document.removeEventListener('click', unlockAudio);
+                    document.removeEventListener('touchstart', unlockAudio);
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
         });
 
         // Generador dinámico de lucecitas flotantes

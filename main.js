@@ -29,7 +29,7 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 const stars = [];
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 150; i++) {
   stars.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
@@ -42,14 +42,14 @@ for (let i = 0; i < 200; i++) {
 const shootingStars = [];
 function createShootingStar() {
   shootingStars.push({
-    x: Math.random() * canvas.width + 300,
+    x: Math.random() * canvas.width + 200,
     y: Math.random() * (canvas.height / 2),
-    length: Math.random() * 100 + 80,
-    speed: Math.random() * 7 + 5,
+    length: Math.random() * 80 + 60,
+    speed: Math.random() * 6 + 4,
     opacity: 1
   });
 }
-setInterval(createShootingStar, 2500);
+setInterval(createShootingStar, 3000);
 
 function animateStars() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,7 +65,7 @@ function animateStars() {
 
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
   ctx.lineWidth = 2;
-  ctx.shadowBlur = 15;
+  ctx.shadowBlur = 12;
   ctx.shadowColor = '#00d2ff';
 
   shootingStars.forEach((star, index) => {
@@ -76,7 +76,7 @@ function animateStars() {
 
     star.x -= star.speed;
     star.y += star.speed * 0.4;
-    star.opacity -= 0.01;
+    star.opacity -= 0.012;
 
     if (star.opacity <= 0 || star.x < 0) {
       shootingStars.splice(index, 1);
@@ -102,7 +102,7 @@ const cordHandle = document.getElementById('cordHandle');
 let isDragging = false;
 let startY = 0;
 let currentY = 0;
-const maxPull = 60;
+const maxPull = 55;
 
 function updateCordPosition(y) {
   cordLine.setAttribute('y2', 40 + y);
@@ -127,12 +127,12 @@ cordContainer.addEventListener('pointerup', (e) => {
   isDragging = false;
   cordContainer.releasePointerCapture(e.pointerId);
 
-  // Si se jaló lo suficiente, se enciende o apaga
-  if (currentY > 30) {
+  // Si se jaló lo suficiente, alterna el estado
+  if (currentY > 25) {
     toggleLamp();
   }
 
-  // Animación de rebote al soltar
+  // Animación de rebote (efecto resorte)
   let returnInterval = setInterval(() => {
     currentY -= 4;
     if (currentY <= 0) {
@@ -162,7 +162,7 @@ function toggleLamp() {
   }
 }
 
-// ================= VALIDACIÓN DE LOGIN =================
+// ================= VALIDACIÓN Y ENRUTAMIENTO DEL BOTÓN =================
 const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -173,7 +173,10 @@ loginForm.addEventListener('submit', (e) => {
 
   if (isValid) {
     alert("¡Bienvenido a nuestro rincón mágico, " + userVal + "!");
-    // Aquí puedes redirigir a tu siguiente página, ej: window.location.href = "home.html";
+    
+    // ENRUTAMIENTO: Cambia "home.html" por la ruta o archivo al que deseas redirigir al iniciar sesión exitosamente
+    window.location.href = "home.html"; 
+    
   } else {
     alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
   }

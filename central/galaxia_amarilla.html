@@ -226,20 +226,7 @@ const coreMat = new THREE.MeshPhongMaterial({color:0xff6600, transparent:true, o
 const core = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 32), coreMat);
 scene.add(core);
 
-function makeCenterTextTexture(msg){
-  const c = document.createElement('canvas'); c.width = 512; c.height = 512;
-  const ctx = c.getContext('2d');
-  ctx.clearRect(0,0,c.width,c.height);
-  ctx.font = 'bold 60px "Segoe UI", Roboto, sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#ffaa00';
-  ctx.shadowColor = '#00d2ff'; ctx.shadowBlur = 40;
-  ctx.fillText(msg, c.width/2, c.height/2);
-  return new THREE.CanvasTexture(c);
-}
-const centerSprite = new THREE.Sprite(new THREE.SpriteMaterial({map:makeCenterTextTexture("🌻 TE AMO BETZI 🌻"), transparent:true}));
-centerSprite.scale.set(90, 90, 1);
-scene.add(centerSprite);
+// (Texto central eliminado por completo)
 
 function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
@@ -256,7 +243,6 @@ function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   return new THREE.CanvasTexture(c);
 }
 
-// CORRECCIÓN APLICADA: AdditiveBlending elimina el cuadro/recuadro rectangular del brillo
 const glow = new THREE.Sprite(new THREE.SpriteMaterial({
   map: makeGlow(), 
   transparent: true, 

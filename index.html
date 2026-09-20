@@ -8,34 +8,51 @@
 </head>
 <body>
 
-  <div class="lamp-container">
-    <div class="lamp-cord-top"></div>
-    <div class="lamp-head">
-      <div class="lamp-face">
-        <div class="eye"></div>
-        <div class="eye"></div>
-      </div>
-      <div class="smile"></div>
-    </div>
-    
-    <!-- Pita y bolita centradas y más abajo -->
-    <div class="pull-cord-container" id="pullCord">
-      <div class="cord-line" id="cordLine"></div>
-      <div class="cord-ball" id="cordBall"></div>
-    </div>
-  </div>
+  <!-- Fondo de partículas -->
+  <canvas id="starCanvas"></canvas>
 
-  <div class="login-card">
-    <h2>BIENVENIDOS A NUESTRO RINCON ♥</h2>
-    <div class="input-group">
-      <label>♥ TU USUARIO ♥</label>
-      <input type="text" placeholder="Ingresa tu usuario">
+  <!-- Audio de fondo (opcional) -->
+  <audio id="loginAudio" src="tu-audio.mp3" loop></audio>
+
+  <div class="main-container">
+    <!-- Lámpara Interactiva -->
+    <div class="lamp-container" id="lampContainer">
+      <div class="lamp-glow-bg"></div>
+      <div class="lamp-wire-top"></div>
+      <div class="lamp-shade">
+        <div class="lamp-face">
+          <div class="eye"></div>
+          <div class="eye"></div>
+          <div class="mouth"></div>
+        </div>
+      </div>
+      <div class="light-beam"></div>
+      <div class="lamp-base"></div>
+
+      <!-- Pita y bolita -->
+      <div class="lamp-cord-container" id="cordContainer">
+        <svg class="cord-svg">
+          <line id="cordLine" x1="45" y1="0" x2="45" y2="25" stroke="#ffffff" stroke-width="2" />
+        </svg>
+        <div class="cord-handle" id="cordHandle"></div>
+      </div>
     </div>
-    <div class="input-group">
-      <label>♥ TU CONTRASEÑA ♥</label>
-      <input type="password" placeholder="Ingresa tu contraseña">
+
+    <!-- Tarjeta de Login -->
+    <div class="login-card" id="loginCard">
+      <h2 class="login-title">BIENVENIDOS A NUESTRO RINCON ♥</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>♥ TU USUARIO ♥</label>
+          <input type="text" id="username" placeholder="Ingresa tu usuario" required>
+        </div>
+        <div class="form-group">
+          <label>♥ TU CONTRASEÑA ♥</label>
+          <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
+        </div>
+        <button type="submit" class="login-btn">INICIAR</button>
+      </form>
     </div>
-    <button class="btn-submit">INICIAR</button>
   </div>
 
   <script src="script.js"></script>

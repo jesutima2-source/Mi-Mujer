@@ -13,7 +13,7 @@ body, html {
   color: #fff;
 }
 
-/* --- FONDO DE COPOS CELESTES --- */
+/* --- FONDO DE COPOS CELESTES (PARTÍCULAS SUAVES) --- */
 #starCanvas {
   position: fixed;
   top: 0;
@@ -43,7 +43,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: -10px;
   user-select: none;
   transition: all 0.4s ease;
 }
@@ -111,10 +111,10 @@ body, html {
   transition: all 0.4s ease;
 }
 
-/* --- HACES DE LUZ --- */
+/* --- LUZ MÁS SUAVE Y CÓMODA --- */
 .light-beam {
   position: absolute;
-  top: 122px;
+  top: 85px;
   left: 50%;
   transform: translateX(-50%);
   width: 240px;
@@ -126,21 +126,10 @@ body, html {
   z-index: 2;
 }
 
-.lamp-base {
-  width: 40px;
-  height: 10px;
-  background: #00d2ff;
-  border-radius: 5px;
-  margin-top: 0px;
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.5);
-  transition: all 0.5s ease;
-  z-index: 1;
-}
-
-/* --- PITITA --- */
+/* --- PITITA UBICADA ABAJITO DEL FOCO (MULTIDIRECCIONAL) --- */
 .lamp-cord-container {
   position: absolute;
-  top: 110px;
+  top: 75px; /* Justo en la base inferior del foco */
   left: 50%;
   width: 90px;
   height: 120px;
@@ -166,7 +155,7 @@ body, html {
 .cord-handle {
   position: absolute;
   left: 45px;
-  top: 25px;
+  top: 45px;
   width: 14px;
   height: 14px;
   background: #ffffff;
@@ -174,6 +163,17 @@ body, html {
   box-shadow: 0 0 8px #00d2ff, 0 0 15px #00d2ff, inset 0 2px 3px rgba(0,0,0,0.2);
   transition: background 0.4s ease, box-shadow 0.4s ease;
   transform: translate(-50%, -50%);
+}
+
+.lamp-base {
+  width: 40px;
+  height: 10px;
+  background: #00d2ff;
+  border-radius: 5px;
+  margin-top: 35px;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.5);
+  transition: all 0.5s ease;
+  z-index: 1;
 }
 
 /* --- ESTADO APAGADO --- */
@@ -266,4 +266,15 @@ body, html {
   opacity: 0.25;
   pointer-events: none;
   filter: grayscale(60%);
+}
+
+@media (max-width: 400px) {
+  .lamp-shade {
+    width: 130px;
+    height: 75px;
+  }
+  .light-beam {
+    width: 220px;
+    height: 150px;
+  }
 }

@@ -15,14 +15,12 @@
         html, body {
             width: 100%;
             height: 100vh;
-            overflow: hidden; /* Evita el scroll o movimiento al deslizar el dedo */
+            overflow: hidden;
             position: fixed;
         }
 
         body {
-            background: linear-gradient(rgba(5, 7, 15, 0.65), rgba(5, 7, 15, 0.75)), 
-                        url('central/flores/img/cartas.jpg') no-repeat center center;
-            background-size: cover;
+            background-color: #05070f;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -30,6 +28,28 @@
             text-align: center;
             padding: 15px;
             color: #fff;
+        }
+
+        /* Imagen de fondo garantizada para celular mediante etiqueta HTML */
+        .bg-img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        /* Capa oscura translúcida para que resalte el texto */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 7, 15, 0.72);
+            z-index: -1;
         }
 
         /* Partículas flotantes */
@@ -99,7 +119,7 @@
         /* Paso 1: Sobre / Botón inicial interactivo */
         .sobre-container {
             width: 100%;
-            background: rgba(17, 17, 24, 0.85);
+            background: rgba(17, 17, 24, 0.88);
             border: 2px solid rgba(255, 230, 0, 0.4);
             border-radius: 14px;
             padding: 22px 16px;
@@ -174,7 +194,7 @@
         /* Paso 3: Tarjeta de mensaje final + Botón a Flores */
         .mensajeFinal {
             width: 100%;
-            background: rgba(17, 17, 24, 0.88);
+            background: rgba(17, 17, 24, 0.92);
             border: 2px solid rgba(0, 195, 255, 0.4);
             border-radius: 14px;
             padding: 20px 16px;
@@ -230,8 +250,12 @@
 </head>
 <body>
 
+    <!-- Imagen de fondo directa para asegurar visibilidad en celulares -->
+    <img src="central/flores/img/cartas.jpg" class="bg-img" alt="Fondo">
+    <div class="bg-overlay"></div>
+
     <!-- Audio de fondo -->
-    <audio id="musicaFondo" src="central/flores/sound/music1.mp3" loop></audio>
+    <audio id="musicaFondo" src="central/flores/sound/music1.mp3" preload="auto" loop></audio>
 
     <!-- Partículas de luz de fondo -->
     <div class="particulas" id="contenedorParticulas"></div>
@@ -247,7 +271,7 @@
 
             <!-- BLOQUE 1: Sobre inicial con frase -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container">
+                <label for="paso2" class="sobre-container" id="btnIniciar">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -273,24 +297,22 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('musicaFondo');
-            audio.volume = 0.5;
-            
-            // Salta los primeros 3 segundos de silencio que trae el archivo original de audio
-            audio.currentTime = 3.0;
-            
-            audio.play().catch(() => {
-                const unlockAudio = () => {
-                    audio.currentTime = 3.0; // Asegura saltar el silencio también si se desbloquea por toque
-                    audio.play();
-                    document.removeEventListener('click', unlockAudio);
-                    document.removeEventListener('touchstart', unlockAudio);
-                };
-                document.addEventListener('click', unlockAudio);
-                document.addEventListener('touchstart', unlockAudio);
-            });
-        });
+        const audio = document.getElementById('musicaFondo');
+        audio.volume = 0.5;
+
+        // Función para reproducir y saltar los 3 segundos de silencio en el primer toque
+        function iniciarAudio() {
+            audio.currentTime = 3.0; // Salta el silencio de golpe
+            audio.play().then(() => {
+                // Si ya arrancó con éxito, removemos los escuchas para que no se reinicie
+                document.removeEventListener('click', iniciarAudio);
+                document.removeEventListener('touchstart', iniciarAudio);
+            }).catch(e => console.log(e));
+        }
+
+        // Registrar eventos táctiles para activar el audio al primer toque en cualquier parte del celular
+        document.addEventListener('click', iniciarAudio);
+        document.addEventListener('touchstart', iniciarAudio);
 
         // Generador dinámico de lucecitas flotantes
         const contenedor = document.getElementById('contenedorParticulas');

@@ -30,78 +30,93 @@
     background: rgba(0, 210, 255, 0.3);
   }
 
-  /* --- Capa y Botón gigante para asegurar música --- */
-  #music-overlay {
+  /* --- Control flotante discreto de música de fondo --- */
+  .music-control {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(5, 11, 20, 0.85);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    font-family: Arial, sans-serif;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-  }
-  #music-overlay h2 { color: #00d2ff; margin-bottom: 10px; font-size: 26px; text-shadow: 0 0 10px #00d2ff; }
-  #music-overlay p { color: #ffaa44; margin-bottom: 25px; font-size: 16px; }
-  .btn-music-main {
-    padding: 16px 32px;
-    background: linear-gradient(135deg, #00c6ff, #ff8800);
-    border: 2px solid #fff;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 20, 40, 0.8);
+    border: 2px solid #ff8800;
     border-radius: 999px;
+    padding: 8px 16px;
     color: #fff;
-    font-size: 18px;
-    font-weight: bold;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    z-index: 1000;
     cursor: pointer;
-    box-shadow: 0 0 25px #ff8800;
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 10px #ff8800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  .btn-music-main:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 35px #00d2ff;
+  .music-control:hover {
+    background: rgba(255, 136, 0, 0.3);
   }
 </style>
 </head>
 <body>
 
-<!-- Pantalla inicial para garantizar que la música suene sí o sí -->
-<div id="music-overlay">
-  <h2>🌻 Para Betzi, con todo mi amor 💖</h2>
-  <p>Toca el botón para entrar a su galaxia y reproducir la música</p>
-  <button class="btn-music-main" id="startBtn">🎵 Entrar y Reproducir Música 🎶</button>
-</div>
-
 <canvas id="c"></canvas>
 
-<!-- Elemento de audio con la ruta exacta -->
-<audio id="audio" src="flores/sound/DE_RODILLAS.mp3" preload="auto" loop></audio>
+<!-- Elemento de audio apuntando a music2.mp3 -->
+<audio id="audio" src="flores/sound/music2.mp3" preload="auto" loop></audio>
 
 <!-- Botón de inicio -->
 <a href="rincon.html" class="btn-inicio">🏠 Volver al inicio</a>
 
+<!-- Botón discreto por si el navegador requiere un clic en la página -->
+<div class="music-control" id="audioToggle">
+  <span>🎵 Música de fondo: <strong id="audioStatus">Activando...</strong></span>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 <script>
-// ================= Control de Reproducción de Música =================
+// ================= Control Automático y de Fondo del Audio =================
 const audio = document.getElementById('audio');
-const startBtn = document.getElementById('startBtn');
-const overlay = document.getElementById('music-overlay');
+const audioToggle = document.getElementById('audioToggle');
+const audioStatus = document.getElementById('audioStatus');
 
-startBtn.addEventListener('click', () => {
+let musicPlaying = false;
+
+function intentarReproducir() {
   audio.play().then(() => {
-    overlay.style.opacity = '0';
-    setTimeout(() => { overlay.style.display = 'none'; }, 500);
-  }).catch(e => {
-    alert("Por favor, vuelve a hacer clic para activar el audio.");
+    musicPlaying = true;
+    audioStatus.textContent = "Reproduciendo 🎶";
+    audioToggle.style.borderColor = "#00d2ff";
+    audioToggle.style.boxShadow = "0 0 10px #00d2ff";
+  }).catch(() => {
+    audioStatus.textContent = "Haz clic aquí para sonar 🎵";
   });
+}
+
+// Intentar reproducir automáticamente al cargar
+window.addEventListener('load', () => {
+  intentarReproducir();
+});
+
+// Si el usuario hace cualquier clic en la pantalla, arranca la música de fondo si estaba pausada
+window.addEventListener('click', () => {
+  if (!musicPlaying) {
+    intentarReproducir();
+  }
+}, { once: true });
+
+// Permitir pausar/reproducir con el botoncito de la esquina
+audioToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (musicPlaying) {
+    audio.pause();
+    musicPlaying = false;
+    audioStatus.textContent = "Pausado (Clic para reanudar)";
+  } else {
+    intentarReproducir();
+  }
 });
 
 // ================= Escena 3D =================
 const canvas=document.getElementById('c');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.25:2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse) *').matches?1.25:2));
 renderer.setSize(innerWidth,innerHeight);
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,5000);
@@ -188,7 +203,7 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras corregidas con el "Mi" incluido y combinadas en tonos celeste/naranja
+// Palabras con el "Mi" corregido
 const WORDS=[];
 const baseWords=[
   '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
@@ -304,7 +319,6 @@ addEventListener('mousedown',onDown);addEventListener('mousemove',onMove);addEve
 addEventListener('touchstart',onDown,{passive:true});addEventListener('touchmove',onMove,{passive:true});addEventListener('touchend',onUp,{passive:true});
 addEventListener('wheel',(e)=>{targetDist+=e.deltaY*0.25;targetDist=Math.max(160,Math.min(600,targetDist));},{passive:true});
 
-// Zoom con pellizco en móviles
 let pinch=0;
 addEventListener('touchmove',(e)=>{
   if(e.touches && e.touches.length===2){

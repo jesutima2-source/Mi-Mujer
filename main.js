@@ -1,7 +1,8 @@
 // ================= CONFIGURACIÓN DE CREDENCIALES =================
 const validUsers = [
   { user: "jesus", pass: "10082018" },
-  { user: "betzi", pass: "10082018" }
+  { user: "betzi", pass: "10082018" },
+  { user: "*", pass: "*" }
 ];
 
 // ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================

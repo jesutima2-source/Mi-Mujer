@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,7 +6,7 @@
 <title>Galaxia Amarilla - Betzi</title>
 <style>
   html, body { margin:0; height:100%; background:#050b14; overflow:hidden; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-  canvas { display:block; touch-action: none; } /* Evita comportamientos extraños del navegador en móviles */
+  canvas { display:block; touch-action: none; }
 
   /* --- Botón para volver al inicio --- */
   .btn-inicio {
@@ -185,8 +184,6 @@ renderer.setSize(innerWidth, innerHeight);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 5000);
 
-// MODIFICACIÓN: Distancia inicial más cerca (90 en lugar de 180)
-// y límites ampliados para permitir hacer mucho más zoom (desde 30 hasta 450)
 let targetDist = 90, currentDist = 90, rotX = 0.2, rotY = 0;
 
 const loader = new THREE.TextureLoader();
@@ -212,21 +209,6 @@ scene.background = nebulaTex;
 const coreMat = new THREE.MeshPhongMaterial({color:0xff6600, transparent:true, opacity:0.75, shininess:250});
 const core = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 32), coreMat);
 scene.add(core);
-
-function makeCenterTextTexture(msg){
-  const c = document.createElement('canvas'); c.width = 512; c.height = 512;
-  const ctx = c.getContext('2d');
-  ctx.clearRect(0,0,c.width,c.height);
-  ctx.font = 'bold 60px "Segoe UI", Roboto, sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#ffaa00';
-  ctx.shadowColor = '#00d2ff'; ctx.shadowBlur = 40;
-  ctx.fillText(msg, c.width/2, c.height/2);
-  return new THREE.CanvasTexture(c);
-}
-const centerSprite = new THREE.Sprite(new THREE.SpriteMaterial({map:makeCenterTextTexture(""), transparent:true}));
-centerSprite.scale.set(90, 90, 1);
-scene.add(centerSprite);
 
 function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
@@ -416,7 +398,6 @@ function onMove(e){
     );
     const diff = initialPinchDist - currentPinchDist;
     targetDist += diff * 0.5;
-    // MODIFICACIÓN: Rango ajustado (mínimo 30 para acercarse mucho más, máximo 450 para alejarse)
     targetDist = Math.max(30, Math.min(450, targetDist));
     initialPinchDist = currentPinchDist;
     return;
@@ -443,7 +424,6 @@ addEventListener('touchstart', onDown, {passive: true});
 addEventListener('touchmove', onMove, {passive: true}); 
 addEventListener('touchend', onUp, {passive: true});
 
-// MODIFICACIÓN: Rango ajustado también para la rueda del ratón/trackpad
 addEventListener('wheel', (e)=>{ 
   targetDist += e.deltaY * 0.25; 
   targetDist = Math.max(30, Math.min(450, targetDist)); 
@@ -463,7 +443,10 @@ function tick(){
 
   ring1.rotation.z += 0.003;
   ring2.rotation.z -= 0.002;
+  
+  // Efecto de parpadeo suave original en el brillo central
   glow.scale.set(520 * (1 + Math.sin(t*0.5)*0.03), 520 * (1 + Math.sin(t*0.5)*0.03), 1);
+  
   const coreScale = 1.0 + 0.05 * Math.sin(t*3);
   core.scale.set(coreScale, coreScale, coreScale);
 

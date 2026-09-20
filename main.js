@@ -1,8 +1,8 @@
-// ================= CONFIGURACIÓN DE LAS 3 CREDENCIALES =================
+// ================= CONFIGURACIÓN DE CREDENCIALES =================
 const validUsers = [
-  { user: "jesus", pass: "10082018" },   // Credencial 1 (Tú)
-  { user: "betzi", pass: "10082018" },   // Credencial 2 (Betzi)
-  { user: "*", pass: "*" }               // Credencial 3 (Pruebas)
+  { user: "jesus", pass: "10082018" },
+  { user: "betzi", pass: "10082018" },
+  { user: "*", pass: "*" }
 ];
 
 // ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
@@ -29,7 +29,6 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Crear estrellas estáticas de fondo
 const stars = [];
 for (let i = 0; i < 200; i++) {
   stars.push({
@@ -41,7 +40,6 @@ for (let i = 0; i < 200; i++) {
   });
 }
 
-// Crear estrellas fugaces dinámicas
 const shootingStars = [];
 function createShootingStar() {
   shootingStars.push({
@@ -52,13 +50,11 @@ function createShootingStar() {
     opacity: 1
   });
 }
-
-setInterval(createShootingStar, 2500); // Cada 2.5s aparece una
+setInterval(createShootingStar, 2500);
 
 function animateStars() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Dibujar estrellas estáticas titilando
   stars.forEach(star => {
     star.alpha += star.speed;
     if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
@@ -68,7 +64,6 @@ function animateStars() {
     ctx.fill();
   });
 
-  // Dibujar y mover estrellas fugaces
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
   ctx.lineWidth = 2;
   ctx.shadowBlur = 15;
@@ -77,4 +72,112 @@ function animateStars() {
   shootingStars.forEach((star, index) => {
     ctx.beginPath();
     ctx.moveTo(star.x, star.y);
-    ctx.lineTo(star.x - star.length, star.y +
+    ctx.lineTo(star.x - star.length, star.y + star.length * 0.4);
+    ctx.stroke();
+
+    star.x -= star.speed;
+    star.y += star.speed * 0.4;
+    star.opacity -= 0.01;
+
+    if (star.opacity <= 0 || star.x < 0) {
+      shootingStars.splice(index, 1);
+    }
+  });
+
+  ctx.shadowBlur = 0;
+  requestAnimationFrame(animateStars);
+}
+animateStars();
+
+// ================= LÓGICA DE LA LÁMPARA Y LA PITITA =================
+const lampContainer = document.getElementById('lampContainer');
+const loginCard = document.getElementById('loginCard');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const loginBtn = document.querySelector('.login-btn');
+
+const cordContainer = document.getElementById('cordContainer');
+const cordLine = document.getElementById('cordLine');
+const cordHandle = document.getElementById('cordHandle');
+
+let isDragging = false;
+let startY = 0;
+let currentY = 0;
+const maxPull = 70;
+
+function updateCordPosition(y) {
+  cordLine.setAttribute('y2', 45 + y);
+  cordHandle.style.top = (45 + y) + 'px';
+}
+
+cordContainer.addEventListener('pointerdown', (e) => {
+  isDragging = true;
+  startY = e.clientY;
+  cordContainer.setPointerCapture(e.pointerId);
+});
+
+cordContainer.addEventListener('pointermove', (e) => {
+  if (!isDragging) return;
+  let deltaY = e.clientY - startY;
+  currentY = Math.max(0, Math.min(deltaY, maxPull));
+  updateCordPosition(currentY);
+});
+
+cordContainer.addEventListener('pointerup', (e) => {
+  if (!isDragging) return;
+  isDragging = false;
+  cordContainer.releasePointerCapture(e.pointerId);
+
+  // Si se jaló lo suficiente, alternamos el estado de encendido/apagado
+  if (currentY > 35) {
+    toggleLamp();
+  }
+
+  // Animación de rebote al soltar
+  let returnInterval = setInterval(() => {
+    currentY -= 4;
+    if (currentY <= 0) {
+      currentY = 0;
+      updateCordPosition(0);
+      clearInterval(returnInterval);
+    } else {
+      updateCordPosition(currentY);
+    }
+  }, 15);
+});
+
+function toggleLamp() {
+  lampContainer.classList.toggle('off');
+  const isOff = lampContainer.classList.contains('off');
+
+  if (isOff) {
+    loginCard.classList.add('disabled');
+    usernameInput.disabled = true;
+    passwordInput.disabled = true;
+    loginBtn.disabled = true;
+  } else {
+    loginCard.classList.remove('disabled');
+    usernameInput.disabled = false;
+    passwordInput.disabled = false;
+    loginBtn.disabled = false;
+  }
+}
+
+// ================= VALIDACIÓN DE LOGIN =================
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const userVal = usernameInput.value.trim().toLowerCase();
+  const passVal = passwordInput.value.trim();
+
+  const isValid = validUsers.some(u => 
+    (u.user === userVal && u.pass === passVal) || (u.user === "*" && u.pass === "*")
+  );
+
+  if (isValid) {
+    alert("¡Bienvenido a nuestro rincón mágico, " + userVal + "!");
+    // Aquí puedes redirigir a tu siguiente página, ej: window.location.href = "home.html";
+  } else {
+    alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
+  }
+});

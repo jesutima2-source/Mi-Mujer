@@ -13,14 +13,14 @@ body, html {
   color: #fff;
 }
 
-/* --- FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS CORREGIDO) --- */
+/* --- FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS) --- */
 #starCanvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -100; /* Muy atrás para garantizar visibilidad */
+  z-index: -100;
   background: radial-gradient(circle at center, #0a192f 0%, #03070f 100%);
   pointer-events: none;
 }
@@ -112,7 +112,7 @@ body, html {
   z-index: 2;
 }
 
-/* --- PITITA 360° --- */
+/* --- PITITA --- */
 .lamp-cord-container {
   position: absolute;
   top: 95px;
@@ -160,7 +160,7 @@ body, html {
   z-index: 1;
 }
 
-/* --- ESTADO APAGADO (AHORA ES POR DEFECTO) --- */
+/* --- ESTADO APAGADO --- */
 .lamp-container.off .lamp-glow-bg { opacity: 0; }
 .lamp-container.off .lamp-shade { background: #2c3e50; box-shadow: none; }
 .lamp-container.off .eye, 
@@ -241,7 +241,7 @@ body, html {
   box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
 }
 
-/* --- ESTADO DESHABILITADO DEL LOGIN (AHORA POR DEFECTO) --- */
+/* --- ESTADO DESHABILITADO DEL LOGIN --- */
 .login-card.disabled {
   opacity: 0.3;
   pointer-events: none;

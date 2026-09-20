@@ -11,12 +11,12 @@
   <!-- Fondo de partículas -->
   <canvas id="starCanvas"></canvas>
 
-  <!-- Audio con la ruta solicitada -->
+  <!-- Audio de fondo -->
   <audio id="loginAudio" src="central/flores/sound/musiclogin.mp3" loop></audio>
 
   <div class="main-container">
-    <!-- Lámpara Interactiva -->
-    <div class="lamp-container" id="lampContainer">
+    <!-- Lámpara Interactiva (Inicia con la clase 'off' para que empiece apagada) -->
+    <div class="lamp-container off" id="lampContainer">
       <div class="lamp-glow-bg"></div>
       <div class="lamp-wire-top"></div>
       <div class="lamp-shade">
@@ -32,25 +32,25 @@
       <!-- Pita y bolita -->
       <div class="lamp-cord-container" id="cordContainer">
         <svg class="cord-svg">
-          <line id="cordLine" x1="45" y1="0" x2="45" y2="25" stroke="#ffffff" stroke-width="2" />
+          <line id="cordLine" x1="45" y1="0" x2="45" y2="25" stroke="#7f8c8d" stroke-width="2" />
         </svg>
         <div class="cord-handle" id="cordHandle"></div>
       </div>
     </div>
 
-    <!-- Tarjeta de Login -->
-    <div class="login-card" id="loginCard">
+    <!-- Tarjeta de Login (Inicia deshabilitada porque la lámpara empieza apagada) -->
+    <div class="login-card disabled" id="loginCard">
       <h2 class="login-title">BIENVENIDOS A NUESTRO RINCON ♥</h2>
       <form id="loginForm">
         <div class="form-group">
           <label>♥ TU USUARIO ♥</label>
-          <input type="text" id="username" placeholder="Ingresa tu usuario" required>
+          <input type="text" id="username" placeholder="Ingresa tu usuario" required disabled>
         </div>
         <div class="form-group">
           <label>♥ TU CONTRASEÑA ♥</label>
-          <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
+          <input type="password" id="password" placeholder="Ingresa tu contraseña" required disabled>
         </div>
-        <button type="submit" class="login-btn">INICIAR</button>
+        <button type="submit" class="login-btn" disabled>INICIAR</button>
       </form>
     </div>
   </div>

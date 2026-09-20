@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Un Rincón Especial ♥</title>
   <style>
     * {
@@ -12,7 +12,10 @@
     }
 
     body {
-      background-color: #05070f;
+      /* Fondo de imagen solicitado + color oscuro de respaldo */
+      background: linear-gradient(rgba(5, 7, 15, 0.75), rgba(5, 7, 15, 0.85)), 
+                  url('flores/img/fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -20,24 +23,79 @@
       justify-content: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      padding: 20px;
+      padding: 15px;
       text-align: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* EFECTO DE PARTÍCULAS DE CORAZONES (Fondo animado) */
+    .hearts-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Para que no estorbe al tocar la pantalla */
+      z-index: -1; /* Detrás de todo */
+      background: radial-gradient(circle, transparent 20%, #05070f 100%);
+      opacity: 0.6;
+    }
+
+    /* Animación simple para los corazones usando pseudo-elementos */
+    .hearts-background::before, .hearts-background::after {
+      content: '♥';
+      position: absolute;
+      color: rgba(0, 210, 255, 0.4); /* Color cian suave */
+      font-size: 15px;
+      animation: fall linear infinite;
+      filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.6));
+    }
+
+    .hearts-background::after {
+      color: rgba(255, 136, 0, 0.3); /* Un toque de naranja suave */
+      font-size: 22px;
+      animation-delay: 2s;
+      filter: drop-shadow(0 0 5px rgba(255, 136, 0, 0.5));
+    }
+
+    /* Generar múltiples corazones moviéndose */
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    /* Duplicar el efecto para más densidad */
+    .hearts-container {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+        overflow: hidden;
+    }
+    .heart {
+        position: absolute; display: block; top: -10%;
+        color: var(--heart-color); font-size: var(--heart-size);
+        animation: heartFall var(--fall-duration) linear infinite;
+        animation-delay: var(--fall-delay);
+        opacity: 0.5;
+    }
+    @keyframes heartFall {
+        0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.5; }
+        100% { transform: translateY(105vh) translateX(var(--move-x)) rotate(720deg); opacity: 0; }
     }
 
     /* TÍTULO ANIMADO BIENVENIDA */
     .greetings {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       font-weight: 800;
       display: flex;
-      gap: 5px;
-      margin-bottom: 10px;
+      gap: 4px;
+      margin-bottom: 5px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .greetings span {
       animation: glow 2s ease-in-out infinite alternate;
-      color: #444;
+      color: #888;
     }
 
     .greetings span:nth-child(1) { animation-delay: 0.1s; }
@@ -52,77 +110,123 @@
     .greetings span:nth-child(10) { animation-delay: 1.0s; }
 
     @keyframes glow {
-      0% {
-        color: #333;
-        text-shadow: none;
-      }
-      100% {
-        color: #fff;
-        text-shadow: 0 0 15px #00d2ff, 0 0 30px #00d2ff;
-      }
+      0% { color: #555; text-shadow: none; }
+      100% { color: #fff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; }
     }
 
     /* SUBTÍTULO Y FRASE */
     .description {
-      font-size: 1rem;
-      letter-spacing: 1.2px;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
       color: #e0f8ff;
-      margin-bottom: 30px;
-      text-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+      font-weight: 300;
     }
 
-    /* CONTENEDOR DE TARJETAS (Diseño vertical optimizado para celular) */
+    /* CONTENEDOR DEL TIMER */
+    .timer-box {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 25px;
+        width: 100%;
+        max-width: 380px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .timer-title {
+        font-size: 0.8rem;
+        color: #aaa;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .time-digits {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .time-block {
+        display: flex;
+        flex-direction: column;
+        min-width: 45px;
+    }
+    .digit {
+        background: linear-gradient(to bottom, #00d2ff, #0088cc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: monospace; /* Fuente monoespaciada para el timer */
+        font-size: 1.6rem;
+        text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+    }
+    .label {
+        font-size: 0.65rem;
+        color: #ccc;
+        margin-top: 2px;
+    }
+
+    /* CONTENEDOR DE TARJETAS */
     .cards-grid {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
       width: 100%;
       max-width: 380px;
+      position: relative;
+      z-index: 1; /* Encima del fondo de corazones */
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.07);
       border: 1px solid rgba(0, 210, 255, 0.4);
-      border-radius: 16px;
-      padding: 18px 20px;
+      border-radius: 14px;
+      padding: 15px;
       text-decoration: none;
       color: #fff;
       transition: all 0.3s ease;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      backdrop-filter: blur(6px);
+      gap: 3px;
+      backdrop-filter: blur(5px);
     }
 
     .card:hover, .card:active {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: #00d2ff;
-      box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
-      background: rgba(0, 210, 255, 0.12);
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+      background: rgba(0, 210, 255, 0.15);
     }
 
     .card h3 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #00d2ff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      margin-bottom: 2px;
     }
 
-    /* Destacar un poco más el título de las flores amarillas si deseas */
-    .card.flores h3 {
-      color: #ffcc00;
-    }
+    .card.flores h3 { color: #ffcc00; }
 
     .card p {
-      font-size: 0.85rem;
-      color: #ccc;
+      font-size: 0.75rem;
+      color: #ddd;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
+
+  <!-- FONDO ANIMADO DE CORAZONES (Se generará por JS para mejor efecto) -->
+  <div class="hearts-container" id="heartsContainer"></div>
 
   <!-- SALUDO -->
   <div class="greetings">
@@ -141,6 +245,20 @@
   <!-- FRASE -->
   <div class="description">
     <span>Un rincón especial diseñado solo para ti ♥</span>
+  </div>
+
+  <!-- CONTENEDOR DEL TIMER (Nuevo) -->
+  <div class="timer-box">
+    <div class="timer-title">JUNTOS DESDE</div>
+    <div class="time-digits" id="timeDigits">
+        <!-- Los bloques se llenan dinámicamente con JS -->
+        <div class="time-block"><span class="digit" id="years">00</span><span class="label">AÑOS</span></div>
+        <div class="time-block"><span class="digit" id="months">00</span><span class="label">MESES</span></div>
+        <div class="time-block"><span class="digit" id="days">00</span><span class="label">DÍAS</span></div>
+        <div class="time-block"><span class="digit" id="hours">00</span><span class="label">HRS</span></div>
+        <div class="time-block"><span class="digit" id="minutes">00</span><span class="label">MIN</span></div>
+        <div class="time-block"><span class="digit" id="seconds">00</span><span class="label">SEG</span></div>
+    </div>
   </div>
 
   <!-- MENÚ DE TARJETAS -->
@@ -172,5 +290,57 @@
 
   </div>
 
-</body>
-</html>
+  <script>
+    // --- Lógica del Timer ---
+    // Fecha de inicio: 10 de agosto de 2018 (mes 7 porque JS va de 0 a 11)
+    const startDate = new Date(2018, 7, 10, 0, 0, 0);
+
+    function updateTimer() {
+        const now = new Date();
+        const diff = now - startDate;
+
+        // Cálculos de tiempo
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        // Cálculo más preciso de Años y Meses
+        let years = now.getFullYear() - startDate.getFullYear();
+        let months = now.getMonth() - startDate.getMonth();
+
+        // Ajuste si el mes actual es anterior al mes de inicio
+        if (months < 0 || (months === 0 && now.getDate() < startDate.getDate())) {
+            years--;
+            months += 12;
+        }
+        // Ajuste si el día actual es anterior al día de inicio dentro del mismo mes
+        if (now.getDate() < startDate.getDate()) {
+             // Este ajuste es complejo, la forma más fácil es recalcular los días exactos desde el último mes aniversario
+            let previousMonth = new Date(now.getFullYear(), now.getMonth(), 0); // Último día del mes anterior
+            // Si el día de inicio es mayor al último día del mes actual (ej: inicio el 31, hoy es 28 feb)
+            if(startDate.getDate() > previousMonth.getDate()){
+                 // Se mantiene el cálculo principal, los días se ajustan abajo
+            }
+        }
+        
+        // Recalcular días exactos para mayor precisión (diferencia entre hoy y el último "mes aniversario")
+        const lastMonthAnniversary = new Date(now.getFullYear(), now.getMonth(), startDate.getDate());
+        let accurateDays = Math.floor((now - lastMonthAnniversary) / (1000 * 60 * 60 * 24));
+        
+        if(accurateDays < 0) {
+             const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+             // Si estamos antes del día aniversario en el mes actual, sumamos los días que faltaban del mes anterior
+             accurateDays = previousMonth.getDate() - startDate.getDate() + now.getDate();
+             // O simplemente la diferencia de días cruda, pero el cálculo de meses anterior ya ajustó el año/mes.
+             // Usaremos una aproximación estándar para el timer que se vea bien.
+             // Nota: el cálculo exacto de días entre dos fechas es complicado por los meses bisiestos, pero la diferencia en milisegundos es exacta. 
+             // Para un timer visual, esto es suficiente:
+        }
+        // RECALCULO SENCILLO Y VISUALMENTE EXACTO PARA EL USUARIO:
+        let tempDate = new Date(startDate);
+        let y = 0, m = 0, d = 0, h = 0, min = 0, s = 0;
+        
+        // Años
+        tempDate.setFullYear(tempDate.getFullYear() + 1);
+        while(tempDate

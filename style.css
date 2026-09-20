@@ -13,14 +13,14 @@ body, html {
   color: #fff;
 }
 
-/* --- LIENZO DE ESTRELLAS Y ESTRELLAS FUGAZES --- */
+/* --- FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS CORREGIDO) --- */
 #starCanvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: -100; /* Muy atrás para garantizar visibilidad */
   background: radial-gradient(circle at center, #0a192f 0%, #03070f 100%);
   pointer-events: none;
 }
@@ -44,6 +44,7 @@ body, html {
   align-items: center;
   margin-bottom: -15px;
   user-select: none;
+  transition: all 0.4s ease;
 }
 
 .lamp-glow-bg {
@@ -51,11 +52,11 @@ body, html {
   top: -25px;
   width: 180px;
   height: 180px;
-  background: radial-gradient(circle, rgba(0, 210, 255, 0.45) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.5) 0%, transparent 70%);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
-  transition: opacity 0.4s;
+  transition: opacity 0.5s ease;
 }
 
 .lamp-shade {
@@ -64,8 +65,8 @@ body, html {
   background: #00d2ff;
   border-radius: 75px 75px 20px 20px;
   position: relative;
-  box-shadow: 0 0 40px rgba(0, 210, 255, 0.8);
-  transition: background 0.4s, box-shadow 0.4s;
+  box-shadow: 0 0 45px rgba(0, 210, 255, 0.9);
+  transition: all 0.5s ease;
   z-index: 3;
 }
 
@@ -84,7 +85,7 @@ body, html {
   height: 8px;
   background: #050b14;
   border-radius: 50%;
-  transition: background 0.4s;
+  transition: all 0.4s ease;
 }
 
 .mouth {
@@ -96,7 +97,7 @@ body, html {
   top: 12px;
   left: 50%;
   transform: translateX(-50%);
-  transition: border-color 0.4s;
+  transition: all 0.4s ease;
 }
 
 .light-beam {
@@ -104,10 +105,10 @@ body, html {
   top: 90px;
   width: 240px;
   height: 160px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.45), transparent);
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.5), transparent);
   clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
-  transition: opacity 0.4s;
+  transition: opacity 0.5s ease;
   z-index: 2;
 }
 
@@ -144,7 +145,7 @@ body, html {
   background: #ffffff;
   border-radius: 50%;
   box-shadow: 0 0 12px #00d2ff, 0 0 22px #00d2ff;
-  transition: background 0.4s, box-shadow 0.4s;
+  transition: all 0.4s ease;
   transform: translate(-50%, -50%);
 }
 
@@ -154,18 +155,20 @@ body, html {
   background: #00d2ff;
   border-radius: 8px;
   margin-top: 50px;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.75);
-  transition: background 0.4s, box-shadow 0.4s;
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.9);
+  transition: all 0.5s ease;
   z-index: 1;
 }
 
-/* ESTADO APAGADO */
+/* --- ESTADO APAGADO (AHORA ES POR DEFECTO) --- */
 .lamp-container.off .lamp-glow-bg { opacity: 0; }
-.lamp-container.off .lamp-shade { background: #232b38; box-shadow: none; }
-.lamp-container.off .eye, .lamp-container.off .mouth { background: #4a5568; border-color: #4a5568; }
+.lamp-container.off .lamp-shade { background: #2c3e50; box-shadow: none; }
+.lamp-container.off .eye, 
+.lamp-container.off .mouth { background: #95a5a6; border-color: #95a5a6; }
 .lamp-container.off .light-beam { opacity: 0; }
-.lamp-container.off .lamp-base { background: #232b38; box-shadow: none; }
-.lamp-container.off .cord-handle { background: #4a5568; box-shadow: none; }
+.lamp-container.off .lamp-base { background: #2c3e50; box-shadow: none; }
+.lamp-container.off .cord-handle { background: #7f8c8d; box-shadow: none; }
+.lamp-container.off #cordLine { stroke: #95a5a6; }
 
 /* --- TARJETA DE LOGIN --- */
 .login-card {
@@ -238,8 +241,9 @@ body, html {
   box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
 }
 
+/* --- ESTADO DESHABILITADO DEL LOGIN (AHORA POR DEFECTO) --- */
 .login-card.disabled {
-  opacity: 0.25;
+  opacity: 0.3;
   pointer-events: none;
-  filter: grayscale(80%);
+  filter: grayscale(50%);
 }

@@ -9,11 +9,11 @@ body, html {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #050b14;
+  background-color: #03070f;
   color: #fff;
 }
 
-/* --- FONDO DE ESTRELLAS FUGACES DINÁMICAS --- */
+/* --- FONDO DE ESTRELLAS FUGACES Y PARTÍCULAS --- */
 .starfield {
   position: fixed;
   top: 0;
@@ -27,33 +27,35 @@ body, html {
 
 .shooting-star {
   position: absolute;
-  width: 120px;
+  width: 150px;
   height: 2px;
-  background: linear-gradient(90deg, #fff, transparent);
+  background: linear-gradient(90deg, #ffffff, rgba(0, 210, 255, 0.8), transparent);
   opacity: 0;
   transform: rotate(-45deg);
-  animation: shoot 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px #00d2ff);
+  animation: shoot 3.5s ease-in-out infinite;
 }
 
-.shooting-star:nth-child(1) { top: 10%; left: 80%; animation-delay: 0s; animation-duration: 3.5s; }
-.shooting-star:nth-child(2) { top: 40%; left: 90%; animation-delay: 1.2s; animation-duration: 4s; }
-.shooting-star:nth-child(3) { top: 5%; left: 40%; animation-delay: 2.5s; animation-duration: 3s; }
-.shooting-star:nth-child(4) { top: 60%; left: 70%; animation-delay: 0.8s; animation-duration: 4.5s; }
+.shooting-star:nth-child(1) { top: 5%; left: 90%; animation-delay: 0s; animation-duration: 3s; }
+.shooting-star:nth-child(2) { top: 30%; left: 95%; animation-delay: 1.2s; animation-duration: 4s; }
+.shooting-star:nth-child(3) { top: 10%; left: 50%; animation-delay: 2.1s; animation-duration: 3.2s; }
+.shooting-star:nth-child(4) { top: 50%; left: 80%; animation-delay: 0.5s; animation-duration: 4.5s; }
+.shooting-star:nth-child(5) { top: 20%; left: 70%; animation-delay: 2.8s; animation-duration: 3.8s; }
 
 @keyframes shoot {
   0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
-  100% { transform: translateX(-400px) translateY(400px) rotate(-45deg); opacity: 0; }
+  100% { transform: translateX(-500px) translateY(500px) rotate(-45deg); opacity: 0; }
 }
 
 .starfield-static {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   background-image: 
-      radial-gradient(white, rgba(255,255,255,.3) 2px, transparent 3px),
-      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
-  background-size: 400px 400px, 250px 250px;
+      radial-gradient(white, rgba(255,255,255,.35) 2px, transparent 3px),
+      radial-gradient(#00d2ff, rgba(0,210,255,.2) 1px, transparent 2px);
+  background-size: 350px 350px, 200px 200px;
   z-index: -1;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -67,7 +69,7 @@ body, html {
   z-index: 10;
 }
 
-/* --- ESTILOS DE LA LÁMPARA Y RESPLANDOR TRASERO --- */
+/* --- ESTILOS DE LA LÁMPARA Y RESPLANDOR --- */
 .lamp-container {
   position: relative;
   display: flex;
@@ -77,13 +79,12 @@ body, html {
   user-select: none;
 }
 
-/* Resplandor mágico detrás de la lámpara */
 .lamp-glow-bg {
   position: absolute;
   top: -25px;
   width: 180px;
   height: 180px;
-  background: radial-gradient(circle, rgba(0, 210, 255, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.45) 0%, transparent 70%);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
@@ -131,7 +132,6 @@ body, html {
   transition: border-color 0.4s;
 }
 
-/* Haz de luz inferior */
 .light-beam {
   position: absolute;
   top: 90px;
@@ -144,7 +144,7 @@ body, html {
   z-index: 2;
 }
 
-/* --- PITITA CON FÍSICAS 360 GRADOS --- */
+/* --- PITITA 360° --- */
 .lamp-cord-container {
   position: absolute;
   top: 95px;
@@ -192,30 +192,13 @@ body, html {
   z-index: 1;
 }
 
-/* --- ESTADO APAGADO DE LA LÁMPARA --- */
-.lamp-container.off .lamp-glow-bg {
-  opacity: 0;
-}
-.lamp-container.off .lamp-shade {
-  background: #232b38;
-  box-shadow: none;
-}
-.lamp-container.off .eye,
-.lamp-container.off .mouth {
-  background: #4a5568;
-  border-color: #4a5568;
-}
-.lamp-container.off .light-beam {
-  opacity: 0;
-}
-.lamp-container.off .lamp-base {
-  background: #232b38;
-  box-shadow: none;
-}
-.lamp-container.off .cord-handle {
-  background: #4a5568;
-  box-shadow: none;
-}
+/* ESTADO APAGADO */
+.lamp-container.off .lamp-glow-bg { opacity: 0; }
+.lamp-container.off .lamp-shade { background: #232b38; box-shadow: none; }
+.lamp-container.off .eye, .lamp-container.off .mouth { background: #4a5568; border-color: #4a5568; }
+.lamp-container.off .light-beam { opacity: 0; }
+.lamp-container.off .lamp-base { background: #232b38; box-shadow: none; }
+.lamp-container.off .cord-handle { background: #4a5568; box-shadow: none; }
 
 /* --- TARJETA DE LOGIN --- */
 .login-card {
@@ -288,7 +271,6 @@ body, html {
   box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
 }
 
-/* --- ESTADO APAGADO DEL LOGIN (BLOQUEO) --- */
 .login-card.disabled {
   opacity: 0.25;
   pointer-events: none;

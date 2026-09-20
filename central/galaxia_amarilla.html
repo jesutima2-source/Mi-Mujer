@@ -34,8 +34,8 @@
 <body>
 <canvas id="c"></canvas>
 
-<!-- Elemento de audio con la ruta indicada -->
-<audio id="audio" src="central/flores/sound/DE RODILLAS(CANCIÓN PARA TU FUTUR@ ESPOS@).mp3" preload="auto" loop></audio>
+<!-- Elemento de audio con el nuevo nombre corto exacto -->
+<audio id="audio" src="central/flores/sound/DE%20RODILLAS.mp3" preload="auto" loop></audio>
 
 <!-- Botón de inicio vinculado a rincon.html -->
 <a href="rincon.html" class="btn-inicio">🏠 Volver al inicio</a>
@@ -45,10 +45,8 @@
 // ================= Reproducción automática de música =================
 const audio = document.getElementById('audio');
 
-// Intentar reproducir automáticamente al cargar
 window.addEventListener('load', () => {
   audio.play().catch(() => {
-    // Si el navegador bloquea el autoplay, se reproducirá en el primer toque/clic del usuario
     const unlockAudio = () => {
       audio.play();
       window.removeEventListener('click', unlockAudio);
@@ -94,12 +92,12 @@ const coreMat=new THREE.MeshPhongMaterial({color:0x111111,transparent:true,opaci
 const core=new THREE.Mesh(new THREE.SphereGeometry(40,64,64),coreMat);
 scene.add(core);
 
-// Mensaje "TE AMO ❤️" fijo en el centro
+// Mensaje central
 function makeCenterTextTexture(msg){
   const c=document.createElement('canvas');c.width=512;c.height=512;
   const ctx=c.getContext('2d');
   ctx.clearRect(0,0,c.width,c.height);
-  ctx.font='bold 80px Arial';
+  ctx.font='bold 75px Arial';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
   ctx.fillStyle='#ff0033';
@@ -108,10 +106,10 @@ function makeCenterTextTexture(msg){
   ctx.fillText(msg,c.width/2,c.height/2);
   return new THREE.CanvasTexture(c);
 }
-const centerTex=makeCenterTextTexture("TE AMO ❤️");
+const centerTex=makeCenterTextTexture("TE AMO BETZI");
 const centerMat=new THREE.SpriteMaterial({map:centerTex,transparent:true});
 const centerSprite=new THREE.Sprite(centerMat);
-centerSprite.scale.set(60,60,1);
+centerSprite.scale.set(65,65,1);
 centerSprite.position.set(0,0,0);
 centerSprite.renderOrder=999;
 scene.add(centerSprite);
@@ -150,23 +148,19 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras alrededor personalizadas para Betzi
+// Palabras cortas con menciones directas a Betzi (máximo 2 palabras por etiqueta)
 const WORDS=[];
 const baseWords=[
-  '💖 Te amo Betzi', '🧙‍♀️ Mi bruja tierna', '🥰 Te extraño Betzi', '✨ Eres todo', '❤️ Te amoo', '🔥 Mi amor Betzi',
-  '👑 Mi reina Betzi', '💫 Te amo muchísimo', '🥺 Te extraño tanto', '🌹 Mi vida Betzi', '💖 Eres mi mundo', '🪄 Brujita hermosa',
-  '💎 Te amoo mi amor', '🥰 Mi tierna brujita', '🌟 Eres todo para mí', '😘 Te amo Betzi', '🌙 Mi dulce Betzi', '💫 Siempre tú',
-  '🔮 Mi bruja hermosa', '❤️ Te extraño mi amor', '🌻 Mi tesoro Betzi', '✨ Eres mi felicidad', '💞 Te amoo con el alma', '🌸 Mi chica tierna',
-  '🥰 Contigo siempre', '🔥 Mi pasión Betzi', '💌 Te amo mi vida', '⭐ Mi estrellita Betzi', '🎈 Mi razón de ser', '💖 Eres mi todo',
-  '🪄 Brujita de mi amor', '🤗 Abrazos para ti', '🌷 Te extraño mi vida', '💘 Te amo infinitamente', '✨ Mi bruja tierna', '🥰 Eres mi sol',
-  '💫 Por siempre Betzi', '❤️ Te amoo mi reina', '🌹 Mi flor hermosa', '🌠 Eres mi universo', '😘 Te amo con locura', '💖 Mi dulce compañera',
-  '🔮 Brujita de mi vida', '✨ Te extraño demasiado', '🥰 Eres mi alegría', '❤️ Te amo mi princesa', '🌟 Mi amor eterno', '💌 Por siempre tú y yo'
+  'Te amo Betzi', 'Mi vida Betzi', 'Brujita Betzi', 'Mi reina Betzi', 
+  'Te amo', 'Mi amor', 'Mi brujita', 'Eres todo', 
+  'Te extraño', 'Mi cielo', 'Mi tesoro', 'Mi magia'
 ];
 for(let i=0;i<6;i++){WORDS.push(...baseWords);}
+
 function makeTextTexture(text,color){
   const c=document.createElement('canvas');c.width=512;c.height=128;
   const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
-  ctx.font='bold 60px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='bold 55px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillStyle='#fff';ctx.shadowColor=color;ctx.shadowBlur=30;
   ctx.fillText(text,c.width/2,c.height/2);
   return new THREE.CanvasTexture(c);
@@ -180,7 +174,7 @@ for(let i=0;i<WORDS.length;i++){
   const tex=sharedWordTextures.get(textureKey);
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true});
   const sp=new THREE.Sprite(mat);
-  sp.scale.set(65,16,1); // Ancho ajustado para que quepan bien las frases
+  sp.scale.set(42,13,1); // Tamaño compacto para evitar distorsiones
   const phi=Math.acos(2*Math.random()-1);const theta=Math.random()*Math.PI*2;
   const r=150+Math.random()*120;
   sp.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));

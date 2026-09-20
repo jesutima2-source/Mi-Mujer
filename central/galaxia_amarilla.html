@@ -15,18 +15,18 @@
     left: 20px;
     padding: 10px 20px;
     background: rgba(0, 20, 40, 0.7);
-    border: 2px solid #ff8800;
+    border: 2px solid #00d2ff;
     border-radius: 999px;
     color: #fff;
     font-size: 14px;
     text-decoration: none;
-    box-shadow: 0 0 12px #ff8800;
+    box-shadow: 0 0 12px #00d2ff;
     z-index: 1000;
     transition: transform 0.2s, background 0.2s;
   }
   .btn-inicio:hover {
     transform: scale(1.05);
-    background: rgba(255, 136, 0, 0.3);
+    background: rgba(0, 210, 255, 0.3);
   }
 
   /* --- Barra de Reproducción Inferior --- */
@@ -38,13 +38,13 @@
     width: 90%;
     max-width: 450px;
     background: rgba(5, 11, 20, 0.85);
-    border: 2px solid rgba(255, 136, 0, 0.6);
+    border: 2px solid rgba(0, 210, 255, 0.6);
     border-radius: 999px;
     padding: 10px 20px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 0 20px rgba(255, 136, 0, 0.4);
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
     z-index: 1000;
     backdrop-filter: blur(8px);
   }
@@ -52,7 +52,7 @@
   .play-btn {
     background: none;
     border: none;
-    color: #ffaa00;
+    color: #00d2ff;
     font-size: 22px;
     cursor: pointer;
     transition: transform 0.2s;
@@ -184,7 +184,6 @@ renderer.setSize(innerWidth, innerHeight);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 5000);
 
-// Distancia inicial mayor para celulares
 let targetDist = 140, currentDist = 140, rotX = 0.2, rotY = 0;
 
 const loader = new THREE.TextureLoader();
@@ -211,15 +210,15 @@ const coreMat = new THREE.MeshPhongMaterial({color:0xff8800, transparent:true, o
 const core = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 32), coreMat);
 scene.add(core);
 
-// Luz central con un toque más notable de celeste equilibrado
-function makeGlow(size=1024, c1='0,200,255', c2='255,136,0'){
+// Naranja en el núcleo interior, abriéndose a celeste protagonista afuera
+function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
   const g = c.getContext('2d');
   g.clearRect(0, 0, size, size);
   const grad = g.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
-  grad.addColorStop(0, 'rgba('+c1+',0.85)');
-  grad.addColorStop(0.35, 'rgba(0,160,255,0.45)');
-  grad.addColorStop(0.7, 'rgba('+c2+',0.3)');
+  grad.addColorStop(0, 'rgba('+c1+',0.9)');    // Naranja vivo en el centro exacto
+  grad.addColorStop(0.35, 'rgba(255,150,50,0.5)'); // Transición suave cálida
+  grad.addColorStop(0.7, 'rgba('+c2+',0.45)');   // El celeste toma fuerza afuera
   grad.addColorStop(1, 'rgba(0,0,0,0)');
   g.fillStyle = grad; 
   g.beginPath();
@@ -237,9 +236,9 @@ function ringTexture(size=768){
   const g = c.getContext('2d'); g.translate(size/2, size/2);
   const r1 = size*0.34, r2 = size*0.49;
   const grd = g.createRadialGradient(0,0,r1*0.3,0,0,r2);
-  grd.addColorStop(0.0,'rgba(0,220,255,1)');
-  grd.addColorStop(0.35,'rgba(0,180,255,0.7)');
-  grd.addColorStop(0.7,'rgba(255,136,0,0.4)');
+  grd.addColorStop(0.0,'rgba(255,136,0,0.6)');  // Toque de naranja sutil en la parte interna del anillo
+  grd.addColorStop(0.4,'rgba(0,210,255,0.85)'); // El celeste domina gran parte del anillo
+  grd.addColorStop(0.8,'rgba(0,180,255,0.5)');  // Destello celeste exterior
   grd.addColorStop(1.0,'rgba(0,0,0,0)');
   g.fillStyle = grd;
   g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
@@ -448,7 +447,6 @@ function tick(){
   ring1.rotation.z += 0.003;
   ring2.rotation.z -= 0.002;
   
-  // Parpadeo suave conservado
   const glowPulse = 580 * (1 + Math.sin(t*1.8)*0.08);
   glow.scale.set(glowPulse, glowPulse, 1);
   glow.material.opacity = 0.75 + 0.25 * Math.sin(t*1.8);

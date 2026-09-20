@@ -6,7 +6,7 @@
 <title>Galaxia Amarilla - Betzi</title>
 <style>
   html, body { margin:0; height:100%; background:#050b14; overflow:hidden; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-  canvas { display:block; }
+  canvas { display:block; touch-action: none; } /* Evita comportamientos extraños del navegador en móviles */
 
   /* --- Botón para volver al inicio --- */
   .btn-inicio {
@@ -190,7 +190,7 @@ const loader = new THREE.TextureLoader();
 const nebulaTex = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
 scene.background = nebulaTex;
 
-// Estrellas de fondo grandes, brillantes y notorias
+// Estrellas de fondo
 (function makeStars(count=2500, spread=3200){
   const g = new THREE.BufferGeometry();
   const pos = new Float32Array(count*3);
@@ -225,7 +225,6 @@ const centerSprite = new THREE.Sprite(new THREE.SpriteMaterial({map:makeCenterTe
 centerSprite.scale.set(90, 90, 1);
 scene.add(centerSprite);
 
-// Textura circular radial limpia (sin esquinas cuadradas gracias a circleClip y gradiente exacto)
 function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
   const g = c.getContext('2d');
@@ -262,7 +261,7 @@ const ring2 = new THREE.Mesh(new THREE.RingGeometry(85, 100, 64), new THREE.Mesh
 ring1.rotation.x = ring2.rotation.x = Math.PI/2;
 scene.add(ring1); scene.add(ring2);
 
-// ================= Palabras Flotantes (Movimiento Uniforme) =================
+// ================= Palabras Flotantes =================
 const WORDS = [
   '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
   '🥰 Te amo mucho', '🔥 Mi amor lindo', '🪄 Mi bruja', '❤️ Eres mi todo', 
@@ -290,7 +289,7 @@ const COLORS = ['#00d2ff', '#ff9933', '#38bdf8', '#ffbb33', '#70d6ff', '#ff8800'
 const textGroup = new THREE.Group(); scene.add(textGroup);
 
 const totalWords = 85;
-const wordSpeed = 0.0009; // Velocidad uniforme para las letras
+const wordSpeed = 0.0009;
 
 for(let i=0; i<totalWords; i++){
   const word = WORDS[i % WORDS.length];
@@ -311,7 +310,7 @@ for(let i=0; i<totalWords; i++){
   textGroup.add(sp);
 }
 
-// ================= Ramos 360 de Flores (Movimiento Uniforme Desfasado / Destiempo) =================
+// ================= Ramos 360 de Flores =================
 const addedBouquets = (()=>{
   function makeGeometry(){
     let data=[];const PI=Math.PI,TAU=2*PI;let seed=13;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),mul=(a,k)=>a.map(v=>v*k),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],norm=a=>mul(a,1/(Math.hypot(...a)||1));
@@ -366,7 +365,7 @@ const addedBouquets = (()=>{
   `});
   const geometry=makeGeometry(),group=new THREE.Group();group.name='Ramos abiertos 360';
   const totalBouquets = 26;
-  const bouquetSpeed = 0.0005; // Velocidad ligeramente distinta (más pausada) para generar el destiempo perfecto con las letras
+  const bouquetSpeed = 0.0005;
 
   for(let i=0; i<totalBouquets; i++){
     const mesh=new THREE.Mesh(geometry,material);
@@ -384,20 +383,77 @@ const addedBouquets = (()=>{
   scene.add(group);return group;
 })();
 
-// ================= Controles de Cámara =================
+// ================= Controles de Cámara Avanzados para Celular y PC =================
 let dragging = false, lastX = 0, lastY = 0;
-function onDown(e){ dragging = true; const t = e.touches ? e.touches[0] : e; lastX = t.clientX; lastY = t.clientY; }
+let initialPinchDist = null;
+
+function onDown(e){
+  // Si tocan la barra de reproducción o el botón de inicio, no interferir con el arrastre 3D
+  if(e.target.closest('.player-bar') || e.target.closest('.btn-inicio')) return;
+
+  if (e.touches && e.touches.length === 2) {
+    // Detección de 2 dedos para zoom (pinch)
+    initialPinchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    dragging = false;
+    return;
+  }
+
+  dragging = true; 
+  const t = e.touches ? e.touches[0] : e; 
+  lastX = t.clientX; 
+  lastY = t.clientY; 
+}
+
 function onMove(e){
+  if (e.touches && e.touches.length === 2 && initialPinchDist !== null) {
+    // Manejo de Zoom con 2 dedos en celular
+    const currentPinchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    const diff = initialPinchDist - currentPinchDist;
+    targetDist += diff * 0.5;
+    targetDist = Math.max(90, Math.min(450, targetDist));
+    initialPinchDist = currentPinchDist;
+    return;
+  }
+
   if(!dragging) return;
   const t = e.touches ? e.touches[0] : e;
   rotY -= (t.clientX - lastX) / innerWidth * 3;
   rotX = Math.max(-1.2, Math.min(1.2, rotX - (t.clientY - lastY) / innerHeight * 2.2));
-  lastX = t.clientX; lastY = t.clientY;
+  lastX = t.clientX; 
+  lastY = t.clientY;
 }
-function onUp(){ dragging = false; }
-addEventListener('mousedown', onDown); addEventListener('mousemove', onMove); addEventListener('mouseup', onUp);
-addEventListener('touchstart', onDown, {passive:true}); addEventListener('touchmove', onMove, {passive:true}); addEventListener('touchend', onUp, {passive:true});
-addEventListener('wheel', (e)=>{ targetDist += e.deltaY * 0.25; targetDist = Math.max(90, Math.min(450, targetDist)); }, {passive:true});
+
+function onUp(){ 
+  dragging = false; 
+  initialPinchDist = null;
+}
+
+// Eventos de Mouse y Táctiles optimizados con `{ passive: false }` para evitar bloqueos del navegador
+addEventListener('mousedown', onDown); 
+addEventListener('mousemove', onMove); 
+addEventListener('mouseup', onUp);
+
+addEventListener('touchstart', onDown, {passive: true}); 
+addEventListener('touchmove', onMove, {passive: true}); 
+addEventListener('touchend', onUp, {passive: true});
+
+addEventListener('wheel', (e)=>{ 
+  targetDist += e.deltaY * 0.25; 
+  targetDist = Math.max(90, Math.min(450, targetDist)); 
+}, {passive:true});
+
+// Ajuste dinámico si el celular cambia de orientación (girar pantalla)
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
 
 // ================= Bucle de Animación =================
 let t = 0;
@@ -411,7 +467,6 @@ function tick(){
   const coreScale = 1.0 + 0.05 * Math.sin(t*3);
   core.scale.set(coreScale, coreScale, coreScale);
 
-  // Animación uniforme de las letras (van primero con su ritmo constante)
   textGroup.children.forEach(sp => {
     sp.material.opacity = 0.75 + 0.25 * Math.sin(t * 2);
     sp.userData.theta += sp.userData.speed;
@@ -420,7 +475,6 @@ function tick(){
     sp.position.z = radius * Math.sin(phi) * Math.sin(theta);
   });
 
-  // Animación uniforme de las flores en perfecto destiempo (ritmo ligeramente más lento y elegante)
   addedBouquets.children.forEach(mesh => {
     mesh.userData.theta += mesh.userData.speed;
     const { radius, phi, theta } = mesh.userData;

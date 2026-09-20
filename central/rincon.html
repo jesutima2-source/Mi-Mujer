@@ -9,24 +9,27 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      touch-action: pan-y;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden; /* Evita cualquier tipo de desplazamiento o scroll */
+      position: fixed; /* Mantiene la pantalla estática al deslizar el dedo */
     }
 
     body {
       background: linear-gradient(rgba(5, 7, 15, 0.7), rgba(5, 7, 15, 0.85)), 
-                  url('flores/img/fondo.jpg') no-repeat center center fixed;
+                  url('flores/img/fondo.jpg') no-repeat center center;
       background-size: cover;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      padding: 15px 10px;
+      padding: 10px;
       text-align: center;
-      overflow-x: hidden;
-      position: relative;
     }
 
     /* CONTENEDOR DE CORAZONES FLOTANTES (SOLO ROJOS) */
@@ -63,25 +66,27 @@
       }
     }
 
-    /* CONTENIDO PRINCIPAL CENTRADO */
+    /* CONTENIDO PRINCIPAL CENTRADO Y ESTÁTICO */
     .main-content {
       position: relative;
       z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
+      height: 100%;
     }
 
     /* TÍTULO MEJORADO CON LUCES NEÓN */
     .greetings {
-      font-size: 2.3rem;
+      font-size: 2.2rem;
       font-weight: 900;
       letter-spacing: 2px;
       display: flex;
       gap: 4px;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -107,10 +112,10 @@
 
     /* SUBTÍTULO Y FRASE */
     .description {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       letter-spacing: 1.2px;
       color: #ffd6df;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       text-shadow: 0 0 10px rgba(255, 51, 75, 0.6);
       font-weight: 400;
     }
@@ -119,18 +124,18 @@
     .timer-box {
       background: rgba(20, 10, 15, 0.75);
       border: 1px solid rgba(255, 51, 75, 0.4);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 15px;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 12px;
       width: 100%;
       backdrop-filter: blur(8px);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 51, 75, 0.15);
     }
 
     .timer-title {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #ff88a2;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       letter-spacing: 2px;
       font-weight: 600;
     }
@@ -150,7 +155,7 @@
 
     .digit {
       font-family: monospace;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: bold;
       background: linear-gradient(to bottom, #ffffff, #ff334b);
       -webkit-background-clip: text;
@@ -168,7 +173,7 @@
     /* CONTENEDOR DE TARJETAS EN 2 COLUMNAS */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 2 columnas iguales */
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       width: 100%;
     }
@@ -177,7 +182,7 @@
       background: rgba(20, 10, 15, 0.7);
       border: 1px solid rgba(255, 51, 75, 0.35);
       border-radius: 12px;
-      padding: 12px 10px;
+      padding: 10px 8px;
       text-decoration: none;
       color: #fff;
       transition: all 0.3s ease;
@@ -186,10 +191,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 3px;
       backdrop-filter: blur(6px);
       text-align: center;
-      min-height: 95px;
+      min-height: 85px;
     }
 
     .card:active {
@@ -200,10 +205,10 @@
     }
 
     .card h3 {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #ff667d;
       display: flex;
-      flex-direction: column; /* Icono arriba, texto abajo para que quepa bien en dos columnas */
+      flex-direction: column;
       align-items: center;
       gap: 2px;
       line-height: 1.2;
@@ -215,9 +220,9 @@
     }
 
     .card p {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: #ccc;
-      line-height: 1.2;
+      line-height: 1.1;
     }
   </style>
 </head>

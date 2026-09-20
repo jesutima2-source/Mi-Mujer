@@ -28,21 +28,18 @@ const cordHandle = document.getElementById('cordHandle');
 let isLightOn = true;
 let isDragging = false;
 
-// Centro de origen del cordón dentro del contenedor (X: 50, Y: 0)
 const originX = 50;
 const originY = 0;
 
 let currentX = 50;
 let currentY = 45;
-
 let targetX = 50;
 let targetY = 45;
-
 let velX = 0;
 let velY = 0;
 
-const springK = 0.15; // Elasticidad
-const damping = 0.82; // Amortiguación
+const springK = 0.15;
+const damping = 0.82;
 
 cordContainer.addEventListener('pointerdown', (e) => {
   isDragging = true;
@@ -61,7 +58,6 @@ function updatePointerPosition(e) {
   targetX = e.clientX - rect.left;
   targetY = e.clientY - rect.top;
 
-  // Limitar distancia máxima de estiramiento (radio de 80px)
   const dx = targetX - originX;
   const dy = targetY - originY;
   const dist = Math.hypot(dx, dy);
@@ -77,10 +73,7 @@ function releaseCord() {
   if (!isDragging) return;
   isDragging = false;
 
-  // Calcular cuánto se estiró desde la posición de descanso (50, 45)
   const pullDistance = Math.hypot(currentX - 50, currentY - 45);
-  
-  // Si se jaló lo suficiente (más de 25 píxeles), conmuta el estado
   if (pullDistance > 25) {
     toggleLight();
   }
@@ -100,7 +93,6 @@ function toggleLight() {
   }
 }
 
-// Bucle de físicas de resorte bidimensional (360 grados)
 function updatePhysics() {
   if (isDragging) {
     currentX = targetX;
@@ -108,7 +100,6 @@ function updatePhysics() {
     velX = 0;
     velY = 0;
   } else {
-    // Fuerza de resorte hacia el punto de descanso (50, 45)
     const restX = 50;
     const restY = 45;
 
@@ -122,7 +113,6 @@ function updatePhysics() {
     currentY += velY;
   }
 
-  // Actualizar línea SVG y posición de la bolita
   cordLine.setAttribute('x2', currentX);
   cordLine.setAttribute('y2', currentY);
   cordHandle.style.left = currentX + 'px';
@@ -142,8 +132,8 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
   const matchedUser = validUsers.find(u => u.user === userInput && u.pass === passInput);
 
   if (matchedUser) {
-    // Enrutamiento correcto desde la carpeta universos hacia central/rincon.html
-    window.location.href = "../central/rincon.html";
+    // Ruta corregida hacia central/rincon.html
+    window.location.href = "central/rincon.html";
   } else {
     alert('Usuario o contraseña incorrectos. Intenta de nuevo 💔');
   }

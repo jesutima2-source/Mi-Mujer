@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ================= FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS) =================
+// ================= FONDO DE ESTRELLAS Y COPOS MÁGICOS (CANVAS) =================
 const canvas = document.getElementById('starCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -30,13 +30,14 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 const stars = [];
-for (let i = 0; i < 150; i++) {
+for (let i = 0; i < 180; i++) {
   stars.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    radius: Math.random() * 1.8,
+    radius: Math.random() * 2 + 0.5,
     alpha: Math.random(),
-    speed: Math.random() * 0.015 + 0.005
+    speed: Math.random() * 0.02 + 0.005,
+    drift: (Math.random() - 0.5) * 0.2
   });
 }
 
@@ -50,20 +51,29 @@ function createShootingStar() {
     opacity: 1
   });
 }
-setInterval(createShootingStar, 3000);
+setInterval(createShootingStar, 3500);
 
 function animateStars() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Dibujar estrellas y copos suaves flotando
   stars.forEach(star => {
     star.alpha += star.speed;
-    if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
-    ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+    if (star.alpha > 1 || star.alpha < 0.2) star.speed = -star.speed;
+    star.y += 0.15; // Caída suave tipo copo de nieve
+    star.x += star.drift;
+
+    if (star.y > canvas.height) star.y = 0;
+    if (star.x > canvas.width) star.x = 0;
+    if (star.x < 0) star.x = canvas.width;
+
+    ctx.fillStyle = `rgba(200, 240, 255, ${star.alpha})`;
     ctx.beginPath();
     ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
     ctx.fill();
   });
 
+  // Estrellas fugaces
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
   ctx.lineWidth = 2;
   ctx.shadowBlur = 12;
@@ -89,7 +99,7 @@ function animateStars() {
 }
 animateStars();
 
-// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS MULTIDIRECCIONALES =================
+// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS DE LA PITA =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const usernameInput = document.getElementById('username');
@@ -102,10 +112,10 @@ const cordHandle = document.getElementById('cordHandle');
 
 let isDragging = false;
 let currentX = 50;
-let currentY = 45;
+let currentY = 25; // Al ras de la base
 const originX = 50;
 const originY = 0;
-const maxPullDistance = 75;
+const maxPullDistance = 65;
 
 function updateCord(x, y) {
   cordLine.setAttribute('x2', x);
@@ -144,22 +154,21 @@ cordContainer.addEventListener('pointerup', (e) => {
   isDragging = false;
   cordContainer.releasePointerCapture(e.pointerId);
 
-  let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 45, 2));
+  let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 25, 2));
 
-  // Si se jaló lo suficiente en cualquier dirección
-  if (pullDistance > 28) {
+  if (pullDistance > 20) {
     toggleLamp();
   }
 
-  // Efecto resorte de retorno al centro (suave)
+  // Efecto resorte de retorno al centro
   let returnInterval = setInterval(() => {
     currentX += (originX - currentX) * 0.2;
-    currentY += (45 - currentY) * 0.2;
+    currentY += (25 - currentY) * 0.2;
     updateCord(currentX, currentY);
 
-    if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 45) < 0.5) {
+    if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 25) < 0.5) {
       currentX = originX;
-      currentY = 45;
+      currentY = 25;
       updateCord(currentX, currentY);
       clearInterval(returnInterval);
     }
@@ -183,7 +192,7 @@ function toggleLamp() {
   }
 }
 
-// ================= VALIDACIÓN Y ENRUTAMIENTO CORRECTO =================
+// ================= VALIDACIÓN Y ENRUTAMIENTO =================
 const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -193,7 +202,6 @@ loginForm.addEventListener('submit', (e) => {
   const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
 
   if (isValid) {
-    // ENRUTAMIENTO SOLICITADO
     window.location.href = "central/rincon.html"; 
   } else {
     alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");

@@ -13,55 +13,47 @@ body, html {
   color: #fff;
 }
 
-/* --- FONDO DE ESTRELLAS FUGACES --- */
+/* --- FONDO DE ESTRELLAS FUGACES DINÁMICAS --- */
 .starfield {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #050b14;
+  background: radial-gradient(circle at center, #0a192f 0%, #03070f 100%);
   z-index: -2;
   overflow: hidden;
 }
 
-@keyframes shootingStarUp {
-  0% { transform: translateY(105vh) translateX(-10vw); opacity: 1; }
-  20% { opacity: 1; }
-  100% { transform: translateY(-10vh) translateX(30vw); opacity: 0; }
-}
-
-.starfield::before,
-.starfield::after {
-  content: '';
+.shooting-star {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 100%;
-  background: linear-gradient(to top, transparent, #fff, #00d2ff);
-  animation: shootingStarUp 7s linear infinite;
-  opacity: 0.6;
-  filter: drop-shadow(0 0 6px #00d2ff);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, #fff, transparent);
+  opacity: 0;
+  transform: rotate(-45deg);
+  animation: shoot 4s ease-in-out infinite;
 }
 
-.starfield::after {
-  animation-duration: 4.5s;
-  animation-delay: -2.5s;
-  left: auto;
-  right: 20vw;
-  width: 3px;
-  opacity: 0.8;
+.shooting-star:nth-child(1) { top: 10%; left: 80%; animation-delay: 0s; animation-duration: 3.5s; }
+.shooting-star:nth-child(2) { top: 40%; left: 90%; animation-delay: 1.2s; animation-duration: 4s; }
+.shooting-star:nth-child(3) { top: 5%; left: 40%; animation-delay: 2.5s; animation-duration: 3s; }
+.shooting-star:nth-child(4) { top: 60%; left: 70%; animation-delay: 0.8s; animation-duration: 4.5s; }
+
+@keyframes shoot {
+  0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+  100% { transform: translateX(-400px) translateY(400px) rotate(-45deg); opacity: 0; }
 }
 
 .starfield-static {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   background-image: 
-      radial-gradient(white, rgba(255,255,255,.25) 2px, transparent 3px),
+      radial-gradient(white, rgba(255,255,255,.3) 2px, transparent 3px),
       radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
-  background-size: 500px 500px, 300px 300px;
+  background-size: 400px 400px, 250px 250px;
   z-index: -1;
+  opacity: 0.8;
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -75,7 +67,7 @@ body, html {
   z-index: 10;
 }
 
-/* --- ESTILOS DE LA LÁMPARA Y FOCO --- */
+/* --- ESTILOS DE LA LÁMPARA Y RESPLANDOR TRASERO --- */
 .lamp-container {
   position: relative;
   display: flex;
@@ -85,13 +77,26 @@ body, html {
   user-select: none;
 }
 
+/* Resplandor mágico detrás de la lámpara */
+.lamp-glow-bg {
+  position: absolute;
+  top: -25px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
 .lamp-shade {
   width: 140px;
   height: 100px;
   background: #00d2ff;
   border-radius: 75px 75px 20px 20px;
   position: relative;
-  box-shadow: 0 0 35px rgba(0, 210, 255, 0.75);
+  box-shadow: 0 0 40px rgba(0, 210, 255, 0.8);
   transition: background 0.4s, box-shadow 0.4s;
   z-index: 3;
 }
@@ -130,22 +135,22 @@ body, html {
 .light-beam {
   position: absolute;
   top: 90px;
-  width: 220px;
+  width: 240px;
   height: 160px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.4), transparent);
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.45), transparent);
   clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
   transition: opacity 0.4s;
   z-index: 2;
 }
 
-/* --- CORDÓN Y FÍSICAS DE LA PITITA --- */
+/* --- PITITA CON FÍSICAS 360 GRADOS --- */
 .lamp-cord-container {
   position: absolute;
   top: 95px;
   left: 50%;
-  width: 30px;
-  height: 90px;
+  width: 100px;
+  height: 120px;
   transform: translateX(-50%);
   z-index: 5;
   touch-action: none;
@@ -155,28 +160,25 @@ body, html {
   cursor: grabbing;
 }
 
-.lamp-cord {
+.cord-svg {
   position: absolute;
   top: 0;
-  left: 50%;
-  width: 3px;
-  height: 45px;
-  background: #ffffff;
-  transform-origin: top center;
-  box-shadow: 0 0 5px rgba(255,255,255,0.8);
+  left: 0;
+  width: 100px;
+  height: 120px;
+  overflow: visible;
+  pointer-events: none;
 }
 
 .cord-handle {
   position: absolute;
-  top: 45px;
-  left: 50%;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   background: #ffffff;
   border-radius: 50%;
-  transform: translate(-50%, 0);
-  box-shadow: 0 0 12px #00d2ff, 0 0 20px #00d2ff;
+  box-shadow: 0 0 12px #00d2ff, 0 0 22px #00d2ff;
   transition: background 0.4s, box-shadow 0.4s;
+  transform: translate(-50%, -50%);
 }
 
 .lamp-base {
@@ -191,6 +193,9 @@ body, html {
 }
 
 /* --- ESTADO APAGADO DE LA LÁMPARA --- */
+.lamp-container.off .lamp-glow-bg {
+  opacity: 0;
+}
 .lamp-container.off .lamp-shade {
   background: #232b38;
   box-shadow: none;
@@ -283,7 +288,7 @@ body, html {
   box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
 }
 
-/* --- ESTADO APAGADO DEL LOGIN (BLOQUEO DE ESCRITURA) --- */
+/* --- ESTADO APAGADO DEL LOGIN (BLOQUEO) --- */
 .login-card.disabled {
   opacity: 0.25;
   pointer-events: none;

@@ -222,11 +222,17 @@ scene.background = new THREE.Color(0x050b14);
   scene.add(new THREE.Points(g, new THREE.PointsMaterial({size:3.5, color:0xffffff, depthWrite:false, transparent:true, opacity:0.95})));
 })();
 
-const coreMat = new THREE.MeshPhongMaterial({color:0xff6600, transparent:true, opacity:0.75, shininess:250});
-const core = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 32), coreMat);
-scene.add(core);
+// ================= Núcleo Central con tu Foto =================
+const textureLoader = new THREE.TextureLoader();
+const coreTexture = textureLoader.load('central/flores/img/galaxia.jpeg');
 
-// (Texto central eliminado por completo)
+const coreMat = new THREE.MeshBasicMaterial({
+  map: coreTexture,
+  transparent: true,
+  opacity: 0.95
+});
+const core = new THREE.Mesh(new THREE.SphereGeometry(35, 32, 32), coreMat);
+scene.add(core);
 
 function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
@@ -467,9 +473,9 @@ function tick(){
 
   ring1.rotation.z += 0.003;
   ring2.rotation.z -= 0.002;
-  glow.scale.set(520 * (1 + Math.sin(t*0.5)*0.03), 520 * (1 + Math.sin(t*0.5)*0.03), 1);
-  const coreScale = 1.0 + 0.05 * Math.sin(t*3);
-  core.scale.set(coreScale, coreScale, coreScale);
+  
+  // El brillo central ya no parpadea de tamaño, se queda estable y firme
+  glow.scale.set(520, 520, 1);
 
   textGroup.children.forEach(sp => {
     sp.material.opacity = 0.75 + 0.25 * Math.sin(t * 2);

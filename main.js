@@ -5,23 +5,19 @@ const validUsers = [
   { user: "*", pass: "*" }               // Credencial 3 (Pruebas)
 ];
 
-// ================= REPRODUCTOR DE MÚSICA =================
+// ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
 const audio = document.getElementById('loginAudio');
-const playBtn = document.getElementById('playBtn');
-
 audio.volume = 0.8;
 
-playBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    audio.play().then(() => {
-      playBtn.textContent = '⏸';
-    }).catch(err => {
-      console.log("Error al reproducir audio:", err);
-    });
-  } else {
-    audio.pause();
-    playBtn.textContent = '▶';
-  }
+// Intentar reproducir automáticamente al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+  audio.play().catch(err => {
+    console.log("El navegador requiere una interacción para reproducir audio:", err);
+    // Reproducir en cuanto el usuario haga clic en cualquier parte de la página
+    document.addEventListener('click', () => {
+      audio.play();
+    }, { once: true });
+  });
 });
 
 // ================= FÍSICAS DE LA PITITA Y ENCENDIDO/APAGADO =================
@@ -39,8 +35,8 @@ let currentPull = 0;
 // Variables de físicas de resorte (Hooke)
 let cordVelocity = 0;
 let cordOffset = 0;
-const springK = 0.2;   // Rigidez del resorte
-const damping = 0.8;   // Amortiguación de rebote
+const springK = 0.2;   
+const damping = 0.8;   
 
 cordContainer.addEventListener('pointerdown', (e) => {
   isDragging = true;
@@ -52,7 +48,7 @@ cordContainer.addEventListener('pointerdown', (e) => {
 cordContainer.addEventListener('pointermove', (e) => {
   if (!isDragging) return;
   const deltaY = e.clientY - startY;
-  currentPull = Math.max(0, Math.min(deltaY, 60)); // Límite de estiramiento
+  currentPull = Math.max(0, Math.min(deltaY, 60)); 
   cordOffset = currentPull;
 });
 
@@ -74,10 +70,10 @@ function toggleLight() {
   isLightOn = !isLightOn;
   if (isLightOn) {
     lampContainer.classList.remove('off');
-    loginCard.classList.remove('disabled'); // Habilita escritura y campos
+    loginCard.classList.remove('disabled'); 
   } else {
     lampContainer.classList.add('off');
-    loginCard.classList.add('disabled');    // Apaga y bloquea escritura
+    loginCard.classList.add('disabled');    
   }
 }
 
@@ -101,7 +97,7 @@ function updatePhysics() {
 }
 updatePhysics();
 
-// ================= VALIDACIÓN DE LOGIN =================
+// ================= VALIDACIÓN DE LOGIN Y REDIRECCIÓN =================
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -112,9 +108,8 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
   const matchedUser = validUsers.find(u => u.user === userInput && u.pass === passInput);
 
   if (matchedUser) {
-    alert('¡Acceso concedido! Bienvenido a nuestro rincón mágico ❤️');
-    // Aquí puedes redirigir a tu siguiente vista o archivo principal:
-    // window.location.href = "principal.html";
+    // Redirige correctamente a rincon.html en la misma ruta
+    window.location.href = "rincon.html";
   } else {
     alert('Usuario o contraseña incorrectos. Intenta de nuevo 💔');
   }

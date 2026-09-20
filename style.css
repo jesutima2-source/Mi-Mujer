@@ -13,7 +13,7 @@ body, html {
   color: #fff;
 }
 
-/* --- FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS) --- */
+/* --- FONDO DE COPOS CELESTES (PARTÍCULAS SUAVES) --- */
 #starCanvas {
   position: fixed;
   top: 0;
@@ -21,7 +21,7 @@ body, html {
   width: 100vw;
   height: 100vh;
   z-index: -100;
-  background: radial-gradient(circle at center, #0a192f 0%, #03070f 100%);
+  background: radial-gradient(circle at center, #071325 0%, #03070f 100%);
   pointer-events: none;
 }
 
@@ -50,10 +50,10 @@ body, html {
 
 .lamp-glow-bg {
   position: absolute;
-  top: -15px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(0, 210, 255, 0.45) 0%, rgba(0, 150, 255, 0.1) 60%, transparent 75%);
+  top: -10px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.25) 0%, rgba(0, 150, 255, 0.05) 60%, transparent 80%);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
@@ -73,16 +73,16 @@ body, html {
   background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
   border-radius: 80px 80px 18px 18px;
   position: relative;
-  box-shadow: 0 0 30px rgba(0, 210, 255, 0.7), inset 0 5px 15px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.4), inset 0 4px 10px rgba(255, 255, 255, 0.3);
   transition: all 0.5s ease;
   z-index: 3;
-  border-top: 2px solid rgba(255, 255, 255, 0.6);
-  overflow: hidden; /* Evita que la luz interna sobresalga */
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
 }
 
 .lamp-face {
   position: absolute;
-  top: 22px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -111,29 +111,30 @@ body, html {
   transition: all 0.4s ease;
 }
 
+/* --- LUZ MÁS SUAVE Y CÓMODA --- */
 .light-beam {
   position: absolute;
   top: 85px;
   left: 50%;
   transform: translateX(-50%);
-  width: 260px;
-  height: 170px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.35), rgba(0, 150, 255, 0.03) 80%, transparent);
+  width: 240px;
+  height: 160px;
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.18), rgba(0, 150, 255, 0.02) 80%, transparent);
   clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
   transition: opacity 0.5s ease;
   z-index: 2;
 }
 
-/* --- PITITA Y CUERDA MULTIDIRECCIONAL --- */
+/* --- PITITA UBICADA ABAJITO DEL FOCO (MULTIDIRECCIONAL) --- */
 .lamp-cord-container {
   position: absolute;
-  top: 45px;
+  top: 75px; /* Justo en la base inferior del foco */
   left: 50%;
-  width: 100px;
-  height: 140px;
+  width: 90px;
+  height: 120px;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 6;
   touch-action: none;
   cursor: grab;
 }
@@ -153,24 +154,24 @@ body, html {
 
 .cord-handle {
   position: absolute;
-  left: 50px;
+  left: 45px;
   top: 45px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   background: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 0 12px #00d2ff, 0 0 20px #00d2ff, inset 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 0 8px #00d2ff, 0 0 15px #00d2ff, inset 0 2px 3px rgba(0,0,0,0.2);
   transition: background 0.4s ease, box-shadow 0.4s ease;
   transform: translate(-50%, -50%);
 }
 
 .lamp-base {
-  width: 50px;
-  height: 12px;
+  width: 40px;
+  height: 10px;
   background: #00d2ff;
-  border-radius: 6px;
-  margin-top: 42px;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.7);
+  border-radius: 5px;
+  margin-top: 35px;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.5);
   transition: all 0.5s ease;
   z-index: 1;
 }
@@ -198,7 +199,7 @@ body, html {
   padding: 25px 20px;
   width: 90vw;
   max-width: 350px;
-  box-shadow: 0 0 40px rgba(0, 210, 255, 0.25);
+  box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
   backdrop-filter: blur(12px);
   transition: all 0.4s ease;
 }
@@ -238,7 +239,7 @@ body, html {
 
 .form-group input:focus {
   border-color: #00d2ff;
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
 }
 
 .login-btn {
@@ -252,16 +253,15 @@ body, html {
   font-size: 15px;
   cursor: pointer;
   margin-top: 10px;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
   transition: all 0.2s;
 }
 
 .login-btn:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.7);
 }
 
-/* --- ESTADO DESHABILITADO DEL LOGIN --- */
 .login-card.disabled {
   opacity: 0.25;
   pointer-events: none;

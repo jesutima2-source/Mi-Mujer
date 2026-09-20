@@ -166,28 +166,6 @@
             text-transform: uppercase;
         }
 
-        .boton {
-            background-color: #0a2be9;
-            color: #ffffff;
-            padding: 14px 38px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            box-shadow: 0 6px 22px rgba(10, 43, 233, 0.55);
-            transition: transform 0.25s ease, background-color 0.25s ease;
-            letter-spacing: 1px;
-            cursor: pointer;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .boton:hover {
-            background-color: #00c3ff;
-            transform: scale(1.05);
-        }
-
         /* Paso 2: Carta pequeña interactiva para revelar mensaje final */
         .small-gift-message {
             display: none;
@@ -263,8 +241,8 @@
 </head>
 <body>
 
-    <!-- Audio de fondo configurado con music1.mp3 -->
-    <audio id="musicaFondo" loop>
+    <!-- Audio configurado con autoplay para sonar al cargar la interfaz -->
+    <audio id="musicaFondo" loop autoplay>
         <source src="sound/music1.mp3" type="audio/mpeg">
     </audio>
 
@@ -282,7 +260,7 @@
 
             <!-- BLOQUE 1: Sobre inicial con frase -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container" onclick="tocarMusica()">
+                <label for="paso2" class="sobre-container">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -291,8 +269,8 @@
             </div>
 
             <!-- BLOQUE 2: Icono intermedio para revelar carta final -->
-            <label for="paso3" class="small-gift-message" onclick="tocarMusica()">✉️</label>
-            <label for="paso3" class="texto-small-gift-message" onclick="tocarMusica()">Te encontraste un sobre ,tocame otra vez :3</label>
+            <label for="paso3" class="small-gift-message">✉️</label>
+            <label for="paso3" class="texto-small-gift-message">Te encontraste un sobre ,tocame otra vez :3</label>
 
             <!-- BLOQUE 3: Mensaje final + Salto a vista de flores -->
             <div class="mensajeFinal" id="blockFinal">
@@ -302,22 +280,20 @@
                     Cada segundo a tu lado vale oro.
                 </span>
                 <span class="textoPd">Pd: Estoy muy orgulloso de ti ❤️❤️</span>
-                <a href="flower.html" class="btn-siguiente-seccion" onclick="tocarMusica()">Ver Flores Amarillas "♥baja el volumen♥"✨</a>
+                <a href="flower.html" class="btn-siguiente-seccion">Ver Flores Amarillas "♥baja el volumen♥"✨</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Reproducir música al primer toque interactivo
-        function tocarMusica() {
+        // Reproducción automática al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
             const audio = document.getElementById('musicaFondo');
-            if (audio.paused) {
-                audio.volume = 0.5;
-                audio.play().catch(e => console.log("Audio play waiting interaction", e));
-            }
-        }
-
-        document.addEventListener('click', tocarMusica, { once: true });
+            audio.volume = 0.5;
+            audio.play().catch(e => {
+                console.log("Reproducción automática bloqueada por políticas del navegador", e);
+            });
+        });
 
         // Generador dinámico de lucecitas flotantes
         const contenedor = document.getElementById('contenedorParticulas');

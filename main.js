@@ -2,24 +2,23 @@
 const validUsers = [
   { user: "jesus", pass: "10082018" },
   { user: "betzi", pass: "10082018" },
-  { user: "*", pass: "*" }
+    { user: "*", pass: "*" }
 ];
 
-// ================= REPRODUCTOR DE MÚSICA =================
+// ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
 const audio = document.getElementById('loginAudio');
-if (audio) {
-  audio.volume = 0.8;
-  // Intenta reproducir al cargar; si el navegador bloquea, suena con el primer clic en la página
-  window.addEventListener('DOMContentLoaded', () => {
-    audio.play().catch(() => {
-      document.addEventListener('click', () => {
-        audio.play();
-      }, { once: true });
-    });
-  });
-}
+audio.volume = 0.8;
 
-// ================= FONDO DE COPOS CELESTES =================
+window.addEventListener('DOMContentLoaded', () => {
+  audio.play().catch(err => {
+    console.log("El navegador requiere interacción para reproducir audio:", err);
+    document.addEventListener('click', () => {
+      audio.play();
+    }, { once: true });
+  });
+});
+
+// ================= FONDO DE COPOS CELESTES / PARTÍCULAS SUAVES (CANVAS) =================
 const canvas = document.getElementById('starCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -30,6 +29,7 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
+// Generar copos celestes flotantes suaves
 const snowflakes = [];
 for (let i = 0; i < 70; i++) {
   snowflakes.push({
@@ -44,6 +44,7 @@ for (let i = 0; i < 70; i++) {
 
 function animateSnowflakes() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   snowflakes.forEach(flake => {
     flake.y += flake.speedY;
     flake.x += flake.speedX;
@@ -60,11 +61,12 @@ function animateSnowflakes() {
     ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
     ctx.fill();
   });
+
   requestAnimationFrame(animateSnowflakes);
 }
 animateSnowflakes();
 
-// ================= LÁMPARA Y FÍSICAS DE LA PITA =================
+// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS DE LA PITITA =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const usernameInput = document.getElementById('username');
@@ -77,7 +79,7 @@ const cordHandle = document.getElementById('cordHandle');
 
 let isDragging = false;
 let currentX = 45;
-let currentY = 25;
+let currentY = 45;
 const originX = 45;
 const originY = 0;
 const maxPullDistance = 65;
@@ -89,57 +91,57 @@ function updateCord(x, y) {
   cordHandle.style.top = y + 'px';
 }
 
-if (cordContainer) {
-  cordContainer.addEventListener('pointerdown', (e) => {
-    isDragging = true;
-    cordContainer.setPointerCapture(e.pointerId);
-  });
+cordContainer.addEventListener('pointerdown', (e) => {
+  isDragging = true;
+  cordContainer.setPointerCapture(e.pointerId);
+});
 
-  cordContainer.addEventListener('pointermove', (e) => {
-    if (!isDragging) return;
-    const rect = cordContainer.getBoundingClientRect();
-    let mouseX = e.clientX - rect.left;
-    let mouseY = e.clientY - rect.top;
+cordContainer.addEventListener('pointermove', (e) => {
+  if (!isDragging) return;
+  const rect = cordContainer.getBoundingClientRect();
+  let mouseX = e.clientX - rect.left;
+  let mouseY = e.clientY - rect.top;
 
-    let dx = mouseX - originX;
-    let dy = mouseY - originY;
-    let distance = Math.sqrt(dx * dx + dy * dy);
+  let dx = mouseX - originX;
+  let dy = mouseY - originY;
+  let distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance > maxPullDistance) {
-      dx = (dx / distance) * maxPullDistance;
-      dy = (dy / distance) * maxPullDistance;
-    }
+  if (distance > maxPullDistance) {
+    dx = (dx / distance) * maxPullDistance;
+    dy = (dy / distance) * maxPullDistance;
+  }
 
-    currentX = originX + dx;
-    currentY = originY + dy;
+  currentX = originX + dx;
+  currentY = originY + dy;
+  updateCord(currentX, currentY);
+});
+
+cordContainer.addEventListener('pointerup', (e) => {
+  if (!isDragging) return;
+  isDragging = false;
+  cordContainer.releasePointerCapture(e.pointerId);
+
+  let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 45, 2));
+
+  // Si se jaló lo suficiente en cualquier dirección
+  if (pullDistance > 25) {
+    toggleLamp();
+  }
+
+  // Efecto resorte de retorno al centro (suave)
+  let returnInterval = setInterval(() => {
+    currentX += (originX - currentX) * 0.2;
+    currentY += (45 - currentY) * 0.2;
     updateCord(currentX, currentY);
-  });
 
-  cordContainer.addEventListener('pointerup', (e) => {
-    if (!isDragging) return;
-    isDragging = false;
-    cordContainer.releasePointerCapture(e.pointerId);
-
-    let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 25, 2));
-
-    if (pullDistance > 20) {
-      toggleLamp();
-    }
-
-    let returnInterval = setInterval(() => {
-      currentX += (originX - currentX) * 0.2;
-      currentY += (25 - currentY) * 0.2;
+    if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 45) < 0.5) {
+      currentX = originX;
+      currentY = 45;
       updateCord(currentX, currentY);
-
-      if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 25) < 0.5) {
-        currentX = originX;
-        currentY = 25;
-        updateCord(currentX, currentY);
-        clearInterval(returnInterval);
-      }
-    }, 15);
-  });
-}
+      clearInterval(returnInterval);
+    }
+  }, 15);
+});
 
 function toggleLamp() {
   lampContainer.classList.toggle('off');
@@ -158,21 +160,19 @@ function toggleLamp() {
   }
 }
 
-// ================= VALIDACIÓN Y REDIRECCIÓN EXACTA =================
+// ================= VALIDACIÓN Y ENRUTAMIENTO CORRECTO =================
 const loginForm = document.getElementById('loginForm');
-if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const userVal = usernameInput.value.trim().toLowerCase();
-    const passVal = passwordInput.value.trim();
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const userVal = usernameInput.value.trim().toLowerCase();
+  const passVal = passwordInput.value.trim();
 
-    const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
+  const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
 
-    if (isValid) {
-      // Redirección exacta solicitada
-      window.location.href = "central/rincon.html"; 
-    } else {
-      alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
-    }
-  });
-}
+  if (isValid) {
+    // ENRUTAMIENTO SOLICITADO
+    window.location.href = "central/rincon.html"; 
+  } else {
+    alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
+  }
+});

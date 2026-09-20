@@ -15,42 +15,52 @@
     left: 20px;
     padding: 10px 20px;
     background: rgba(0, 20, 40, 0.7);
-    border: 2px solid #00d2ff;
+    border: 2px solid #ff8800;
     border-radius: 999px;
     color: #fff;
     font-family: Arial, sans-serif;
     font-size: 14px;
     text-decoration: none;
-    box-shadow: 0 0 12px #00d2ff;
+    box-shadow: 0 0 12px #ff8800;
     z-index: 1000;
     transition: transform 0.2s, background 0.2s;
   }
   .btn-inicio:hover {
     transform: scale(1.05);
-    background: rgba(0, 210, 255, 0.3);
+    background: rgba(255, 136, 0, 0.3);
   }
 
-  /* --- Control flotante discreto de música de fondo --- */
-  .music-control {
+  /* --- Reproductor de música visible y garantizado --- */
+  .music-player-box {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: rgba(0, 20, 40, 0.8);
-    border: 2px solid #ff8800;
-    border-radius: 999px;
-    padding: 8px 16px;
+    background: rgba(5, 11, 20, 0.85);
+    border: 2px solid #00d2ff;
+    border-radius: 16px;
+    padding: 12px 18px;
     color: #fff;
     font-family: Arial, sans-serif;
     font-size: 13px;
     z-index: 1000;
-    cursor: pointer;
-    box-shadow: 0 0 10px #ff8800;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
     display: flex;
+    flex-direction: column;
+    gap: 6px;
     align-items: center;
-    gap: 8px;
   }
-  .music-control:hover {
-    background: rgba(255, 136, 0, 0.3);
+  .music-player-box button {
+    background: linear-gradient(135deg, #ff8800, #ffaa00);
+    border: none;
+    border-radius: 999px;
+    padding: 6px 14px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 8px #ff8800;
+  }
+  .music-player-box button:hover {
+    transform: scale(1.05);
   }
 </style>
 </head>
@@ -58,58 +68,68 @@
 
 <canvas id="c"></canvas>
 
-<!-- Elemento de audio apuntando a music2.mp3 -->
+<!-- Elemento de audio con music2.mp3 -->
 <audio id="audio" src="flores/sound/music2.mp3" preload="auto" loop></audio>
 
 <!-- Botón de inicio -->
 <a href="rincon.html" class="btn-inicio">🏠 Volver al inicio</a>
 
-<!-- Botón discreto por si el navegador requiere un clic en la página -->
-<div class="music-control" id="audioToggle">
-  <span>🎵 Música de fondo: <strong id="audioStatus">Activando...</strong></span>
+<!-- Caja de control de música interactiva -->
+<div class="music-player-box">
+  <span>🎵 Música de fondo (music2.mp3)</span>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <button id="playBtn">Reproducir 🎶</button>
+    <input type="file" id="localAudioLoader" accept="audio/mp3" style="font-size:11px; width:120px;" title="Si el navegador bloquea la ruta, carga tu MP3 aquí">
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 <script>
-// ================= Control Automático y de Fondo del Audio =================
+// ================= Control de Audio =================
 const audio = document.getElementById('audio');
-const audioToggle = document.getElementById('audioToggle');
-const audioStatus = document.getElementById('audioStatus');
+const playBtn = document.getElementById('playBtn');
+const localAudioLoader = document.getElementById('localAudioLoader');
 
-let musicPlaying = false;
+let isPlaying = false;
 
-function intentarReproducir() {
-  audio.play().then(() => {
-    musicPlaying = true;
-    audioStatus.textContent = "Reproduciendo 🎶";
-    audioToggle.style.borderColor = "#00d2ff";
-    audioToggle.style.boxShadow = "0 0 10px #00d2ff";
-  }).catch(() => {
-    audioStatus.textContent = "Haz clic aquí para sonar 🎵";
-  });
+function togglePlay() {
+  if (!isPlaying) {
+    audio.play().then(() => {
+      isPlaying = true;
+      playBtn.textContent = "Pausar ⏸️";
+    }).catch(err => {
+      console.log("Bloqueado por navegador, usa el selector de archivo local si persiste.");
+      alert("Haz clic en el botón de reproducir o carga el archivo music2.mp3 con el selector al lado.");
+    });
+  } else {
+    audio.pause();
+    isPlaying = false;
+    playBtn.textContent = "Reproducir 🎶";
+  }
 }
 
-// Intentar reproducir automáticamente al cargar
-window.addEventListener('load', () => {
-  intentarReproducir();
-});
+playBtn.addEventListener('click', togglePlay);
 
-// Si el usuario hace cualquier clic en la pantalla, arranca la música de fondo si estaba pausada
+// Intento automático al hacer primer clic en cualquier parte de la página
 window.addEventListener('click', () => {
-  if (!musicPlaying) {
-    intentarReproducir();
+  if (!isPlaying) {
+    audio.play().then(() => {
+      isPlaying = true;
+      playBtn.textContent = "Pausar ⏸️";
+    }).catch(() => {});
   }
 }, { once: true });
 
-// Permitir pausar/reproducir con el botoncito de la esquina
-audioToggle.addEventListener('click', (e) => {
-  e.stopPropagation();
-  if (musicPlaying) {
-    audio.pause();
-    musicPlaying = false;
-    audioStatus.textContent = "Pausado (Clic para reanudar)";
-  } else {
-    intentarReproducir();
+// Fallback por si el navegador bloquea la ruta local de GitHub Pages: permite cargar el archivo localmente con el input
+localAudioLoader.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const fileURL = URL.createObjectURL(file);
+    audio.src = fileURL;
+    audio.play().then(() => {
+      isPlaying = true;
+      playBtn.textContent = "Pausar ⏸️";
+    });
   }
 });
 
@@ -122,7 +142,7 @@ const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,5000);
 let targetDist=300,currentDist=300,rotX=0.2,rotY=0;
 
-// Fondo espacial celeste
+// Fondo espacial
 const loader=new THREE.TextureLoader();
 const nebulaTex=loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
 scene.background=nebulaTex;
@@ -142,8 +162,8 @@ scene.background=nebulaTex;
   scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:1.8,color:0x87ceeb,depthWrite:false})));
 })();
 
-// Núcleo central
-const coreMat=new THREE.MeshPhongMaterial({color:0x002244,transparent:true,opacity:0.7,shininess:250});
+// Núcleo central con tono Naranja cálido
+const coreMat=new THREE.MeshPhongMaterial({color:0xff6600,transparent:true,opacity:0.75,shininess:250});
 const core=new THREE.Mesh(new THREE.SphereGeometry(40,64,64),coreMat);
 scene.add(core);
 
@@ -155,22 +175,21 @@ function makeCenterTextTexture(msg){
   ctx.font='bold 65px Arial';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillStyle='#00d2ff';
-  ctx.shadowColor='#ffaa00';
+  ctx.fillStyle='#ffaa00';
+  ctx.shadowColor='#00d2ff';
   ctx.shadowBlur=40;
   ctx.fillText(msg,c.width/2,c.height/2);
   return new THREE.CanvasTexture(c);
 }
 const centerTex=makeCenterTextTexture("🌻 TE AMO BETZI 🌻");
-const centerMat=new THREE.SpriteMaterial({map:centerTex,transparent:true});
-const centerSprite=new THREE.Sprite(centerMat);
+const centerSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:centerTex,transparent:true}));
 centerSprite.scale.set(75,75,1);
 centerSprite.position.set(0,0,0);
 centerSprite.renderOrder=999;
 scene.add(centerSprite);
 
-// Brillo exterior combinado: Celeste intenso y Naranjita cálido
-function makeGlow(size=768,c1='0,210,255',c2='255,140,0'){
+// Brillo exterior invertido: Naranja adentro y Celeste afuera
+function makeGlow(size=768,c1='255,136,0',c2='0,210,255'){
   const c=document.createElement('canvas');c.width=c.height=size;
   const g=c.getContext('2d');
   const grad=g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
@@ -184,15 +203,15 @@ const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(),transparent
 glow.scale.set(520,520,1);
 scene.add(glow);
 
-// Anillos con degradado celeste y naranja
+// Anillos invertidos (Naranja adentro, Celeste afuera)
 function ringTexture(size=768){
   const c=document.createElement('canvas');c.width=c.height=size;
   const g=c.getContext('2d');g.translate(size/2,size/2);
   const r1=size*0.34, r2=size*0.49;
   const grd=g.createRadialGradient(0,0,r1*0.3,0,0,r2);
-  grd.addColorStop(0.0,'rgba(255,230,150,1)');
-  grd.addColorStop(0.3,'rgba(0,210,255,0.9)');
-  grd.addColorStop(0.65,'rgba(255,130,0,0.7)');
+  grd.addColorStop(0.0,'rgba(0,210,255,1)');
+  grd.addColorStop(0.3,'rgba(255,136,0,0.9)');
+  grd.addColorStop(0.65,'rgba(0,210,255,0.7)');
   grd.addColorStop(1.0,'rgba(0,0,0,0)');
   g.fillStyle=grd;
   g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
@@ -203,7 +222,7 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras con el "Mi" corregido
+// Palabras flotantes
 const WORDS=[];
 const baseWords=[
   '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
@@ -243,7 +262,7 @@ for(let i=0;i<WORDS.length;i++){
   textGroup.add(sp);
 }
 
-// Ramos 360 de Girasoles
+// Ramos 360 de Girasoles con distribución perfectamente uniformada por Fibonacci Sphere
 const addedBouquets=(()=>{
 function makeGeometry(){
 let data=[];const PI=Math.PI,TAU=2*PI;let seed=13;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),mul=(a,k)=>a.map(v=>v*k),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],norm=a=>mul(a,1/(Math.hypot(...a)||1));
@@ -296,15 +315,22 @@ float light=max(dot(n,normalize(vec3(-.6,.9,1.2))),0.);
 float rim=pow(1.-abs(n.z),3.);
 gl_FragColor=vec4(floralColor*(.48+.57*light)+vec3(.08,.07,.035)*rim,1.);}
 `});
-const geometry=makeGeometry(),group=new THREE.Group();group.name='Ramos abiertos 360';
-for(let i=0;i<30;i++){
+const geometry=makeGeometry(),group=new THREE.Group();group.name='Ramos distribuidos';
+const totalBouquets=32;
+for(let i=0;i<totalBouquets;i++){
  const mesh=new THREE.Mesh(geometry,material);
- const phi=Math.acos(1-2*(i+.5)/30),theta=i*2.3999632297;
- const radius=165+(i%4)*27;
- mesh.scale.setScalar((6.5+(i%3)*.65)*1.4*1.3);
- mesh.position.set(radius*Math.sin(phi)*Math.cos(theta),radius*Math.cos(phi),radius*Math.sin(phi)*Math.sin(theta));
- mesh.rotation.y=theta;mesh.rotation.z=Math.sin(i*1.7)*.12;
- mesh.userData={phi,theta,radius,speed:.001+(i%5)*.00022};
+ // Distribución perfecta de Fibonacci Sphere para evitar acumulaciones
+ const y=1-(i/(totalBouquets-1))*2;
+ const radiusAtY=Math.sqrt(1-y*y);
+ const theta=i*2.3999632297;
+ const x=Math.cos(theta)*radiusAtY;
+ const z=Math.sin(theta)*radiusAtY;
+ const dist=170+((i*37)%50);
+ 
+ mesh.scale.setScalar(8.5);
+ mesh.position.set(x*dist, y*dist, z*dist);
+ mesh.lookAt(0,0,0);
+ mesh.userData={x:x*dist, y:y*dist, z:z*dist, speed:0.0005+(i%3)*0.0002};
  group.add(mesh);
 }
 scene.add(group);return group;
@@ -344,12 +370,6 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
     sp.userData.theta+=sp.userData.speed;
     sp.position.x=sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
-  });
-  addedBouquets.children.forEach(ramo=>{
-    const d=ramo.userData;d.theta+=d.speed;
-    ramo.position.x=d.radius*Math.sin(d.phi)*Math.cos(d.theta);
-    ramo.position.z=d.radius*Math.sin(d.phi)*Math.sin(d.theta);
-    ramo.rotation.y+=d.speed*.45;
   });
   currentDist+=(targetDist-currentDist)*0.06;
   const cx=Math.cos(rotX),sx=Math.sin(rotX);const cy=Math.cos(rotY),sy=Math.sin(rotY);

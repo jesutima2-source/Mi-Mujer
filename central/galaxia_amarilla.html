@@ -47,10 +47,8 @@
 const audio = document.getElementById('audio');
 audio.volume = 1.0;
 
-// Intento forzado de reproducción automática
 window.addEventListener('DOMContentLoaded', () => {
   audio.play().catch(() => {
-    // Si el navegador bloquea el autoplay estricto, suena al primer toque/clic del usuario en la pantalla
     const unlockAudio = () => {
       audio.play();
       window.removeEventListener('click', unlockAudio);
@@ -75,6 +73,7 @@ const loader=new THREE.TextureLoader();
 const nebulaTex=loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
 scene.background=nebulaTex;
 
+// Estrellas celestes de fondo original
 (function makeStars(count=2500,spread=3000){
   const g=new THREE.BufferGeometry();
   const pos=new Float32Array(count*3);
@@ -88,6 +87,22 @@ scene.background=nebulaTex;
   }
   g.setAttribute('position',new THREE.BufferAttribute(pos,3));
   scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:1.8,color:0x87ceeb,depthWrite:false})));
+})();
+
+// NUEVAS: Partículas blancas como estrellas brillantes abundantes por todo el espacio
+(function makeWhiteBrightStars(count=4000,spread=3500){
+  const g=new THREE.BufferGeometry();
+  const pos=new Float32Array(count*3);
+  for(let i=0;i<count;i++){
+    const r=spread*(0.2+Math.random()*0.8);
+    const th=Math.random()*Math.PI*2;
+    const ph=Math.acos(2*Math.random()-1);
+    pos[i*3+0]=r*Math.sin(ph)*Math.cos(th);
+    pos[i*3+1]=r*Math.cos(ph);
+    pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+  }
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:2.4,color:0xffffff,transparent:true,opacity:0.9,depthWrite:false})));
 })();
 
 // Núcleo central con tono Naranja cálido
@@ -183,15 +198,15 @@ for(let i=0;i<WORDS.length;i++){
   const tex=sharedWordTextures.get(textureKey);
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true});
   const sp=new THREE.Sprite(mat);
-  sp.scale.set(58,16.5,1); // Letras más grandecitas y proporcionadas
+  sp.scale.set(58,16.5,1);
   const phi=Math.acos(2*Math.random()-1);const theta=Math.random()*Math.PI*2;
-  const r=150+Math.random()*120;
+  const r=140+Math.random()*140;
   sp.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));
   sp.userData={phi:phi,theta:theta,radius:r,speed:0.001+Math.random()*0.001};
   textGroup.add(sp);
 }
 
-// Ramos 360 de Girasoles con movimiento dinámico en órbita
+// Ramos 360 de Girasoles bien orientados y con mayor densidad
 const bouquetGroup=new THREE.Group();scene.add(bouquetGroup);
 const addedBouquets=(()=>{
 function makeGeometry(){
@@ -246,7 +261,7 @@ float rim=pow(1.-abs(n.z),3.);
 gl_FragColor=vec4(floralColor*(.48+.57*light)+vec3(.08,.07,.035)*rim,1.);}
 `});
 const geometry=makeGeometry();
-const totalBouquets=32;
+const totalBouquets=56;
 const bouquetsList=[];
 for(let i=0;i<totalBouquets;i++){
  const mesh=new THREE.Mesh(geometry,material);
@@ -255,18 +270,19 @@ for(let i=0;i<totalBouquets;i++){
  const theta=i*2.3999632297;
  const x=Math.cos(theta)*radiusAtY;
  const z=Math.sin(theta)*radiusAtY;
- const dist=170+((i*37)%50);
+ const dist=140+((i*31)%70);
  
- mesh.scale.setScalar(8.5);
+ mesh.scale.setScalar(7.5);
  mesh.position.set(x*dist, y*dist, z*dist);
- mesh.lookAt(0,0,0);
  
- // Datos dinámicos para el movimiento orbital
+ mesh.lookAt(x*dist*2, y*dist*2, z*dist*2);
+ mesh.rotateX(Math.PI/2);
+ 
  mesh.userData={
    phi: Math.acos(y),
    theta: theta,
    radius: dist,
-   speed: 0.0006 + (i%3)*0.00025
+   speed: 0.0005 + (i%3)*0.0002
  };
  bouquetGroup.add(mesh);
  bouquetsList.push(mesh);
@@ -312,16 +328,20 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
   });
 
-  // Animar los ramos de girasoles para que orbiten de forma orgánica y viva junto con las letras
-  addedBouquets.forEach((mesh, index)=>{
+  // Animar ramos manteniendo siempre su orientación correcta hacia afuera
+  addedBouquets.forEach((mesh)=>{
     mesh.userData.theta += mesh.userData.speed;
     const r = mesh.userData.radius;
     const phi = mesh.userData.phi;
     const theta = mesh.userData.theta;
     
-    mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
-    mesh.position.z = r * Math.sin(phi) * Math.sin(theta);
-    mesh.lookAt(0,0,0);
+    const nx = r * Math.sin(phi) * Math.cos(theta);
+    const ny = r * Math.cos(phi);
+    const nz = r * Math.sin(phi) * Math.sin(theta);
+
+    mesh.position.set(nx, ny, nz);
+    mesh.lookAt(nx*2, ny*2, nz*2);
+    mesh.rotateX(Math.PI/2);
   });
 
   currentDist+=(targetDist-currentDist)*0.06;

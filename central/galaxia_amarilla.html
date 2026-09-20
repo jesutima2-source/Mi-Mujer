@@ -204,7 +204,6 @@ const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 5000
 
 let targetDist = 180, currentDist = 180, rotX = 0.2, rotY = 0;
 
-// Fondo negro profundo limpio (eliminando la textura cuadrada que causaba el recuadro)
 scene.background = new THREE.Color(0x050b14);
 
 // Estrellas de fondo
@@ -256,7 +255,14 @@ function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   g.fill();
   return new THREE.CanvasTexture(c);
 }
-const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(), transparent:true, depthWrite:false}));
+
+// CORRECCIÓN APLICADA: AdditiveBlending elimina el cuadro/recuadro rectangular del brillo
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: makeGlow(), 
+  transparent: true, 
+  depthWrite: false,
+  blending: THREE.AdditiveBlending 
+}));
 glow.scale.set(520, 520, 1);
 scene.add(glow);
 
@@ -430,7 +436,6 @@ function onMove(e){
     );
     const diff = initialPinchDist - currentPinchDist;
     targetDist += diff * 0.5;
-    // Zoom ampliado: ahora permite acercarse más (hasta 40 en lugar de 90)
     targetDist = Math.max(40, Math.min(450, targetDist));
     initialPinchDist = currentPinchDist;
     return;
@@ -459,7 +464,6 @@ addEventListener('touchend', onUp, {passive: true});
 
 addEventListener('wheel', (e)=>{ 
   targetDist += e.deltaY * 0.25; 
-  // Zoom con rueda del mouse también ampliado
   targetDist = Math.max(40, Math.min(450, targetDist)); 
 }, {passive:true});
 

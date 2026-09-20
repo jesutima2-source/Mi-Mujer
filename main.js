@@ -1,8 +1,7 @@
 // ================= CONFIGURACIÓN DE CREDENCIALES =================
 const validUsers = [
   { user: "jesus", pass: "10082018" },
-  { user: "betzi", pass: "10082018" },
-  { user: "*", pass: "*" }
+  { user: "betzi", pass: "10082018" }
 ];
 
 // ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
@@ -103,11 +102,11 @@ const cordHandle = document.getElementById('cordHandle');
 let isDragging = false;
 let startY = 0;
 let currentY = 0;
-const maxPull = 70;
+const maxPull = 60;
 
 function updateCordPosition(y) {
-  cordLine.setAttribute('y2', 45 + y);
-  cordHandle.style.top = (45 + y) + 'px';
+  cordLine.setAttribute('y2', 40 + y);
+  cordHandle.style.top = (40 + y) + 'px';
 }
 
 cordContainer.addEventListener('pointerdown', (e) => {
@@ -128,8 +127,8 @@ cordContainer.addEventListener('pointerup', (e) => {
   isDragging = false;
   cordContainer.releasePointerCapture(e.pointerId);
 
-  // Si se jaló lo suficiente, alternamos el estado de encendido/apagado
-  if (currentY > 35) {
+  // Si se jaló lo suficiente, se enciende o apaga
+  if (currentY > 30) {
     toggleLamp();
   }
 
@@ -170,9 +169,7 @@ loginForm.addEventListener('submit', (e) => {
   const userVal = usernameInput.value.trim().toLowerCase();
   const passVal = passwordInput.value.trim();
 
-  const isValid = validUsers.some(u => 
-    (u.user === userVal && u.pass === passVal) || (u.user === "*" && u.pass === "*")
-  );
+  const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
 
   if (isValid) {
     alert("¡Bienvenido a nuestro rincón mágico, " + userVal + "!");

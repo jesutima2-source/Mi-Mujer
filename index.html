@@ -12,18 +12,12 @@
   <div class="starfield"></div>
   <div class="starfield-static"></div>
 
-  <!-- Audio de fondo -->
-  <audio id="loginAudio" src="flores/sound/musiclogin.mp3" preload="auto" loop></audio>
-
-  <!-- Reproductor flotante de música -->
-  <div class="player-bar" id="playerBar">
-    <button class="play-btn" id="playBtn" title="Reproducir / Pausa">▶</button>
-    <span class="song-title">Te Amo Betzi 💖</span>
-  </div>
+  <!-- Audio de fondo automático -->
+  <audio id="loginAudio" src="flores/sound/musiclogin.mp3" preload="auto" loop autoplay></audio>
 
   <div class="main-container">
-    <!-- LÁMPARA ESTÉTICA (Solo se controla con la pitita) -->
-    <div class="lamp-container" id="lampContainer" title="¡Jala la pitita para encender o apagar!">
+    <!-- LÁMPARA ESTÉTICA (Únicamente se enciende/apaga jalando la pitita) -->
+    <div class="lamp-container" id="lampContainer">
       <div class="lamp-shade">
         <div class="lamp-face">
           <div class="eye left"></div>
@@ -34,7 +28,7 @@
       <div class="light-beam"></div>
       
       <!-- Contenedor con físicas para la pitita -->
-      <div class="lamp-cord-container" id="cordContainer">
+      <div class="lamp-cord-container" id="cordContainer" title="¡Jala la pitita!">
         <div class="lamp-cord" id="lampCord"></div>
         <div class="cord-handle" id="cordHandle"></div>
       </div>

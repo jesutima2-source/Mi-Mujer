@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Galaxia Amarilla - Betzi</title>
 <style>
-    html, body { 
+  html, body { 
     margin: 0; 
     padding: 0;
     width: 100%;
@@ -16,7 +16,6 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   }
   
-  /* --- Lienzo 3D ajustado perfectamente para evitar recortes raros en celular --- */
   canvas { 
     display: block; 
     position: fixed;
@@ -205,9 +204,8 @@ const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 5000
 
 let targetDist = 180, currentDist = 180, rotX = 0.2, rotY = 0;
 
-const loader = new THREE.TextureLoader();
-const nebulaTex = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
-scene.background = nebulaTex;
+// Fondo negro profundo limpio (eliminando la textura cuadrada que causaba el recuadro)
+scene.background = new THREE.Color(0x050b14);
 
 // Estrellas de fondo
 (function makeStars(count=2500, spread=3200){
@@ -432,7 +430,8 @@ function onMove(e){
     );
     const diff = initialPinchDist - currentPinchDist;
     targetDist += diff * 0.5;
-    targetDist = Math.max(90, Math.min(450, targetDist));
+    // Zoom ampliado: ahora permite acercarse más (hasta 40 en lugar de 90)
+    targetDist = Math.max(40, Math.min(450, targetDist));
     initialPinchDist = currentPinchDist;
     return;
   }
@@ -460,7 +459,8 @@ addEventListener('touchend', onUp, {passive: true});
 
 addEventListener('wheel', (e)=>{ 
   targetDist += e.deltaY * 0.25; 
-  targetDist = Math.max(90, Math.min(450, targetDist)); 
+  // Zoom con rueda del mouse también ampliado
+  targetDist = Math.max(40, Math.min(450, targetDist)); 
 }, {passive:true});
 
 window.addEventListener('resize', () => {

@@ -8,18 +8,11 @@
 </head>
 <body>
 
-  <!-- Fondo animado con estrellas fugaces -->
-  <div class="starfield">
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-  </div>
-  <div class="starfield-static"></div>
+  <!-- Fondo dinámico de estrellas fugaces con Canvas -->
+  <canvas id="starCanvas"></canvas>
 
-  <!-- Audio de fondo automático -->
-  <audio id="loginAudio" src="flores/sound/musiclogin.mp3" preload="auto" loop autoplay></audio>
+  <!-- Audio con la ruta exacta: central/flores/sound/musiclogin.mp3 -->
+  <audio id="loginAudio" src="central/flores/sound/musiclogin.mp3" preload="auto" loop autoplay></audio>
 
   <div class="main-container">
     <!-- LÁMPARA ESTÉTICA CON RESPLANDOR Y PITITA 360° -->

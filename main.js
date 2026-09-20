@@ -1,8 +1,8 @@
-// ================= CONFIGURACIÓN DE LAS 2 CREDENCIALES =================
-// Puedes cambiar los usuarios y contraseñas aquí mismo cuando gustes:
+// ================= CONFIGURACIÓN DE LAS 3 CREDENCIALES =================
 const validUsers = [
-  { user: "betzi", pass: "12345" },       // Credencial 1
-  { user: "*", pass: "*" }   // Credencial 2
+  { user: "jesus", pass: "10082018" },   // Credencial 1 (Tú)
+  { user: "betzi", pass: "10082018" },   // Credencial 2 (Betzi)
+  { user: "*", pass: "*" }               // Credencial 3 (Pruebas)
 ];
 
 // ================= REPRODUCTOR DE MÚSICA =================
@@ -24,7 +24,7 @@ playBtn.addEventListener('click', () => {
   }
 });
 
-// ================= FÍSICAS DE LA PITITA Y ENCENDIDO =================
+// ================= FÍSICAS DE LA PITITA Y ENCENDIDO/APAGADO =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const cordContainer = document.getElementById('cordContainer');
@@ -74,20 +74,14 @@ function toggleLight() {
   isLightOn = !isLightOn;
   if (isLightOn) {
     lampContainer.classList.remove('off');
-    loginCard.classList.remove('disabled'); // Habilita escritura en el login
+    loginCard.classList.remove('disabled'); // Habilita escritura y campos
   } else {
     lampContainer.classList.add('off');
-    loginCard.classList.add('disabled');    // Apaga y bloquea la escritura
+    loginCard.classList.add('disabled');    // Apaga y bloquea escritura
   }
 }
 
-// Permite encender/apagar también haciendo clic directo en el foco
-lampContainer.addEventListener('click', (e) => {
-  if (e.target.closest('#cordContainer')) return; // Evita conflicto con el arrastre de la pita
-  toggleLight();
-});
-
-// Bucle de animación de físicas del resorte
+// Bucle de animación de físicas del resorte para la pitita
 function updatePhysics() {
   if (!isDragging) {
     const force = -springK * cordOffset;
@@ -111,15 +105,15 @@ updatePhysics();
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const userInput = document.getElementById('username').value.trim();
+  const userInput = document.getElementById('username').value.trim().toLowerCase();
   const passInput = document.getElementById('password').value;
 
-  // Verificamos si coincide con alguna de las 2 credenciales
+  // Verificamos si coincide con alguna de las 3 credenciales
   const matchedUser = validUsers.find(u => u.user === userInput && u.pass === passInput);
 
   if (matchedUser) {
     alert('¡Acceso concedido! Bienvenido a nuestro rincón mágico ❤️');
-    // Aquí puedes redirigir a tu página principal, por ejemplo:
+    // Aquí puedes redirigir a tu siguiente vista o archivo principal:
     // window.location.href = "principal.html";
   } else {
     alert('Usuario o contraseña incorrectos. Intenta de nuevo 💔');

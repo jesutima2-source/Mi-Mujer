@@ -1,8 +1,7 @@
 // ================= CONFIGURACIÓN DE CREDENCIALES =================
 const validUsers = [
   { user: "jesus", pass: "10082018" },
-  { user: "betzi", pass: "10082018" },
-  { user: "*", pass: "*" }
+  { user: "betzi", pass: "10082018" }
 ];
 
 // ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
@@ -18,7 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ================= FONDO DE ESTRELLAS Y PARTÍCULAS (CANVAS) =================
+// ================= FONDO DE COPOS CELESTES / PARTÍCULAS SUAVES (CANVAS) =================
 const canvas = document.getElementById('starCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -29,67 +28,44 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-const stars = [];
-for (let i = 0; i < 150; i++) {
-  stars.push({
+// Generar copos celestes flotantes suaves
+const snowflakes = [];
+for (let i = 0; i < 70; i++) {
+  snowflakes.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    radius: Math.random() * 1.8,
-    alpha: Math.random(),
-    speed: Math.random() * 0.015 + 0.005
+    radius: Math.random() * 2.5 + 0.8,
+    alpha: Math.random() * 0.7 + 0.2,
+    speedY: Math.random() * 0.4 + 0.1,
+    speedX: (Math.random() - 0.5) * 0.3
   });
 }
 
-const shootingStars = [];
-function createShootingStar() {
-  shootingStars.push({
-    x: Math.random() * canvas.width + 200,
-    y: Math.random() * (canvas.height / 2),
-    length: Math.random() * 80 + 60,
-    speed: Math.random() * 6 + 4,
-    opacity: 1
-  });
-}
-setInterval(createShootingStar, 3000);
-
-function animateStars() {
+function animateSnowflakes() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  stars.forEach(star => {
-    star.alpha += star.speed;
-    if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
-    ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+  snowflakes.forEach(flake => {
+    flake.y += flake.speedY;
+    flake.x += flake.speedX;
+
+    if (flake.y > canvas.height) {
+      flake.y = 0;
+      flake.x = Math.random() * canvas.width;
+    }
+    if (flake.x > canvas.width) flake.x = 0;
+    if (flake.x < 0) flake.x = canvas.width;
+
+    ctx.fillStyle = `rgba(0, 210, 255, ${flake.alpha})`;
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-  ctx.lineWidth = 2;
-  ctx.shadowBlur = 12;
-  ctx.shadowColor = '#00d2ff';
-
-  shootingStars.forEach((star, index) => {
-    ctx.beginPath();
-    ctx.moveTo(star.x, star.y);
-    ctx.lineTo(star.x - star.length, star.y + star.length * 0.4);
-    ctx.stroke();
-
-    star.x -= star.speed;
-    star.y += star.speed * 0.4;
-    star.opacity -= 0.012;
-
-    if (star.opacity <= 0 || star.x < 0) {
-      shootingStars.splice(index, 1);
-    }
-  });
-
-  ctx.shadowBlur = 0;
-  requestAnimationFrame(animateStars);
+  requestAnimationFrame(animateSnowflakes);
 }
-animateStars();
+animateSnowflakes();
 
-// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS MULTIDIRECCIONALES =================
+// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS DE LA PITITA =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const usernameInput = document.getElementById('username');
@@ -101,11 +77,11 @@ const cordLine = document.getElementById('cordLine');
 const cordHandle = document.getElementById('cordHandle');
 
 let isDragging = false;
-let currentX = 50;
+let currentX = 45;
 let currentY = 45;
-const originX = 50;
+const originX = 45;
 const originY = 0;
-const maxPullDistance = 75;
+const maxPullDistance = 65;
 
 function updateCord(x, y) {
   cordLine.setAttribute('x2', x);
@@ -147,7 +123,7 @@ cordContainer.addEventListener('pointerup', (e) => {
   let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 45, 2));
 
   // Si se jaló lo suficiente en cualquier dirección
-  if (pullDistance > 28) {
+  if (pullDistance > 25) {
     toggleLamp();
   }
 

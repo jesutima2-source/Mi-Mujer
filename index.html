@@ -8,8 +8,8 @@
 </head>
 <body>
 
-  <!-- Fondo dinámico de estrellas y partículas con Canvas -->
-  <canvas id="starCanvas"></canvas>
+  <!-- Partículas / Copos de nieve flotantes -->
+  <div class="particulas" id="particulasContainer"></div>
 
   <!-- Audio con la ruta correcta -->
   <audio id="loginAudio" src="central/flores/sound/musiclogin.mp3" preload="auto" loop autoplay></audio>
@@ -33,10 +33,10 @@
       
       <div class="light-beam"></div>
       
-      <!-- Contenedor de la pitita interactiva (Al ras de la base) -->
+      <!-- Contenedor de la pitita interactiva al ras de la base -->
       <div class="lamp-cord-container" id="cordContainer" title="¡Jala la pitita para encender!">
         <svg class="cord-svg" id="cordSvg">
-          <line id="cordLine" x1="50" y1="0" x2="50" y2="25" stroke="#00d2ff" stroke-width="3" stroke-linecap="round"/>
+          <line id="cordLine" x1="50" y1="0" x2="50" y2="22" stroke="#00d2ff" stroke-width="3" stroke-linecap="round"/>
         </svg>
         <div class="cord-handle" id="cordHandle"></div>
       </div>

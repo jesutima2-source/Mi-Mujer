@@ -66,7 +66,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,matchMedia('(pointer:
 renderer.setSize(innerWidth,innerHeight);
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,5000);
-let targetDist=300,currentDist=300,rotX=0.2,rotY=0;
+
+// Zoom inicial más cercano al centro
+let targetDist=180, currentDist=180, rotX=0.2, rotY=0;
 
 // Fondo espacial
 const loader=new THREE.TextureLoader();
@@ -165,7 +167,7 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras flotantes
+// Palabras flotantes (Letras más grandes)
 const WORDS=[];
 const baseWords=[
   '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
@@ -198,7 +200,8 @@ for(let i=0;i<WORDS.length;i++){
   const tex=sharedWordTextures.get(textureKey);
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true});
   const sp=new THREE.Sprite(mat);
-  sp.scale.set(58,16.5,1);
+  // Letras más grandes (aumentado el ancho y alto del sprite)
+  sp.scale.set(78,22,1);
   const phi=Math.acos(2*Math.random()-1);const theta=Math.random()*Math.PI*2;
   const r=140+Math.random()*140;
   sp.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));
@@ -206,7 +209,7 @@ for(let i=0;i<WORDS.length;i++){
   textGroup.add(sp);
 }
 
-// Ramos ajustados a 40 unidades (fluidez máxima)
+// Ramos de flores
 const bouquetGroup=new THREE.Group();scene.add(bouquetGroup);
 const addedBouquets=(()=>{
 function makeGeometry(){
@@ -272,18 +275,16 @@ for(let i=0;i<totalBouquets;i++){
  const z=Math.sin(theta)*radiusAtY;
  const dist=140+((i*31)%70);
  
- mesh.scale.setScalar(7.5);
+ // Flores más grandes (escala aumentada a 10.5)
+ mesh.scale.setScalar(10.5);
  mesh.position.set(x*dist, y*dist, z*dist);
- 
- // Orientación inicial limpia sin distorsión
- mesh.lookAt(0, 0, 0);
- mesh.rotateY(Math.PI);
  
  mesh.userData={
    phi: Math.acos(y),
    theta: theta,
    radius: dist,
-   speed: 0.0005 + (i%3)*0.0002
+   speed: 0.0005 + (i%3)*0.0002,
+   spinSpeed: 0.008 + ((i * 3) % 5) * 0.002
  };
  bouquetGroup.add(mesh);
  bouquetsList.push(mesh);
@@ -298,7 +299,7 @@ function onMove(e){if(!dragging)return;const t=e.touches?e.touches[0]:e;const dx
 function onUp(){dragging=false;}
 addEventListener('mousedown',onDown);addEventListener('mousemove',onMove);addEventListener('mouseup',onUp);
 addEventListener('touchstart',onDown,{passive:true});addEventListener('touchmove',onMove,{passive:true});addEventListener('touchend',onUp,{passive:true});
-addEventListener('wheel',(e)=>{targetDist+=e.deltaY*0.25;targetDist=Math.max(160,Math.min(600,targetDist));},{passive:true});
+addEventListener('wheel',(e)=>{targetDist+=e.deltaY*0.25;targetDist=Math.max(100,Math.min(500,targetDist));},{passive:true});
 
 let pinch=0;
 addEventListener('touchmove',(e)=>{
@@ -307,7 +308,7 @@ addEventListener('touchmove',(e)=>{
     const dx=e.touches[0].clientX-e.touches[1].clientX;
     const dy=e.touches[0].clientY-e.touches[1].clientY;
     const d=Math.hypot(dx,dy);
-    if(pinch){targetDist+=(pinch-d)*0.5;targetDist=Math.max(160,Math.min(600,targetDist));}
+    if(pinch){targetDist+=(pinch-d)*0.5;targetDist=Math.max(100,Math.min(500,targetDist));}
     pinch=d;
   }
 },{passive:false});
@@ -329,7 +330,7 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
   });
 
-  // Animar ramos orientados perfectamente hacia afuera sin deformación
+  // Animar ramos: movimiento orbital + orientación uniforme + giro horizontal
   addedBouquets.forEach((mesh)=>{
     mesh.userData.theta += mesh.userData.speed;
     const r = mesh.userData.radius;
@@ -342,9 +343,12 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
 
     mesh.position.set(nx, ny, nz);
     
-    // Hace que la parte frontal del ramo mire hacia afuera de la galaxia de forma estable
-    mesh.lookAt(nx * 2, ny * 2, nz * 2);
+    // ORIENTACIÓN UNIFORME: Forzamos que todos miren hacia afuera manteniendo el horizonte nivelado (sin inclinaciones extrañas en los polos)
+    mesh.lookAt(nx * 2, 0, nz * 2);
     mesh.rotateY(Math.PI);
+
+    // Giro horizontal constante sobre su propio eje
+    mesh.rotateY(mesh.userData.spinSpeed);
   });
 
   currentDist+=(targetDist-currentDist)*0.06;

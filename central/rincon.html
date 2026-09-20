@@ -9,11 +9,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      touch-action: pan-y; /* Permite desplazamiento vertical suave con el dedo */
     }
 
     body {
-      /* Fondo de imagen solicitado + color oscuro de respaldo */
-      background: linear-gradient(rgba(5, 7, 15, 0.75), rgba(5, 7, 15, 0.85)), 
+      background: linear-gradient(rgba(5, 7, 15, 0.7), rgba(5, 7, 15, 0.85)), 
                   url('flores/img/fondo.jpg') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
@@ -23,69 +23,62 @@
       justify-content: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      padding: 15px;
+      padding: 20px 15px;
       text-align: center;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* EFECTO DE PARTÍCULAS DE CORAZONES (Fondo animado) */
-    .hearts-background {
+    /* CONTENEDOR DE CORAZONES FLOTANTES */
+    .hearts-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none; /* Para que no estorbe al tocar la pantalla */
-      z-index: -1; /* Detrás de todo */
-      background: radial-gradient(circle, transparent 20%, #05070f 100%);
-      opacity: 0.6;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
     }
 
-    /* Animación simple para los corazones usando pseudo-elementos */
-    .hearts-background::before, .hearts-background::after {
-      content: '♥';
-      position: absolute;
-      color: rgba(0, 210, 255, 0.4); /* Color cian suave */
-      font-size: 15px;
-      animation: fall linear infinite;
-      filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.6));
-    }
-
-    .hearts-background::after {
-      color: rgba(255, 136, 0, 0.3); /* Un toque de naranja suave */
-      font-size: 22px;
-      animation-delay: 2s;
-      filter: drop-shadow(0 0 5px rgba(255, 136, 0, 0.5));
-    }
-
-    /* Generar múltiples corazones moviéndose */
-    @keyframes fall {
-      0% { transform: translateY(-10vh) rotate(0deg); }
-      100% { transform: translateY(100vh) rotate(360deg); }
-    }
-
-    /* Duplicar el efecto para más densidad */
-    .hearts-container {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
-        overflow: hidden;
-    }
     .heart {
-        position: absolute; display: block; top: -10%;
-        color: var(--heart-color); font-size: var(--heart-size);
-        animation: heartFall var(--fall-duration) linear infinite;
-        animation-delay: var(--fall-delay);
-        opacity: 0.5;
-    }
-    @keyframes heartFall {
-        0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.5; }
-        100% { transform: translateY(105vh) translateX(var(--move-x)) rotate(720deg); opacity: 0; }
+      position: absolute;
+      top: -10%;
+      color: var(--heart-color);
+      font-size: var(--heart-size);
+      animation: heartFall var(--fall-duration) linear infinite;
+      animation-delay: var(--fall-delay);
+      opacity: 0.6;
+      filter: drop-shadow(0 0 6px var(--heart-color));
     }
 
-    /* TÍTULO ANIMADO BIENVENIDA */
+    @keyframes heartFall {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(105vh) translateX(var(--move-x)) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* CONTENIDO PRINCIPAL CENTRADO */
+    .main-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* TÍTULO MEJORADO CON LUCES NEÓN */
     .greetings {
-      font-size: 2.3rem;
-      font-weight: 800;
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
       display: flex;
       gap: 4px;
       margin-bottom: 5px;
@@ -94,81 +87,82 @@
     }
 
     .greetings span {
-      animation: glow 2s ease-in-out infinite alternate;
-      color: #888;
+      animation: neonGlow 2.5s ease-in-out infinite alternate;
+      color: #fff;
     }
 
-    .greetings span:nth-child(1) { animation-delay: 0.1s; }
-    .greetings span:nth-child(2) { animation-delay: 0.2s; }
-    .greetings span:nth-child(3) { animation-delay: 0.3s; }
-    .greetings span:nth-child(4) { animation-delay: 0.4s; }
-    .greetings span:nth-child(5) { animation-delay: 0.5s; }
-    .greetings span:nth-child(6) { animation-delay: 0.6s; }
-    .greetings span:nth-child(7) { animation-delay: 0.7s; }
-    .greetings span:nth-child(8) { animation-delay: 0.8s; }
-    .greetings span:nth-child(9) { animation-delay: 0.9s; }
-    .greetings span:nth-child(10) { animation-delay: 1.0s; }
+    .greetings span:nth-child(odd) { animation-delay: 0.2s; }
+    .greetings span:nth-child(even) { animation-delay: 0.7s; }
 
-    @keyframes glow {
-      0% { color: #555; text-shadow: none; }
-      100% { color: #fff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; }
+    @keyframes neonGlow {
+      0% {
+        color: #88d4ff;
+        text-shadow: 0 0 5px rgba(0, 210, 255, 0.3);
+      }
+      100% {
+        color: #ffffff;
+        text-shadow: 0 0 12px #00d2ff, 0 0 25px #00d2ff, 0 0 35px #0088cc;
+      }
     }
 
     /* SUBTÍTULO Y FRASE */
     .description {
       font-size: 0.95rem;
-      letter-spacing: 1px;
-      color: #e0f8ff;
-      margin-bottom: 15px;
-      text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
-      font-weight: 300;
+      letter-spacing: 1.5px;
+      color: #c5f0ff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+      font-weight: 400;
     }
 
     /* CONTENEDOR DEL TIMER */
     .timer-box {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 12px;
-        padding: 15px;
-        margin-bottom: 25px;
-        width: 100%;
-        max-width: 380px;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      background: rgba(10, 15, 30, 0.65);
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 20px;
+      width: 100%;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 210, 255, 0.1);
     }
+
     .timer-title {
-        font-size: 0.8rem;
-        color: #aaa;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+      font-size: 0.75rem;
+      color: #88d4ff;
+      margin-bottom: 8px;
+      letter-spacing: 2.5px;
+      font-weight: 600;
     }
+
     .time-digits {
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
+      display: flex;
+      justify-content: space-around;
+      gap: 5px;
     }
+
     .time-block {
-        display: flex;
-        flex-direction: column;
-        min-width: 45px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 42px;
     }
+
     .digit {
-        background: linear-gradient(to bottom, #00d2ff, #0088cc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-family: monospace; /* Fuente monoespaciada para el timer */
-        font-size: 1.6rem;
-        text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+      font-family: monospace;
+      font-size: 1.3rem;
+      font-weight: bold;
+      background: linear-gradient(to bottom, #ffffff, #00d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
     }
+
     .label {
-        font-size: 0.65rem;
-        color: #ccc;
-        margin-top: 2px;
+      font-size: 0.55rem;
+      color: #aaa;
+      margin-top: 3px;
+      letter-spacing: 0.5px;
     }
 
     /* CONTENEDOR DE TARJETAS */
@@ -177,32 +171,29 @@
       flex-direction: column;
       gap: 12px;
       width: 100%;
-      max-width: 380px;
-      position: relative;
-      z-index: 1; /* Encima del fondo de corazones */
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(0, 210, 255, 0.4);
+      background: rgba(15, 20, 35, 0.6);
+      border: 1px solid rgba(0, 210, 255, 0.3);
       border-radius: 14px;
-      padding: 15px;
+      padding: 14px 18px;
       text-decoration: none;
       color: #fff;
       transition: all 0.3s ease;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      backdrop-filter: blur(5px);
+      gap: 4px;
+      backdrop-filter: blur(6px);
     }
 
-    .card:hover, .card:active {
-      transform: translateY(-2px);
+    .card:active {
+      transform: scale(0.97);
       border-color: #00d2ff;
-      box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
-      background: rgba(0, 210, 255, 0.15);
+      background: rgba(0, 210, 255, 0.2);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
     }
 
     .card h3 {
@@ -211,136 +202,154 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 2px;
     }
 
-    .card.flores h3 { color: #ffcc00; }
+    .card.flores h3 {
+      color: #ffcc00;
+      text-shadow: 0 0 8px rgba(255, 204, 0, 0.4);
+    }
 
     .card p {
       font-size: 0.75rem;
-      color: #ddd;
-      line-height: 1.4;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
 
-  <!-- FONDO ANIMADO DE CORAZONES (Se generará por JS para mejor efecto) -->
+  <!-- FONDO ANIMADO DE CORAZONES -->
   <div class="hearts-container" id="heartsContainer"></div>
 
-  <!-- SALUDO -->
-  <div class="greetings">
-    <span>B</span>
-    <span>I</span>
-    <span>E</span>
-    <span>N</span>
-    <span>V</span>
-    <span>E</span>
-    <span>N</span>
-    <span>I</span>
-    <span>D</span>
-    <span>A</span>
-  </div>
+  <div class="main-content">
+    <!-- SALUDO -->
+    <div class="greetings">
+      <span>B</span>
+      <span>I</span>
+      <span>E</span>
+      <span>N</span>
+      <span>V</span>
+      <span>E</span>
+      <span>N</span>
+      <span>I</span>
+      <span>D</span>
+      <span>A</span>
+    </div>
 
-  <!-- FRASE -->
-  <div class="description">
-    <span>Un rincón especial diseñado solo para ti ♥</span>
-  </div>
+    <!-- FRASE -->
+    <div class="description">
+      <span>Un rincón especial diseñado solo para ti ♥</span>
+    </div>
 
-  <!-- CONTENEDOR DEL TIMER (Nuevo) -->
-  <div class="timer-box">
-    <div class="timer-title">JUNTOS DESDE</div>
-    <div class="time-digits" id="timeDigits">
-        <!-- Los bloques se llenan dinámicamente con JS -->
+    <!-- CONTENEDOR DEL TIMER -->
+    <div class="timer-box">
+      <div class="timer-title">JUNTOS DESDE EL 10 DE AGOSTO</div>
+      <div class="time-digits">
         <div class="time-block"><span class="digit" id="years">00</span><span class="label">AÑOS</span></div>
         <div class="time-block"><span class="digit" id="months">00</span><span class="label">MESES</span></div>
         <div class="time-block"><span class="digit" id="days">00</span><span class="label">DÍAS</span></div>
         <div class="time-block"><span class="digit" id="hours">00</span><span class="label">HRS</span></div>
         <div class="time-block"><span class="digit" id="minutes">00</span><span class="label">MIN</span></div>
         <div class="time-block"><span class="digit" id="seconds">00</span><span class="label">SEG</span></div>
+      </div>
+    </div>
+
+    <!-- MENÚ DE TARJETAS -->
+    <div class="cards-grid">
+      <a href="flores/index.html" class="card flores">
+        <h3>🌻 FLORES AMARILLAS</h3>
+        <p>Para 21/9 una sorpresa espacial para ti</p>
+      </a>
+
+      <a href="universo.html" class="card">
+        <h3>🪐 NUESTRO UNIVERSO</h3>
+        <p>Nuestra historia, momentos y recuerdos juntos</p>
+      </a>
+
+      <a href="galeria.html" class="card">
+        <h3>📸 VIDEOS Y FOTOS</h3>
+        <p>Nuestros mejores recuerdos capturados</p>
+      </a>
+
+      <a href="cartas.html" class="card">
+        <h3>💌 CARTAS</h3>
+        <p>Palabras escritas con todo mi corazón</p>
+      </a>
     </div>
   </div>
 
-  <!-- MENÚ DE TARJETAS -->
-  <div class="cards-grid">
-    
-    <!-- 1. Flores Amarillas (La que ya teníamos) -->
-    <a href="flores/index.html" class="card flores">
-      <h3>🌻 FLORES AMARILLAS</h3>
-      <p>Para 21/9 una sorpresa espacial para ti</p>
-    </a>
-
-    <!-- 2. Nuestro Universo -->
-    <a href="universo.html" class="card">
-      <h3>🪐 NUESTRO UNIVERSO</h3>
-      <p>Nuestra historia, momentos y recuerdos juntos</p>
-    </a>
-
-    <!-- 3. Videos y Fotos -->
-    <a href="galeria.html" class="card">
-      <h3>📸 VIDEOS Y FOTOS</h3>
-      <p>Nuestros mejores recuerdos capturados</p>
-    </a>
-
-    <!-- 4. Cartas -->
-    <a href="cartas.html" class="card">
-      <h3>💌 CARTAS</h3>
-      <p>Palabras escritas con todo mi corazón</p>
-    </a>
-
-  </div>
-
   <script>
-    // --- Lógica del Timer ---
-    // Fecha de inicio: 10 de agosto de 2018 (mes 7 porque JS va de 0 a 11)
-    const startDate = new Date(2018, 7, 10, 0, 0, 0);
+    // --- Generador Dinámico de Corazones Flotantes ---
+    const container = document.getElementById('heartsContainer');
+    const colors = ['#00d2ff', '#ff88cc', '#ffcc00', '#ffffff'];
+    const heartCount = 18;
+
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '♥';
+      
+      const size = Math.random() * 14 + 10;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 6 + 5;
+      const delay = Math.random() * 5;
+      const moveX = (Math.random() - 0.5) * 60 + 'px';
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      heart.style.setProperty('--heart-size', size + 'px');
+      heart.style.setProperty('--fall-duration', duration + 's');
+      heart.style.setProperty('--fall-delay', delay + 's');
+      heart.style.setProperty('--move-x', moveX);
+      heart.style.setProperty('--heart-color', color);
+      heart.style.left = left + '%';
+
+      container.appendChild(heart);
+    }
+
+    // --- Lógica Exacta del Timer (Desde 10 de Agosto de 2018) ---
+    const startDate = new Date(2018, 7, 10, 0, 0, 0); // Mes 7 = Agosto
 
     function updateTimer() {
-        const now = new Date();
-        const diff = now - startDate;
+      const now = new Date();
+      
+      let years = now.getFullYear() - startDate.getFullYear();
+      let months = now.getMonth() - startDate.getMonth();
+      let days = now.getDate() - startDate.getDate();
+      let hours = now.getHours() - startDate.getHours();
+      let minutes = now.getMinutes() - startDate.getMinutes();
+      let seconds = now.getSeconds() - startDate.getSeconds();
 
-        // Cálculos de tiempo
-        const seconds = Math.floor(diff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
+      if (seconds < 0) {
+        seconds += 60;
+        minutes--;
+      }
+      if (minutes < 0) {
+        minutes += 60;
+        hours--;
+      }
+      if (hours < 0) {
+        hours += 24;
+        days--;
+      }
+      if (days < 0) {
+        const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += previousMonth.getDate();
+        months--;
+      }
+      if (months < 0) {
+        months += 12;
+        years--;
+      }
 
-        // Cálculo más preciso de Años y Meses
-        let years = now.getFullYear() - startDate.getFullYear();
-        let months = now.getMonth() - startDate.getMonth();
+      document.getElementById('years').textContent = String(years).padStart(2, '0');
+      document.getElementById('months').textContent = String(months).padStart(2, '0');
+      document.getElementById('days').textContent = String(days).padStart(2, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
 
-        // Ajuste si el mes actual es anterior al mes de inicio
-        if (months < 0 || (months === 0 && now.getDate() < startDate.getDate())) {
-            years--;
-            months += 12;
-        }
-        // Ajuste si el día actual es anterior al día de inicio dentro del mismo mes
-        if (now.getDate() < startDate.getDate()) {
-             // Este ajuste es complejo, la forma más fácil es recalcular los días exactos desde el último mes aniversario
-            let previousMonth = new Date(now.getFullYear(), now.getMonth(), 0); // Último día del mes anterior
-            // Si el día de inicio es mayor al último día del mes actual (ej: inicio el 31, hoy es 28 feb)
-            if(startDate.getDate() > previousMonth.getDate()){
-                 // Se mantiene el cálculo principal, los días se ajustan abajo
-            }
-        }
-        
-        // Recalcular días exactos para mayor precisión (diferencia entre hoy y el último "mes aniversario")
-        const lastMonthAnniversary = new Date(now.getFullYear(), now.getMonth(), startDate.getDate());
-        let accurateDays = Math.floor((now - lastMonthAnniversary) / (1000 * 60 * 60 * 24));
-        
-        if(accurateDays < 0) {
-             const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-             // Si estamos antes del día aniversario en el mes actual, sumamos los días que faltaban del mes anterior
-             accurateDays = previousMonth.getDate() - startDate.getDate() + now.getDate();
-             // O simplemente la diferencia de días cruda, pero el cálculo de meses anterior ya ajustó el año/mes.
-             // Usaremos una aproximación estándar para el timer que se vea bien.
-             // Nota: el cálculo exacto de días entre dos fechas es complicado por los meses bisiestos, pero la diferencia en milisegundos es exacta. 
-             // Para un timer visual, esto es suficiente:
-        }
-        // RECALCULO SENCILLO Y VISUALMENTE EXACTO PARA EL USUARIO:
-        let tempDate = new Date(startDate);
-        let y = 0, m = 0, d = 0, h = 0, min = 0, s = 0;
-        
-        // Años
-        tempDate.setFullYear(tempDate.getFullYear() + 1);
-        while(tempDate
+    setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>

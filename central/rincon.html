@@ -26,11 +26,11 @@
 
     /* TÍTULO ANIMADO BIENVENIDA */
     .greetings {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 800;
       display: flex;
-      gap: 6px;
-      margin-bottom: 15px;
+      gap: 5px;
+      margin-bottom: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -58,58 +58,66 @@
       }
       100% {
         color: #fff;
-        text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+        text-shadow: 0 0 15px #00d2ff, 0 0 30px #00d2ff;
       }
     }
 
     /* SUBTÍTULO Y FRASE */
     .description {
-      font-size: 1.1rem;
-      letter-spacing: 1.5px;
+      font-size: 1rem;
+      letter-spacing: 1.2px;
       color: #e0f8ff;
-      margin-bottom: 40px;
-      text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+      margin-bottom: 30px;
+      text-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
     }
 
-    /* CONTENEDOR DE TARJETAS */
+    /* CONTENEDOR DE TARJETAS (Diseño vertical optimizado para celular) */
     .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
       width: 100%;
-      max-width: 800px;
+      max-width: 380px;
     }
 
     .card {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      border-radius: 15px;
-      padding: 25px;
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      border-radius: 16px;
+      padding: 18px 20px;
       text-decoration: none;
       color: #fff;
       transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+      backdrop-filter: blur(6px);
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: #00f0ff;
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
-      background: rgba(0, 240, 255, 0.1);
+    .card:hover, .card:active {
+      transform: translateY(-3px);
+      border-color: #00d2ff;
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+      background: rgba(0, 210, 255, 0.12);
     }
 
     .card h3 {
-      font-size: 1.3rem;
-      color: #ffe600;
-      margin-bottom: 5px;
+      font-size: 1.2rem;
+      color: #00d2ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Destacar un poco más el título de las flores amarillas si deseas */
+    .card.flores h3 {
+      color: #ffcc00;
     }
 
     .card p {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #ccc;
     }
   </style>
@@ -135,13 +143,31 @@
     <span>Un rincón especial diseñado solo para ti ♥</span>
   </div>
 
-  <!-- GRID DE OPCIONES / TARJETAS -->
+  <!-- MENÚ DE TARJETAS -->
   <div class="cards-grid">
     
-    <!-- Enlace corregido hacia el archivo de flores dentro de la carpeta -->
-    <a href="flores/index.html" class="card">
-      <h3>FLORES AMARILLAS 🌻</h3>
-      <p>Para 21/9 una sorpresa para ti</p>
+    <!-- 1. Flores Amarillas (La que ya teníamos) -->
+    <a href="flores/index.html" class="card flores">
+      <h3>🌻 FLORES AMARILLAS</h3>
+      <p>Para 21/9 una sorpresa espacial para ti</p>
+    </a>
+
+    <!-- 2. Nuestro Universo -->
+    <a href="universo.html" class="card">
+      <h3>🪐 NUESTRO UNIVERSO</h3>
+      <p>Nuestra historia, momentos y recuerdos juntos</p>
+    </a>
+
+    <!-- 3. Videos y Fotos -->
+    <a href="galeria.html" class="card">
+      <h3>📸 VIDEOS Y FOTOS</h3>
+      <p>Nuestros mejores recuerdos capturados</p>
+    </a>
+
+    <!-- 4. Cartas -->
+    <a href="cartas.html" class="card">
+      <h3>💌 CARTAS</h3>
+      <p>Palabras escritas con todo mi corazón</p>
     </a>
 
   </div>

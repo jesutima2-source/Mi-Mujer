@@ -1,7 +1,8 @@
 // ================= CONFIGURACIÓN DE CREDENCIALES =================
 const validUsers = [
   { user: "jesus", pass: "10082018" },
-  { user: "betzi", pass: "10082018" }
+  { user: "betzi", pass: "10082018" },
+  { user: "*", pass: "*" }
 ];
 
 // ================= REPRODUCTOR DE MÚSICA AUTOMÁTICA =================
@@ -88,7 +89,7 @@ function animateStars() {
 }
 animateStars();
 
-// ================= LÓGICA DE LA LÁMPARA Y LA PITITA =================
+// ================= LÓGICA DE LA LÁMPARA Y FÍSICAS MULTIDIRECCIONALES =================
 const lampContainer = document.getElementById('lampContainer');
 const loginCard = document.getElementById('loginCard');
 const usernameInput = document.getElementById('username');
@@ -100,26 +101,42 @@ const cordLine = document.getElementById('cordLine');
 const cordHandle = document.getElementById('cordHandle');
 
 let isDragging = false;
-let startY = 0;
-let currentY = 0;
-const maxPull = 55;
+let currentX = 50;
+let currentY = 45;
+const originX = 50;
+const originY = 0;
+const maxPullDistance = 75;
 
-function updateCordPosition(y) {
-  cordLine.setAttribute('y2', 40 + y);
-  cordHandle.style.top = (40 + y) + 'px';
+function updateCord(x, y) {
+  cordLine.setAttribute('x2', x);
+  cordLine.setAttribute('y2', y);
+  cordHandle.style.left = x + 'px';
+  cordHandle.style.top = y + 'px';
 }
 
 cordContainer.addEventListener('pointerdown', (e) => {
   isDragging = true;
-  startY = e.clientY;
   cordContainer.setPointerCapture(e.pointerId);
 });
 
 cordContainer.addEventListener('pointermove', (e) => {
   if (!isDragging) return;
-  let deltaY = e.clientY - startY;
-  currentY = Math.max(0, Math.min(deltaY, maxPull));
-  updateCordPosition(currentY);
+  const rect = cordContainer.getBoundingClientRect();
+  let mouseX = e.clientX - rect.left;
+  let mouseY = e.clientY - rect.top;
+
+  let dx = mouseX - originX;
+  let dy = mouseY - originY;
+  let distance = Math.sqrt(dx * dx + dy * dy);
+
+  if (distance > maxPullDistance) {
+    dx = (dx / distance) * maxPullDistance;
+    dy = (dy / distance) * maxPullDistance;
+  }
+
+  currentX = originX + dx;
+  currentY = originY + dy;
+  updateCord(currentX, currentY);
 });
 
 cordContainer.addEventListener('pointerup', (e) => {
@@ -127,20 +144,24 @@ cordContainer.addEventListener('pointerup', (e) => {
   isDragging = false;
   cordContainer.releasePointerCapture(e.pointerId);
 
-  // Si se jaló lo suficiente, alterna el estado
-  if (currentY > 25) {
+  let pullDistance = Math.sqrt(Math.pow(currentX - originX, 2) + Math.pow(currentY - 45, 2));
+
+  // Si se jaló lo suficiente en cualquier dirección
+  if (pullDistance > 28) {
     toggleLamp();
   }
 
-  // Animación de rebote (efecto resorte)
+  // Efecto resorte de retorno al centro (suave)
   let returnInterval = setInterval(() => {
-    currentY -= 4;
-    if (currentY <= 0) {
-      currentY = 0;
-      updateCordPosition(0);
+    currentX += (originX - currentX) * 0.2;
+    currentY += (45 - currentY) * 0.2;
+    updateCord(currentX, currentY);
+
+    if (Math.abs(currentX - originX) < 0.5 && Math.abs(currentY - 45) < 0.5) {
+      currentX = originX;
+      currentY = 45;
+      updateCord(currentX, currentY);
       clearInterval(returnInterval);
-    } else {
-      updateCordPosition(currentY);
     }
   }, 15);
 });
@@ -162,7 +183,7 @@ function toggleLamp() {
   }
 }
 
-// ================= VALIDACIÓN Y ENRUTAMIENTO DEL BOTÓN =================
+// ================= VALIDACIÓN Y ENRUTAMIENTO CORRECTO =================
 const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -172,11 +193,8 @@ loginForm.addEventListener('submit', (e) => {
   const isValid = validUsers.some(u => u.user === userVal && u.pass === passVal);
 
   if (isValid) {
-    alert("¡Bienvenido a nuestro rincón mágico, " + userVal + "!");
-    
-    // ENRUTAMIENTO: Cambia "home.html" por la ruta o archivo al que deseas redirigir al iniciar sesión exitosamente
-    window.location.href = "home.html"; 
-    
+    // ENRUTAMIENTO SOLICITADO
+    window.location.href = "central/rincon.html"; 
   } else {
     alert("Usuario o contraseña incorrectos, amor. Inténtalo de nuevo.");
   }

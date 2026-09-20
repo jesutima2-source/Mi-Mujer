@@ -109,7 +109,7 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
 
   if (matchedUser) {
     // Redirige correctamente a rincon.html en la misma ruta
-    window.location.href = "rincon.html";
+    window.location.href = "central/rincon.html";
   } else {
     alert('Usuario o contraseña incorrectos. Intenta de nuevo 💔');
   }

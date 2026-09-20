@@ -18,7 +18,7 @@
     border: 2px solid #ff8800;
     border-radius: 999px;
     color: #fff;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 14px;
     text-decoration: none;
     box-shadow: 0 0 12px #ff8800;
@@ -29,108 +29,36 @@
     transform: scale(1.05);
     background: rgba(255, 136, 0, 0.3);
   }
-
-  /* --- Reproductor de música visible y garantizado --- */
-  .music-player-box {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(5, 11, 20, 0.85);
-    border: 2px solid #00d2ff;
-    border-radius: 16px;
-    padding: 12px 18px;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    z-index: 1000;
-    box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
-  }
-  .music-player-box button {
-    background: linear-gradient(135deg, #ff8800, #ffaa00);
-    border: none;
-    border-radius: 999px;
-    padding: 6px 14px;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 8px #ff8800;
-  }
-  .music-player-box button:hover {
-    transform: scale(1.05);
-  }
 </style>
 </head>
 <body>
 
 <canvas id="c"></canvas>
 
-<!-- Elemento de audio con music2.mp3 -->
-<audio id="audio" src="flores/sound/music2.mp3" preload="auto" loop></audio>
+<!-- Audio automático y en bucle (sin botones) -->
+<audio id="audio" src="flores/sound/music2.mp3" autoplay loop preload="auto"></audio>
 
 <!-- Botón de inicio -->
 <a href="rincon.html" class="btn-inicio">🏠 Volver al inicio</a>
 
-<!-- Caja de control de música interactiva -->
-<div class="music-player-box">
-  <span>🎵 Música de fondo (music2.mp3)</span>
-  <div style="display:flex; gap:8px; align-items:center;">
-    <button id="playBtn">Reproducir 🎶</button>
-    <input type="file" id="localAudioLoader" accept="audio/mp3" style="font-size:11px; width:120px;" title="Si el navegador bloquea la ruta, carga tu MP3 aquí">
-  </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 <script>
-// ================= Control de Audio =================
+// ================= Autoplay de Audio Transparente =================
 const audio = document.getElementById('audio');
-const playBtn = document.getElementById('playBtn');
-const localAudioLoader = document.getElementById('localAudioLoader');
+audio.volume = 1.0;
 
-let isPlaying = false;
-
-function togglePlay() {
-  if (!isPlaying) {
-    audio.play().then(() => {
-      isPlaying = true;
-      playBtn.textContent = "Pausar ⏸️";
-    }).catch(err => {
-      console.log("Bloqueado por navegador, usa el selector de archivo local si persiste.");
-      alert("Haz clic en el botón de reproducir o carga el archivo music2.mp3 con el selector al lado.");
-    });
-  } else {
-    audio.pause();
-    isPlaying = false;
-    playBtn.textContent = "Reproducir 🎶";
-  }
-}
-
-playBtn.addEventListener('click', togglePlay);
-
-// Intento automático al hacer primer clic en cualquier parte de la página
-window.addEventListener('click', () => {
-  if (!isPlaying) {
-    audio.play().then(() => {
-      isPlaying = true;
-      playBtn.textContent = "Pausar ⏸️";
-    }).catch(() => {});
-  }
-}, { once: true });
-
-// Fallback por si el navegador bloquea la ruta local de GitHub Pages: permite cargar el archivo localmente con el input
-localAudioLoader.addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const fileURL = URL.createObjectURL(file);
-    audio.src = fileURL;
-    audio.play().then(() => {
-      isPlaying = true;
-      playBtn.textContent = "Pausar ⏸️";
-    });
-  }
+// Intento forzado de reproducción automática
+window.addEventListener('DOMContentLoaded', () => {
+  audio.play().catch(() => {
+    // Si el navegador bloquea el autoplay estricto, suena al primer toque/clic del usuario en la pantalla
+    const unlockAudio = () => {
+      audio.play();
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    };
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+  });
 });
 
 // ================= Escena 3D =================
@@ -167,12 +95,12 @@ const coreMat=new THREE.MeshPhongMaterial({color:0xff6600,transparent:true,opaci
 const core=new THREE.Mesh(new THREE.SphereGeometry(40,64,64),coreMat);
 scene.add(core);
 
-// Texto central con emojis
+// Texto central con emojis y tipografía estilizada
 function makeCenterTextTexture(msg){
   const c=document.createElement('canvas');c.width=512;c.height=512;
   const ctx=c.getContext('2d');
   ctx.clearRect(0,0,c.width,c.height);
-  ctx.font='bold 65px Arial';
+  ctx.font='bold 60px "Segoe UI", Roboto, Helvetica, sans-serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
   ctx.fillStyle='#ffaa00';
@@ -183,7 +111,7 @@ function makeCenterTextTexture(msg){
 }
 const centerTex=makeCenterTextTexture("🌻 TE AMO BETZI 🌻");
 const centerSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:centerTex,transparent:true}));
-centerSprite.scale.set(75,75,1);
+centerSprite.scale.set(80,80,1);
 centerSprite.position.set(0,0,0);
 centerSprite.renderOrder=999;
 scene.add(centerSprite);
@@ -222,7 +150,7 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras flotantes
+// Palabras flotantes con tipografía más grande y estilizada
 const WORDS=[];
 const baseWords=[
   '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
@@ -240,8 +168,9 @@ for(let i=0;i<5;i++){WORDS.push(...baseWords);}
 function makeTextTexture(text,color){
   const c=document.createElement('canvas');c.width=512;c.height=128;
   const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
-  ctx.font='bold 50px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillStyle='#ffffff';ctx.shadowColor=color;ctx.shadowBlur=30;
+  ctx.font='bold 54px "Segoe UI", Roboto, Helvetica, sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='#ffffff';ctx.shadowColor=color;ctx.shadowBlur=35;
   ctx.fillText(text,c.width/2,c.height/2);
   return new THREE.CanvasTexture(c);
 }
@@ -254,7 +183,7 @@ for(let i=0;i<WORDS.length;i++){
   const tex=sharedWordTextures.get(textureKey);
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true});
   const sp=new THREE.Sprite(mat);
-  sp.scale.set(48,14,1); 
+  sp.scale.set(58,16.5,1); // Letras más grandecitas y proporcionadas
   const phi=Math.acos(2*Math.random()-1);const theta=Math.random()*Math.PI*2;
   const r=150+Math.random()*120;
   sp.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));
@@ -262,7 +191,8 @@ for(let i=0;i<WORDS.length;i++){
   textGroup.add(sp);
 }
 
-// Ramos 360 de Girasoles con distribución perfectamente uniformada por Fibonacci Sphere
+// Ramos 360 de Girasoles con movimiento dinámico en órbita
+const bouquetGroup=new THREE.Group();scene.add(bouquetGroup);
 const addedBouquets=(()=>{
 function makeGeometry(){
 let data=[];const PI=Math.PI,TAU=2*PI;let seed=13;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),mul=(a,k)=>a.map(v=>v*k),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],norm=a=>mul(a,1/(Math.hypot(...a)||1));
@@ -315,11 +245,11 @@ float light=max(dot(n,normalize(vec3(-.6,.9,1.2))),0.);
 float rim=pow(1.-abs(n.z),3.);
 gl_FragColor=vec4(floralColor*(.48+.57*light)+vec3(.08,.07,.035)*rim,1.);}
 `});
-const geometry=makeGeometry(),group=new THREE.Group();group.name='Ramos distribuidos';
+const geometry=makeGeometry();
 const totalBouquets=32;
+const bouquetsList=[];
 for(let i=0;i<totalBouquets;i++){
  const mesh=new THREE.Mesh(geometry,material);
- // Distribución perfecta de Fibonacci Sphere para evitar acumulaciones
  const y=1-(i/(totalBouquets-1))*2;
  const radiusAtY=Math.sqrt(1-y*y);
  const theta=i*2.3999632297;
@@ -330,10 +260,18 @@ for(let i=0;i<totalBouquets;i++){
  mesh.scale.setScalar(8.5);
  mesh.position.set(x*dist, y*dist, z*dist);
  mesh.lookAt(0,0,0);
- mesh.userData={x:x*dist, y:y*dist, z:z*dist, speed:0.0005+(i%3)*0.0002};
- group.add(mesh);
+ 
+ // Datos dinámicos para el movimiento orbital
+ mesh.userData={
+   phi: Math.acos(y),
+   theta: theta,
+   radius: dist,
+   speed: 0.0006 + (i%3)*0.00025
+ };
+ bouquetGroup.add(mesh);
+ bouquetsList.push(mesh);
 }
-scene.add(group);return group;
+return bouquetsList;
 })();
 
 // Controles cámara
@@ -358,19 +296,34 @@ addEventListener('touchmove',(e)=>{
 },{passive:false});
 addEventListener('touchend',()=>{pinch=0;},{passive:true});
 
-// Animación
+// Animación general
 let t=0;
 function tick(){requestAnimationFrame(tick);t+=0.01;
   ring1.rotation.z+=0.002;ring2.rotation.z-=0.0015;
   glow.scale.set(520*(1+Math.sin(t*0.4)*0.03),520*(1+Math.sin(t*0.4)*0.03),1);
   const s=1.0+0.05*Math.sin(t*3);
   core.scale.set(s,s,s);
+
+  // Animar palabras flotantes
   textGroup.children.forEach(sp=>{
     sp.material.opacity=0.8+0.2*Math.sin(t*2);
     sp.userData.theta+=sp.userData.speed;
     sp.position.x=sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
   });
+
+  // Animar los ramos de girasoles para que orbiten de forma orgánica y viva junto con las letras
+  addedBouquets.forEach((mesh, index)=>{
+    mesh.userData.theta += mesh.userData.speed;
+    const r = mesh.userData.radius;
+    const phi = mesh.userData.phi;
+    const theta = mesh.userData.theta;
+    
+    mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
+    mesh.position.z = r * Math.sin(phi) * Math.sin(theta);
+    mesh.lookAt(0,0,0);
+  });
+
   currentDist+=(targetDist-currentDist)*0.06;
   const cx=Math.cos(rotX),sx=Math.sin(rotX);const cy=Math.cos(rotY),sy=Math.sin(rotY);
   camera.position.set(currentDist*sy*cx,currentDist*sx,currentDist*cy*cx);camera.lookAt(0,0,0);

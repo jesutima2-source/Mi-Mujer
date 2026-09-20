@@ -73,8 +73,8 @@ const loader=new THREE.TextureLoader();
 const nebulaTex=loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
 scene.background=nebulaTex;
 
-// Estrellas celestes de fondo original
-(function makeStars(count=2500,spread=3000){
+// Estrellas celestes de fondo
+(function makeStars(count=2000,spread=3000){
   const g=new THREE.BufferGeometry();
   const pos=new Float32Array(count*3);
   for(let i=0;i<count;i++){
@@ -89,8 +89,8 @@ scene.background=nebulaTex;
   scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:1.8,color:0x87ceeb,depthWrite:false})));
 })();
 
-// NUEVAS: Partículas blancas como estrellas brillantes abundantes por todo el espacio
-(function makeWhiteBrightStars(count=4000,spread=3500){
+// Estrellas blancas brillantes optimizadas
+(function makeWhiteBrightStars(count=2500,spread=3500){
   const g=new THREE.BufferGeometry();
   const pos=new Float32Array(count*3);
   for(let i=0;i<count;i++){
@@ -110,7 +110,7 @@ const coreMat=new THREE.MeshPhongMaterial({color:0xff6600,transparent:true,opaci
 const core=new THREE.Mesh(new THREE.SphereGeometry(40,64,64),coreMat);
 scene.add(core);
 
-// Texto central con emojis y tipografía estilizada
+// Texto central
 function makeCenterTextTexture(msg){
   const c=document.createElement('canvas');c.width=512;c.height=512;
   const ctx=c.getContext('2d');
@@ -131,7 +131,7 @@ centerSprite.position.set(0,0,0);
 centerSprite.renderOrder=999;
 scene.add(centerSprite);
 
-// Brillo exterior invertido: Naranja adentro y Celeste afuera
+// Brillo exterior
 function makeGlow(size=768,c1='255,136,0',c2='0,210,255'){
   const c=document.createElement('canvas');c.width=c.height=size;
   const g=c.getContext('2d');
@@ -146,7 +146,7 @@ const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(),transparent
 glow.scale.set(520,520,1);
 scene.add(glow);
 
-// Anillos invertidos (Naranja adentro, Celeste afuera)
+// Anillos
 function ringTexture(size=768){
   const c=document.createElement('canvas');c.width=c.height=size;
   const g=c.getContext('2d');g.translate(size/2,size/2);
@@ -165,7 +165,7 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras flotantes con tipografía más grande y estilizada
+// Palabras flotantes
 const WORDS=[];
 const baseWords=[
   '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
@@ -178,7 +178,7 @@ const baseWords=[
   '🎵 Mi canción','🔥 Mi pasión','⭐ Mi estrella','🌴 Mi paraíso','🌄 Mi amanecer','🌃 Mi noche contigo',
   '🎉 Mi fiesta','💫 Mi inspiración','🌷 Siempre juntos','🎀 Mi ternura','🍀 Mi fortuna'
 ];
-for(let i=0;i<5;i++){WORDS.push(...baseWords);}
+for(let i=0;i<4;i++){WORDS.push(...baseWords);}
 
 function makeTextTexture(text,color){
   const c=document.createElement('canvas');c.width=512;c.height=128;
@@ -206,7 +206,7 @@ for(let i=0;i<WORDS.length;i++){
   textGroup.add(sp);
 }
 
-// Ramos 360 de Girasoles bien orientados y con mayor densidad
+// Ramos ajustados a 40 unidades (fluidez máxima)
 const bouquetGroup=new THREE.Group();scene.add(bouquetGroup);
 const addedBouquets=(()=>{
 function makeGeometry(){
@@ -261,7 +261,7 @@ float rim=pow(1.-abs(n.z),3.);
 gl_FragColor=vec4(floralColor*(.48+.57*light)+vec3(.08,.07,.035)*rim,1.);}
 `});
 const geometry=makeGeometry();
-const totalBouquets=56;
+const totalBouquets=40; // Reducido a 40 para evitar lag
 const bouquetsList=[];
 for(let i=0;i<totalBouquets;i++){
  const mesh=new THREE.Mesh(geometry,material);
@@ -328,7 +328,7 @@ function tick(){requestAnimationFrame(tick);t+=0.01;
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
   });
 
-  // Animar ramos manteniendo siempre su orientación correcta hacia afuera
+  // Animar ramos orientados correctamente hacia afuera
   addedBouquets.forEach((mesh)=>{
     mesh.userData.theta += mesh.userData.speed;
     const r = mesh.userData.radius;

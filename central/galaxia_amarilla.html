@@ -5,26 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Galaxia Amarilla - Betzi</title>
 <style>
-  html, body { 
-    margin: 0; 
-    padding: 0;
-    width: 100%;
-    height: 100%; 
-    background: #050b14; 
-    overflow: hidden; 
-    position: fixed;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-  }
-  
-  canvas { 
-    display: block; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    touch-action: none; 
-  }
+  html, body { margin:0; height:100%; background:#050b14; overflow:hidden; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  canvas { display:block; touch-action: none; }
 
   /* --- Botón para volver al inicio --- */
   .btn-inicio {
@@ -204,7 +186,9 @@ const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 5000
 
 let targetDist = 180, currentDist = 180, rotX = 0.2, rotY = 0;
 
-scene.background = new THREE.Color(0x050b14);
+const loader = new THREE.TextureLoader();
+const nebulaTex = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
+scene.background = nebulaTex;
 
 // Estrellas de fondo
 (function makeStars(count=2500, spread=3200){
@@ -222,41 +206,24 @@ scene.background = new THREE.Color(0x050b14);
   scene.add(new THREE.Points(g, new THREE.PointsMaterial({size:3.5, color:0xffffff, depthWrite:false, transparent:true, opacity:0.95})));
 })();
 
-// ================= Núcleo Central con tu Foto y Luz Cálida Propia =================
-const textureLoader = new THREE.TextureLoader();
-
-// Creamos un material base brillante por si la foto demora en cargar o para darle un fondo cálido luminoso
-const coreMat = new THREE.MeshBasicMaterial({
-  color: 0xffaa44,
-  transparent: true,
-  opacity: 1.0
-});
-
-// Cargamos tu foto de la galaxia y se la aplicamos a la esfera
-textureLoader.load(
-  'central/flores/img/galaxia.jpeg',
-  (texture) => {
-    coreMat.map = texture;
-    coreMat.color.set(0xffffff); // Si carga bien, mostramos la foto a todo color
-    coreMat.needsUpdate = true;
-  },
-  undefined,
-  (err) => {
-    console.log("Usando luz y color de respaldo ya que la imagen cargó con detalle alternativo.");
-  }
-);
-
-const core = new THREE.Mesh(new THREE.SphereGeometry(35, 32, 32), coreMat);
+const coreMat = new THREE.MeshPhongMaterial({color:0xff6600, transparent:true, opacity:0.75, shininess:250});
+const core = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 32), coreMat);
 scene.add(core);
 
-// Halo de luz naranja/blanco brillante envolvente (fijo, sin parpadear)
-function makeGlow(size=1024, c1='255,160,50', c2='255,255,255'){
+// ================= Imagen Central (galaxia.jpeg) =================
+loader.load('flores/img/galaxia.jpeg', (texture) => {
+  const centerImgSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
+  centerImgSprite.scale.set(65, 65, 1); // Tamaño ajustado para el centro
+  scene.add(centerImgSprite);
+});
+
+function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
   const g = c.getContext('2d');
   g.clearRect(0, 0, size, size);
   const grad = g.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
-  grad.addColorStop(0, 'rgba('+c1+',0.95)');
-  grad.addColorStop(0.4, 'rgba('+c2+',0.6)');
+  grad.addColorStop(0, 'rgba('+c1+',0.85)');
+  grad.addColorStop(0.5, 'rgba('+c2+',0.45)');
   grad.addColorStop(1, 'rgba(0,0,0,0)');
   g.fillStyle = grad; 
   g.beginPath();
@@ -264,14 +231,8 @@ function makeGlow(size=1024, c1='255,160,50', c2='255,255,255'){
   g.fill();
   return new THREE.CanvasTexture(c);
 }
-
-const glow = new THREE.Sprite(new THREE.SpriteMaterial({
-  map: makeGlow(), 
-  transparent: true, 
-  depthWrite: false,
-  blending: THREE.AdditiveBlending 
-}));
-glow.scale.set(580, 580, 1);
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(), transparent:true, depthWrite:false}));
+glow.scale.set(520, 520, 1);
 scene.add(glow);
 
 function ringTexture(size=768){
@@ -444,7 +405,7 @@ function onMove(e){
     );
     const diff = initialPinchDist - currentPinchDist;
     targetDist += diff * 0.5;
-    targetDist = Math.max(40, Math.min(450, targetDist));
+    targetDist = Math.max(90, Math.min(450, targetDist));
     initialPinchDist = currentPinchDist;
     return;
   }
@@ -472,7 +433,7 @@ addEventListener('touchend', onUp, {passive: true});
 
 addEventListener('wheel', (e)=>{ 
   targetDist += e.deltaY * 0.25; 
-  targetDist = Math.max(40, Math.min(450, targetDist)); 
+  targetDist = Math.max(90, Math.min(450, targetDist)); 
 }, {passive:true});
 
 window.addEventListener('resize', () => {
@@ -489,9 +450,9 @@ function tick(){
 
   ring1.rotation.z += 0.003;
   ring2.rotation.z -= 0.002;
-  
-  // Halo firme y constante (sin parpadeos de tamaño molestos)
-  glow.scale.set(580, 580, 1);
+  glow.scale.set(520 * (1 + Math.sin(t*0.5)*0.03), 520 * (1 + Math.sin(t*0.5)*0.03), 1);
+  const coreScale = 1.0 + 0.05 * Math.sin(t*3);
+  core.scale.set(coreScale, coreScale, coreScale);
 
   textGroup.children.forEach(sp => {
     sp.material.opacity = 0.75 + 0.25 * Math.sin(t * 2);

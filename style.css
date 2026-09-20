@@ -126,10 +126,10 @@ body, html {
   z-index: 2;
 }
 
-/* --- PITITA UBICADA ABAJITO DEL FOCO (MULTIDIRECCIONAL) --- */
+/* --- PITITA UBICADA EXACTAMENTE AL RAS DE LA LÁMPARA --- */
 .lamp-cord-container {
   position: absolute;
-  top: 75px; /* Justo en la base inferior del foco */
+  top: 110px; /* Al ras de la base inferior del foco (25px cable + 85px pantalla) */
   left: 50%;
   width: 90px;
   height: 120px;
@@ -155,7 +155,7 @@ body, html {
 .cord-handle {
   position: absolute;
   left: 45px;
-  top: 45px;
+  top: 25px; /* Ajustado para que el punto inicial de la pita nazca perfecto desde arriba */
   width: 14px;
   height: 14px;
   background: #ffffff;

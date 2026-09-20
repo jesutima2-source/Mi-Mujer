@@ -8,15 +8,15 @@
 </head>
 <body>
 
-  <!-- Fondo dinámico de estrellas fugaces con Canvas -->
+  <!-- Fondo dinámico de estrellas y partículas con Canvas -->
   <canvas id="starCanvas"></canvas>
 
-  <!-- Audio con la ruta exacta: central/flores/sound/musiclogin.mp3 -->
+  <!-- Audio con la ruta correcta -->
   <audio id="loginAudio" src="central/flores/sound/musiclogin.mp3" preload="auto" loop autoplay></audio>
 
   <div class="main-container">
-    <!-- LÁMPARA ESTÉTICA CON RESPLANDOR Y PITITA 360° -->
-    <div class="lamp-container" id="lampContainer">
+    <!-- LÁMPARA ESTÉTICA (AHORA INICIA APAGADA) -->
+    <div class="lamp-container off" id="lampContainer">
       <div class="lamp-glow-bg"></div>
       <div class="lamp-shade">
         <div class="lamp-face">
@@ -27,8 +27,8 @@
       </div>
       <div class="light-beam"></div>
       
-      <!-- Contenedor con físicas libres 360° para la pitita -->
-      <div class="lamp-cord-container" id="cordContainer" title="¡Jala la pitita desde cualquier dirección!">
+      <!-- Contenedor de la pitita -->
+      <div class="lamp-cord-container" id="cordContainer" title="¡Jala la pitita para encender!">
         <svg class="cord-svg" id="cordSvg">
           <line id="cordLine" x1="50" y1="0" x2="50" y2="45" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
         </svg>
@@ -38,22 +38,22 @@
       <div class="lamp-base"></div>
     </div>
 
-    <!-- TARJETA DE LOGIN -->
-    <div class="login-card" id="loginCard">
+    <!-- TARJETA DE LOGIN (AHORA INICIA DESHABILITADA) -->
+    <div class="login-card disabled" id="loginCard">
       <form class="login-form" id="loginForm">
         <h2 class="login-title">BIENVENIDOS A NUESTRO RINCON ♥</h2>
         
         <div class="form-group">
           <label for="username">♥ TU USUARIO ♥</label>
-          <input type="text" id="username" placeholder="Ingresa tu usuario" required>
+          <input type="text" id="username" placeholder="Ingresa tu usuario" required disabled>
         </div>
 
         <div class="form-group">
           <label for="password">♥ TU CONTRASEÑA ♥</label>
-          <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
+          <input type="password" id="password" placeholder="Ingresa tu contraseña" required disabled>
         </div>
 
-        <button type="submit" class="login-btn">INICIAR</button>
+        <button type="submit" class="login-btn" disabled>INICIAR</button>
       </form>
     </div>
   </div>

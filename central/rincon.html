@@ -29,7 +29,7 @@
       position: relative;
     }
 
-    /* CONTENEDOR DE CORAZONES FLOTANTES */
+    /* CONTENEDOR DE CORAZONES FLOTANTES (SOLO ROJOS) */
     .hearts-container {
       position: fixed;
       top: 0;
@@ -44,18 +44,18 @@
     .heart {
       position: absolute;
       top: -10%;
-      color: var(--heart-color);
+      color: #ff334b; /* Rojo intenso */
       font-size: var(--heart-size);
       animation: heartFall var(--fall-duration) linear infinite;
       animation-delay: var(--fall-delay);
-      opacity: 0.6;
-      filter: drop-shadow(0 0 6px var(--heart-color));
+      opacity: 0.7;
+      filter: drop-shadow(0 0 8px rgba(255, 51, 75, 0.8));
     }
 
     @keyframes heartFall {
       0% {
         transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0.6;
+        opacity: 0.7;
       }
       100% {
         transform: translateY(105vh) translateX(var(--move-x)) rotate(360deg);
@@ -96,12 +96,12 @@
 
     @keyframes neonGlow {
       0% {
-        color: #88d4ff;
-        text-shadow: 0 0 5px rgba(0, 210, 255, 0.3);
+        color: #ff88a2;
+        text-shadow: 0 0 5px rgba(255, 51, 75, 0.4);
       }
       100% {
         color: #ffffff;
-        text-shadow: 0 0 12px #00d2ff, 0 0 25px #00d2ff, 0 0 35px #0088cc;
+        text-shadow: 0 0 12px #ff334b, 0 0 25px #ff334b, 0 0 35px #cc0029;
       }
     }
 
@@ -109,27 +109,27 @@
     .description {
       font-size: 0.95rem;
       letter-spacing: 1.5px;
-      color: #c5f0ff;
+      color: #ffd6df;
       margin-bottom: 20px;
-      text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+      text-shadow: 0 0 10px rgba(255, 51, 75, 0.6);
       font-weight: 400;
     }
 
     /* CONTENEDOR DEL TIMER */
     .timer-box {
-      background: rgba(10, 15, 30, 0.65);
-      border: 1px solid rgba(0, 210, 255, 0.35);
+      background: rgba(20, 10, 15, 0.7);
+      border: 1px solid rgba(255, 51, 75, 0.4);
       border-radius: 14px;
       padding: 14px;
       margin-bottom: 20px;
       width: 100%;
       backdrop-filter: blur(8px);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 210, 255, 0.1);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 51, 75, 0.15);
     }
 
     .timer-title {
       font-size: 0.75rem;
-      color: #88d4ff;
+      color: #ff88a2;
       margin-bottom: 8px;
       letter-spacing: 2.5px;
       font-weight: 600;
@@ -152,10 +152,10 @@
       font-family: monospace;
       font-size: 1.3rem;
       font-weight: bold;
-      background: linear-gradient(to bottom, #ffffff, #00d2ff);
+      background: linear-gradient(to bottom, #ffffff, #ff334b);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+      text-shadow: 0 0 8px rgba(255, 51, 75, 0.6);
     }
 
     .label {
@@ -174,8 +174,8 @@
     }
 
     .card {
-      background: rgba(15, 20, 35, 0.6);
-      border: 1px solid rgba(0, 210, 255, 0.3);
+      background: rgba(20, 10, 15, 0.65);
+      border: 1px solid rgba(255, 51, 75, 0.35);
       border-radius: 14px;
       padding: 14px 18px;
       text-decoration: none;
@@ -191,14 +191,14 @@
 
     .card:active {
       transform: scale(0.97);
-      border-color: #00d2ff;
-      background: rgba(0, 210, 255, 0.2);
-      box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+      border-color: #ff334b;
+      background: rgba(255, 51, 75, 0.2);
+      box-shadow: 0 0 20px rgba(255, 51, 75, 0.6);
     }
 
     .card h3 {
       font-size: 1.1rem;
-      color: #00d2ff;
+      color: #ff667d;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -217,7 +217,10 @@
 </head>
 <body>
 
-  <!-- FONDO ANIMADO DE CORAZONES -->
+  <!-- MÚSICA DE FONDO -->
+  <audio id="backgroundAudio" src="flores/sound/amor.mp3" loop autoplay></audio>
+
+  <!-- FONDO ANIMADO DE CORAZONES (SOLO ROJOS) -->
   <div class="hearts-container" id="heartsContainer"></div>
 
   <div class="main-content">
@@ -278,9 +281,26 @@
   </div>
 
   <script>
-    // --- Generador Dinámico de Corazones Flotantes ---
+    // --- Solución para reproducción automática de audio en celulares ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const audio = document.getElementById('backgroundAudio');
+      audio.volume = 0.6; // Volumen agradable
+      
+      // Intenta reproducir al cargar
+      audio.play().catch(() => {
+        // Si el navegador bloquea el autoplay, se reproducirá al primer toque en la pantalla
+        const unlockAudio = () => {
+          audio.play();
+          document.removeEventListener('click', unlockAudio);
+          document.removeEventListener('touchstart', unlockAudio);
+        };
+        document.addEventListener('click', unlockAudio);
+        document.addEventListener('touchstart', unlockAudio);
+      });
+    });
+
+    // --- Generador Dinámico de Corazones (Solo Rojos) ---
     const container = document.getElementById('heartsContainer');
-    const colors = ['#00d2ff', '#ff88cc', '#ffcc00', '#ffffff'];
     const heartCount = 18;
 
     for (let i = 0; i < heartCount; i++) {
@@ -293,20 +313,19 @@
       const duration = Math.random() * 6 + 5;
       const delay = Math.random() * 5;
       const moveX = (Math.random() - 0.5) * 60 + 'px';
-      const color = colors[Math.floor(Math.random() * colors.length)];
 
       heart.style.setProperty('--heart-size', size + 'px');
       heart.style.setProperty('--fall-duration', duration + 's');
       heart.style.setProperty('--fall-delay', delay + 's');
       heart.style.setProperty('--move-x', moveX);
-      heart.style.setProperty('--heart-color', color);
       heart.style.left = left + '%';
 
       container.appendChild(heart);
     }
 
-    // --- Lógica Exacta del Timer (Desde 10 de Agosto de 2018) ---
-    const startDate = new Date(2018, 7, 10, 0, 0, 0); // Mes 7 = Agosto
+    // --- Lógica del Timer (Con 1 año menos según lo pedido) ---
+    // Fecha real: 10 de Agosto de 2018 -> Restando 1 año para el cálculo: 10 de Agosto de 2017
+    const startDate = new Date(2017, 7, 10, 0, 0, 0); 
 
     function updateTimer() {
       const now = new Date();

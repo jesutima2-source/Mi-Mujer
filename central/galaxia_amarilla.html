@@ -6,7 +6,7 @@
 <title>Galaxia Amarilla - Betzi</title>
 <style>
   html, body { margin:0; height:100%; background:#050b14; overflow:hidden; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-  canvas { display:block; touch-action: none; } /* Evita comportamientos extraños del navegador en móviles */
+  canvas { display:block; touch-action: none; }
 
   /* --- Botón para volver al inicio --- */
   .btn-inicio {
@@ -221,7 +221,7 @@ function makeCenterTextTexture(msg){
   ctx.fillText(msg, c.width/2, c.height/2);
   return new THREE.CanvasTexture(c);
 }
-const centerSprite = new THREE.Sprite(new THREE.SpriteMaterial({map:makeCenterTextTexture("🌻TE AMO #10🌻"), transparent:true}));
+const centerSprite = new THREE.Sprite(new THREE.SpriteMaterial({map:makeCenterTextTexture("🌻 TE AMO BETZI 🌻"), transparent:true}));
 centerSprite.scale.set(90, 90, 1);
 scene.add(centerSprite);
 
@@ -388,11 +388,9 @@ let dragging = false, lastX = 0, lastY = 0;
 let initialPinchDist = null;
 
 function onDown(e){
-  // Si tocan la barra de reproducción o el botón de inicio, no interferir con el arrastre 3D
   if(e.target.closest('.player-bar') || e.target.closest('.btn-inicio')) return;
 
   if (e.touches && e.touches.length === 2) {
-    // Detección de 2 dedos para zoom (pinch)
     initialPinchDist = Math.hypot(
       e.touches[0].clientX - e.touches[1].clientX,
       e.touches[0].clientY - e.touches[1].clientY
@@ -409,7 +407,6 @@ function onDown(e){
 
 function onMove(e){
   if (e.touches && e.touches.length === 2 && initialPinchDist !== null) {
-    // Manejo de Zoom con 2 dedos en celular
     const currentPinchDist = Math.hypot(
       e.touches[0].clientX - e.touches[1].clientX,
       e.touches[0].clientY - e.touches[1].clientY
@@ -434,7 +431,6 @@ function onUp(){
   initialPinchDist = null;
 }
 
-// Eventos de Mouse y Táctiles optimizados con `{ passive: false }` para evitar bloqueos del navegador
 addEventListener('mousedown', onDown); 
 addEventListener('mousemove', onMove); 
 addEventListener('mouseup', onUp);
@@ -448,7 +444,6 @@ addEventListener('wheel', (e)=>{
   targetDist = Math.max(90, Math.min(450, targetDist)); 
 }, {passive:true});
 
-// Ajuste dinámico si el celular cambia de orientación (girar pantalla)
 window.addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
@@ -463,7 +458,9 @@ function tick(){
 
   ring1.rotation.z += 0.003;
   ring2.rotation.z -= 0.002;
-  glow.scale.set(520 * (1 + Math.sin(t*0.5)*0.03), 520 * (1 + Math.sin(t*0.5)*0.03), 1);
+  
+  // NOTA: Se eliminó la animación de 'glow.scale' para que la luz naranja/azul se quede estática,
+  // pero el núcleo 'core' y todo lo demás siguen latiendo y girando normal.
   const coreScale = 1.0 + 0.05 * Math.sin(t*3);
   core.scale.set(coreScale, coreScale, coreScale);
 

@@ -10,18 +10,62 @@ body, html {
   height: 100%;
   overflow: hidden;
   background-color: #050b14;
+  color: #fff;
 }
 
-#bgCanvas {
+/* --- FONDO DE ESTRELLAS FUGACES --- */
+.starfield {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: #050b14;
+  z-index: -2;
+  overflow: hidden;
+}
+
+@keyframes shootingStarUp {
+  0% { transform: translateY(105vh) translateX(-10vw); opacity: 1; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-10vh) translateX(30vw); opacity: 0; }
+}
+
+.starfield::before,
+.starfield::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to top, transparent, #fff, #00d2ff);
+  animation: shootingStarUp 7s linear infinite;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 6px #00d2ff);
+}
+
+.starfield::after {
+  animation-duration: 4.5s;
+  animation-delay: -2.5s;
+  left: auto;
+  right: 20vw;
+  width: 3px;
+  opacity: 0.8;
+}
+
+.starfield-static {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+      radial-gradient(white, rgba(255,255,255,.25) 2px, transparent 3px),
+      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+  background-size: 500px 500px, 300px 300px;
   z-index: -1;
 }
 
-.login-container {
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,223 +73,240 @@ body, html {
   height: 100vh;
   position: relative;
   z-index: 10;
-  gap: 20px;
 }
 
-/* --- ESTILOS DE LA LÁMPARA --- */
-.lamp {
+/* --- ESTILOS DE LA LÁMPARA Y FOCO --- */
+.lamp-container {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  margin-bottom: -15px;
   user-select: none;
 }
 
 .lamp-shade {
-  width: 130px;
-  height: 90px;
+  width: 140px;
+  height: 100px;
   background: #00d2ff;
-  border-radius: 70px 70px 15px 15px;
+  border-radius: 75px 75px 20px 20px;
   position: relative;
-  box-shadow: 0 0 25px rgba(0, 210, 255, 0.6);
-  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 0 35px rgba(0, 210, 255, 0.75);
+  transition: background 0.4s, box-shadow 0.4s;
   z-index: 3;
 }
 
-/* Estado apagado de la lámpara */
-.lamp.off .lamp-shade {
-  background: #2a3b4c;
-  box-shadow: none;
-}
-.lamp.off .light-beam {
-  opacity: 0;
-}
-.lamp.off .lamp-base {
-  box-shadow: none;
-}
-.lamp.off .cord-handle {
-  background: #555;
-  box-shadow: none;
-}
-
-.face {
+.lamp-face {
   position: absolute;
-  top: 35px;
+  top: 38px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  gap: 25px;
 }
 
 .eye {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background: #050b14;
   border-radius: 50%;
-  position: absolute;
+  transition: background 0.4s;
 }
-.eye.left { left: -18px; }
-.eye.right { right: -18px; }
 
 .mouth {
-  width: 12px;
-  height: 6px;
-  border-bottom: 2px solid #050b14;
-  border-radius: 0 0 12px 12px;
-  margin-top: 10px;
+  width: 20px;
+  height: 10px;
+  border-bottom: 3px solid #050b14;
+  border-radius: 0 0 20px 20px;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: border-color 0.4s;
 }
 
 /* Haz de luz inferior */
 .light-beam {
   position: absolute;
   top: 90px;
-  width: 180px;
-  height: 140px;
-  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.35), rgba(0, 210, 255, 0));
-  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  width: 220px;
+  height: 160px;
+  background: linear-gradient(to bottom, rgba(0, 210, 255, 0.4), transparent);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
-  transition: opacity 0.3s;
+  transition: opacity 0.4s;
   z-index: 2;
 }
 
 /* --- CORDÓN Y FÍSICAS DE LA PITITA --- */
 .lamp-cord-container {
   position: absolute;
-  top: 90px;
+  top: 95px;
   left: 50%;
-  width: 20px;
+  width: 30px;
   height: 90px;
   transform: translateX(-50%);
-  z-index: 4;
+  z-index: 5;
   touch-action: none;
+  cursor: grab;
+}
+.lamp-cord-container:active {
+  cursor: grabbing;
 }
 
 .lamp-cord {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 2px;
-  height: 55px;
-  background: #fff;
+  width: 3px;
+  height: 45px;
+  background: #ffffff;
   transform-origin: top center;
+  box-shadow: 0 0 5px rgba(255,255,255,0.8);
 }
 
 .cord-handle {
   position: absolute;
-  top: 55px;
+  top: 45px;
   left: 50%;
   width: 14px;
   height: 14px;
   background: #ffffff;
   border-radius: 50%;
   transform: translate(-50%, 0);
-  box-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff;
-  cursor: grab;
-  transition: background 0.3s, box-shadow 0.3s;
-}
-
-.cord-handle:active {
-  cursor: grabbing;
+  box-shadow: 0 0 12px #00d2ff, 0 0 20px #00d2ff;
+  transition: background 0.4s, box-shadow 0.4s;
 }
 
 .lamp-base {
-  width: 50px;
-  height: 12px;
+  width: 60px;
+  height: 15px;
   background: #00d2ff;
-  border-radius: 6px;
-  margin-top: 75px;
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
-  transition: background 0.3s, box-shadow 0.3s;
+  border-radius: 8px;
+  margin-top: 50px;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.75);
+  transition: background 0.4s, box-shadow 0.4s;
   z-index: 1;
+}
+
+/* --- ESTADO APAGADO DE LA LÁMPARA --- */
+.lamp-container.off .lamp-shade {
+  background: #232b38;
+  box-shadow: none;
+}
+.lamp-container.off .eye,
+.lamp-container.off .mouth {
+  background: #4a5568;
+  border-color: #4a5568;
+}
+.lamp-container.off .light-beam {
+  opacity: 0;
+}
+.lamp-container.off .lamp-base {
+  background: #232b38;
+  box-shadow: none;
+}
+.lamp-container.off .cord-handle {
+  background: #4a5568;
+  box-shadow: none;
 }
 
 /* --- TARJETA DE LOGIN --- */
 .login-card {
-  background: rgba(10, 20, 35, 0.85);
+  background: rgba(10, 20, 35, 0.9);
   border: 2px solid rgba(0, 210, 255, 0.4);
   border-radius: 16px;
   padding: 30px;
-  width: 340px;
-  box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
-  backdrop-filter: blur(10px);
+  width: 360px;
+  box-shadow: 0 0 40px rgba(0, 210, 255, 0.3);
+  backdrop-filter: blur(12px);
+  transition: all 0.4s ease;
 }
 
-.login-form h2 {
+.login-title {
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
   text-align: center;
   margin-bottom: 22px;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
   color: #00d2ff;
-  font-size: 11px;
-  margin-bottom: 6px;
+  font-size: 12px;
+  margin-bottom: 8px;
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  transition: color 0.4s;
 }
 
 .form-group input {
   width: 100%;
-  padding: 11px 14px;
-  background: rgba(5, 11, 20, 0.7);
-  border: 1px solid rgba(0, 210, 255, 0.3);
+  padding: 12px 16px;
+  background: rgba(5, 11, 20, 0.8);
+  border: 1px solid rgba(0, 210, 255, 0.5);
   border-radius: 8px;
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.3s;
 }
 
 .form-group input:focus {
   border-color: #00d2ff;
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
 }
 
 .login-btn {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: linear-gradient(90deg, #0099ff, #00d2ff);
   border: none;
   border-radius: 8px;
   color: #050b14;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
-  margin-top: 10px;
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 15px;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+  transition: all 0.2s;
 }
 
 .login-btn:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 25px rgba(0, 210, 255, 0.8);
+  box-shadow: 0 0 30px rgba(0, 210, 255, 0.8);
+}
+
+/* --- ESTADO APAGADO DEL LOGIN (BLOQUEO DE ESCRITURA) --- */
+.login-card.disabled {
+  opacity: 0.25;
+  pointer-events: none; /* Bloquea completamente la escritura y clics */
+  filter: grayscale(80%);
 }
 
 /* --- REPRODUCTOR FLOTANTE --- */
 .player-bar {
   position: fixed;
-  bottom: 20px;
+  bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(10, 20, 35, 0.85);
-  border: 1px solid rgba(0, 210, 255, 0.4);
+  background: rgba(10, 20, 35, 0.9);
+  border: 1px solid rgba(0, 210, 255, 0.5);
   border-radius: 999px;
-  padding: 8px 18px;
+  padding: 10px 22px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+  gap: 15px;
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
   z-index: 100;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
 }
 
 .play-btn {
@@ -262,6 +323,7 @@ body, html {
 
 .song-title {
   color: #fff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.5px;
 }

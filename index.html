@@ -15,9 +15,14 @@
   <audio id="loginAudio" src="central/flores/sound/musiclogin.mp3" preload="auto" loop autoplay></audio>
 
   <div class="main-container">
-    <!-- LÁMPARA ESTÉTICA (INICIA APAGADA) -->
+    <!-- LÁMPARA ESTÉTICA MEJORADA (INICIA APAGADA) -->
     <div class="lamp-container off" id="lampContainer">
       <div class="lamp-glow-bg"></div>
+      
+      <!-- Soporte superior y cable de la lámpara -->
+      <div class="lamp-wire-top"></div>
+      
+      <!-- Pantalla principal de la lámpara -->
       <div class="lamp-shade">
         <div class="lamp-face">
           <div class="eye left"></div>
@@ -25,12 +30,13 @@
           <div class="mouth"></div>
         </div>
       </div>
+      
       <div class="light-beam"></div>
       
-      <!-- Contenedor de la pitita -->
+      <!-- Contenedor de la pitita interactiva -->
       <div class="lamp-cord-container" id="cordContainer" title="¡Jala la pitita para encender!">
         <svg class="cord-svg" id="cordSvg">
-          <line id="cordLine" x1="50" y1="0" x2="50" y2="45" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+          <line id="cordLine" x1="50" y1="0" x2="50" y2="40" stroke="#00d2ff" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
         <div class="cord-handle" id="cordHandle"></div>
       </div>

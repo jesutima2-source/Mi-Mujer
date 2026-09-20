@@ -9,7 +9,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      touch-action: pan-y; /* Permite desplazamiento vertical suave con el dedo */
+      touch-action: pan-y;
     }
 
     body {
@@ -23,7 +23,7 @@
       justify-content: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      padding: 20px 15px;
+      padding: 15px 10px;
       text-align: center;
       overflow-x: hidden;
       position: relative;
@@ -44,7 +44,7 @@
     .heart {
       position: absolute;
       top: -10%;
-      color: #ff334b; /* Rojo intenso */
+      color: #ff334b;
       font-size: var(--heart-size);
       animation: heartFall var(--fall-duration) linear infinite;
       animation-delay: var(--fall-delay);
@@ -71,12 +71,12 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 400px;
+      max-width: 440px;
     }
 
     /* TÍTULO MEJORADO CON LUCES NEÓN */
     .greetings {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       font-weight: 900;
       letter-spacing: 2px;
       display: flex;
@@ -107,50 +107,50 @@
 
     /* SUBTÍTULO Y FRASE */
     .description {
-      font-size: 0.95rem;
-      letter-spacing: 1.5px;
+      font-size: 0.9rem;
+      letter-spacing: 1.2px;
       color: #ffd6df;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-shadow: 0 0 10px rgba(255, 51, 75, 0.6);
       font-weight: 400;
     }
 
     /* CONTENEDOR DEL TIMER */
     .timer-box {
-      background: rgba(20, 10, 15, 0.7);
+      background: rgba(20, 10, 15, 0.75);
       border: 1px solid rgba(255, 51, 75, 0.4);
       border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 20px;
+      padding: 12px;
+      margin-bottom: 15px;
       width: 100%;
       backdrop-filter: blur(8px);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 51, 75, 0.15);
     }
 
     .timer-title {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #ff88a2;
-      margin-bottom: 8px;
-      letter-spacing: 2.5px;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
       font-weight: 600;
     }
 
     .time-digits {
       display: flex;
       justify-content: space-around;
-      gap: 5px;
+      gap: 3px;
     }
 
     .time-block {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 42px;
+      min-width: 38px;
     }
 
     .digit {
       font-family: monospace;
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       font-weight: bold;
       background: linear-gradient(to bottom, #ffffff, #ff334b);
       -webkit-background-clip: text;
@@ -159,49 +159,54 @@
     }
 
     .label {
-      font-size: 0.55rem;
+      font-size: 0.5rem;
       color: #aaa;
-      margin-top: 3px;
+      margin-top: 2px;
       letter-spacing: 0.5px;
     }
 
-    /* CONTENEDOR DE TARJETAS */
+    /* CONTENEDOR DE TARJETAS EN 2 COLUMNAS */
     .cards-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 2 columnas iguales */
+      gap: 10px;
       width: 100%;
     }
 
     .card {
-      background: rgba(20, 10, 15, 0.65);
+      background: rgba(20, 10, 15, 0.7);
       border: 1px solid rgba(255, 51, 75, 0.35);
-      border-radius: 14px;
-      padding: 14px 18px;
+      border-radius: 12px;
+      padding: 12px 10px;
       text-decoration: none;
       color: #fff;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 4px;
       backdrop-filter: blur(6px);
+      text-align: center;
+      min-height: 95px;
     }
 
     .card:active {
-      transform: scale(0.97);
+      transform: scale(0.95);
       border-color: #ff334b;
-      background: rgba(255, 51, 75, 0.2);
-      box-shadow: 0 0 20px rgba(255, 51, 75, 0.6);
+      background: rgba(255, 51, 75, 0.25);
+      box-shadow: 0 0 18px rgba(255, 51, 75, 0.6);
     }
 
     .card h3 {
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       color: #ff667d;
       display: flex;
+      flex-direction: column; /* Icono arriba, texto abajo para que quepa bien en dos columnas */
       align-items: center;
-      gap: 6px;
+      gap: 2px;
+      line-height: 1.2;
     }
 
     .card.flores h3 {
@@ -210,8 +215,9 @@
     }
 
     .card p {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: #ccc;
+      line-height: 1.2;
     }
   </style>
 </head>
@@ -256,26 +262,26 @@
       </div>
     </div>
 
-    <!-- MENÚ DE TARJETAS -->
+    <!-- MENÚ DE TARJETAS (2 COLUMNAS) -->
     <div class="cards-grid">
       <a href="flores/index.html" class="card flores">
-        <h3>🌻 FLORES AMARILLAS</h3>
-        <p>Para 21/9 una sorpresa espacial para ti</p>
+        <h3><span>🌻</span> FLORES AMARILLAS</h3>
+        <p>Para 21/9 sorpresa espacial</p>
       </a>
 
       <a href="universo.html" class="card">
-        <h3>🪐 NUESTRO UNIVERSO</h3>
-        <p>Nuestra historia, momentos y recuerdos juntos</p>
+        <h3><span>🪐</span> NUESTRO UNIVERSO</h3>
+        <p>Nuestra historia y momentos</p>
       </a>
 
       <a href="galeria.html" class="card">
-        <h3>📸 VIDEOS Y FOTOS</h3>
-        <p>Nuestros mejores recuerdos capturados</p>
+        <h3><span>📸</span> VIDEOS Y FOTOS</h3>
+        <p>Recuerdos capturados</p>
       </a>
 
       <a href="cartas.html" class="card">
-        <h3>💌 CARTAS</h3>
-        <p>Palabras escritas con todo mi corazón</p>
+        <h3><span>💌</span> CARTAS</h3>
+        <p>Palabras de mi corazón</p>
       </a>
     </div>
   </div>
@@ -284,11 +290,9 @@
     // --- Solución para reproducción automática de audio en celulares ---
     document.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById('backgroundAudio');
-      audio.volume = 0.6; // Volumen agradable
+      audio.volume = 0.6;
       
-      // Intenta reproducir al cargar
       audio.play().catch(() => {
-        // Si el navegador bloquea el autoplay, se reproducirá al primer toque en la pantalla
         const unlockAudio = () => {
           audio.play();
           document.removeEventListener('click', unlockAudio);
@@ -323,9 +327,8 @@
       container.appendChild(heart);
     }
 
-    // --- Lógica del Timer (Con 1 año menos según lo pedido) ---
-    // Fecha real: 10 de Agosto de 2018 -> Restando 1 año para el cálculo: 10 de Agosto de 2017
-    const startDate = new Date(2017, 7, 10, 0, 0, 0); 
+    // --- Lógica del Timer (Ajustado a 7 años restando 1 año a la fecha base: 10 de Agosto de 2019) ---
+    const startDate = new Date(2019, 7, 10, 0, 0, 0); 
 
     function updateTimer() {
       const now = new Date();

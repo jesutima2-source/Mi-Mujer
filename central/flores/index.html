@@ -12,37 +12,24 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden; /* Evita el scroll o movimiento al deslizar el dedo */
+            position: fixed;
+        }
+
         body {
-            background-color: #000;
+            background: linear-gradient(rgba(5, 7, 15, 0.75), rgba(5, 7, 15, 0.85)), 
+                        url('central/flores/img/cartas.jpg') no-repeat center center;
+            background-size: cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            position: relative;
             text-align: center;
-            padding: 20px;
-        }
-
-        /* Fondo dinámico respirando */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 420px;
-            height: 420px;
-            background: radial-gradient(circle, rgba(255, 230, 0, 0.18) 0%, rgba(10, 43, 233, 0.1) 55%, transparent 75%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-            animation: respirarGlow 4s ease-in-out infinite;
-        }
-
-        @keyframes respirarGlow {
-            0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+            padding: 15px;
+            color: #fff;
         }
 
         /* Partículas flotantes */
@@ -96,15 +83,15 @@
             align-items: center;
             flex-direction: column;
             width: 100%;
-            max-width: 420px;
+            max-width: 390px;
         }
 
         .badge-amor {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #00c3ff;
-            letter-spacing: 2.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-weight: 700;
             text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
         }
@@ -112,28 +99,29 @@
         /* Paso 1: Sobre / Botón inicial interactivo */
         .sobre-container {
             width: 100%;
-            background: linear-gradient(145deg, #111118, #0a0a0f);
+            background: rgba(17, 17, 24, 0.85);
             border: 2px solid rgba(255, 230, 0, 0.4);
-            border-radius: 16px;
-            padding: 28px 20px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 230, 0, 0.15);
+            border-radius: 14px;
+            padding: 22px 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8), 0 0 15px rgba(255, 230, 0, 0.15);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-bottom: 22px;
+            margin-bottom: 15px;
             cursor: pointer;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            backdrop-filter: blur(6px);
         }
 
-        .sobre-container:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 230, 0, 0.8);
+        .sobre-container:active {
+            transform: scale(0.97);
+            border-color: rgba(255, 230, 0, 0.9);
         }
 
         .sobre-sello {
-            font-size: 2.8rem;
-            margin-bottom: 12px;
+            font-size: 2.4rem;
+            margin-bottom: 8px;
             animation: latirSello 1.5s ease-in-out infinite;
         }
 
@@ -144,22 +132,22 @@
 
         .mensaje-previo {
             color: #fff;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1.35;
+            margin-bottom: 6px;
+            line-height: 1.3;
         }
 
         .sub-mensaje {
             color: #cbd5e1;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             font-weight: 400;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         .indicador-abrir {
-            margin-top: 14px;
-            font-size: 0.78rem;
+            margin-top: 10px;
+            font-size: 0.72rem;
             color: #00c3ff;
             font-weight: 700;
             letter-spacing: 1px;
@@ -169,65 +157,66 @@
         /* Paso 2: Carta pequeña interactiva para revelar mensaje final */
         .small-gift-message {
             display: none;
-            font-size: 5rem;
+            font-size: 4.2rem;
             cursor: pointer;
-            animation: pop-in 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 12px;
+            animation: pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 10px;
         }
 
         .texto-small-gift-message {
             display: none;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             color: #00c3ff;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-weight: 600;
         }
 
         /* Paso 3: Tarjeta de mensaje final + Botón a Flores */
         .mensajeFinal {
             width: 100%;
-            background: linear-gradient(145deg, #111118, #0a0a0f);
+            background: rgba(17, 17, 24, 0.88);
             border: 2px solid rgba(0, 195, 255, 0.4);
-            border-radius: 16px;
-            padding: 24px 20px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
+            border-radius: 14px;
+            padding: 20px 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
             color: #fff;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(6px);
         }
 
         .textoCarta {
-            font-size: 1rem;
+            font-size: 0.92rem;
             text-align: center;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #e2e8f0;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
 
         .textoPd {
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             color: #ffe600;
-            margin-bottom: 22px;
+            margin-bottom: 16px;
             font-weight: 600;
         }
 
         .btn-siguiente-seccion {
             background-color: #ffe600;
             color: #000;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 10px 24px;
+            border-radius: 22px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(255, 230, 0, 0.4);
+            font-size: 0.82rem;
+            box-shadow: 0 4px 12px rgba(255, 230, 0, 0.4);
             transition: transform 0.2s, background-color 0.2s;
         }
 
-        .btn-siguiente-seccion:hover {
+        .btn-siguiente-seccion:active {
+            transform: scale(0.95);
             background-color: #fff;
-            transform: scale(1.05);
         }
 
         /* Lógica de radio buttons para transiciones en cascada */
@@ -241,10 +230,8 @@
 </head>
 <body>
 
-    <!-- Audio configurado con autoplay para sonar al cargar la interfaz -->
-    <audio id="musicaFondo" loop autoplay>
-        <source src="sound/music1.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Audio para reproducir al cargar -->
+    <audio id="musicaFondo" src="sound/music1.mp3" loop autoplay></audio>
 
     <!-- Partículas de luz de fondo -->
     <div class="particulas" id="contenedorParticulas"></div>
@@ -270,7 +257,7 @@
 
             <!-- BLOQUE 2: Icono intermedio para revelar carta final -->
             <label for="paso3" class="small-gift-message">✉️</label>
-            <label for="paso3" class="texto-small-gift-message">Te encontraste un sobre ,tocame otra vez :3</label>
+            <label for="paso3" class="texto-small-gift-message">Te encontraste un sobre, tócame otra vez :3</label>
 
             <!-- BLOQUE 3: Mensaje final + Salto a vista de flores -->
             <div class="mensajeFinal" id="blockFinal">
@@ -280,24 +267,31 @@
                     Cada segundo a tu lado vale oro.
                 </span>
                 <span class="textoPd">Pd: Estoy muy orgulloso de ti ❤️❤️</span>
-                <a href="flower.html" class="btn-siguiente-seccion">Ver Flores Amarillas "♥baja el volumen♥"✨</a>
+                <a href="flower.html" class="btn-siguiente-seccion">Ver Flores Amarillas "♥ baja el volumen ♥" ✨</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Reproducción automática al cargar la página
-        window.addEventListener('DOMContentLoaded', () => {
+        // Reproducción automática de audio con respaldo táctil para móviles
+        document.addEventListener('DOMContentLoaded', () => {
             const audio = document.getElementById('musicaFondo');
             audio.volume = 0.5;
-            audio.play().catch(e => {
-                console.log("Reproducción automática bloqueada por políticas del navegador", e);
+            
+            audio.play().catch(() => {
+                const unlockAudio = () => {
+                    audio.play();
+                    document.removeEventListener('click', unlockAudio);
+                    document.removeEventListener('touchstart', unlockAudio);
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
             });
         });
 
         // Generador dinámico de lucecitas flotantes
         const contenedor = document.getElementById('contenedorParticulas');
-        const cantidad = 18;
+        const cantidad = 16;
         for (let i = 0; i < cantidad; i++) {
             const p = document.createElement('div');
             p.classList.add('particula');

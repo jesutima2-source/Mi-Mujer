@@ -5,75 +5,110 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Galaxia Amarilla</title>
 <style>
-  html, body { margin:0; height:100%; background:#050b14; overflow:hidden; }
+  html, body { margin:0; height:100%; background:#000; overflow:hidden; }
   canvas { display:block; }
 
-  /* --- Botón para volver al inicio --- */
-  .btn-inicio {
+  /* --- Reproductor personalizado --- */
+  .player {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    background: rgba(0, 20, 40, 0.7);
-    border: 2px solid #ff8800;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 2px solid #ff6600;
     border-radius: 999px;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    text-decoration: none;
-    box-shadow: 0 0 12px #ff8800;
+    background: transparent;
+    box-shadow: 0 0 15px #ff6600, 0 0 30px #ff3300;
     z-index: 1000;
-    transition: transform 0.2s, background 0.2s;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    font-size: 14px;
   }
-  .btn-inicio:hover {
-    transform: scale(1.05);
-    background: rgba(255, 136, 0, 0.3);
+  .player button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 6px #ff6600);
+    transition: transform 0.2s;
+  }
+  .player button:hover { transform: scale(1.2); filter: drop-shadow(0 0 10px #ff3300); }
+
+  .progress {
+    flex-grow: 1;
+    height: 14px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(270deg, #ff6600, #ff3300, #ff0099, #ff6600);
+    background-size: 400% 400%;
+    border-radius: 999px;
+    box-shadow: 0 0 10px #ff6600;
+    animation: flowing 6s ease infinite;
+  }
+  @keyframes flowing {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .time {
+    min-width: 74px;
+    text-align: right;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 5px #ff6600;
   }
 </style>
 </head>
 <body>
-
 <canvas id="c"></canvas>
 
-<!-- Audio automático y en bucle (sin botones) -->
-<audio id="audio" src="flores/sound/music2.mp3" autoplay loop preload="auto"></audio>
+<!-- Elemento de audio con una música de prueba en línea -->
+<audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
 
-<!-- Botón de inicio -->
-<a href="rincon.html" class="btn-inicio">🏠 Volver al inicio</a>
+<!-- Reproductor personalizado -->
+<div class="player">
+  <button id="play">▶️</button>
+  <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="time" id="time">0:00 / 0:00</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 <script>
-// ================= Autoplay de Audio Transparente =================
-const audio = document.getElementById('audio');
-audio.volume = 1.0;
+// ================= Reproductor =================
+const audio=document.getElementById('audio'),playBtn=document.getElementById('play'),progress=document.getElementById('progress'),progressBar=document.getElementById('progress-bar'),timeDisplay=document.getElementById('time');let isPlaying=false;
+playBtn.addEventListener('click',async()=>{if(isPlaying){audio.pause();playBtn.textContent='▶️';}else{await audio.play();playBtn.textContent='⏸️';}isPlaying=!isPlaying;});
+function formatTime(sec){if(!isFinite(sec))return'0:00';const m=Math.floor(sec/60);const s=Math.floor(sec%60).toString().padStart(2,'0');return m+':'+s;}
+audio.addEventListener('timeupdate',()=>{const percent=(audio.currentTime/audio.duration)*100;progressBar.style.width=(isFinite(percent)?percent:0)+'%';timeDisplay.textContent=formatTime(audio.currentTime)+' / '+formatTime(audio.duration);});
+progress.addEventListener('click',(e)=>{const rect=progress.getBoundingClientRect();const x=e.clientX-rect.left;const percent=x/rect.width;if(isFinite(audio.duration))audio.currentTime=percent*audio.duration;});
 
-window.addEventListener('DOMContentLoaded', () => {
-  audio.play().catch(() => {
-    const unlockAudio = () => {
-      audio.play();
-      window.removeEventListener('click', unlockAudio);
-      window.removeEventListener('touchstart', unlockAudio);
-    };
-    window.addEventListener('click', unlockAudio);
-    window.addEventListener('touchstart', unlockAudio);
-  });
-});
-
-// ================= Escena 3D =================
+// ================= Escena =================
 const canvas=document.getElementById('c');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse) *').matches?1.25:2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.25:2));
 renderer.setSize(innerWidth,innerHeight);
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,5000);
 let targetDist=300,currentDist=300,rotX=0.2,rotY=0;
 
-// Fondo espacial
+// Fondo
 const loader=new THREE.TextureLoader();
 const nebulaTex=loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
 scene.background=nebulaTex;
 
-// Estrellas celestes de fondo
+// Estrellas
 (function makeStars(count=2000,spread=3000){
   const g=new THREE.BufferGeometry();
   const pos=new Float32Array(count*3);
@@ -86,64 +121,49 @@ scene.background=nebulaTex;
     pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
   }
   g.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:1.8,color:0x87ceeb,depthWrite:false})));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:1.5,color:0xffffff,depthWrite:false})));
 })();
 
-// Estrellas blancas brillantes optimizadas
-(function makeWhiteBrightStars(count=2500,spread=3500){
-  const g=new THREE.BufferGeometry();
-  const pos=new Float32Array(count*3);
-  for(let i=0;i<count;i++){
-    const r=spread*(0.2+Math.random()*0.8);
-    const th=Math.random()*Math.PI*2;
-    const ph=Math.acos(2*Math.random()-1);
-    pos[i*3+0]=r*Math.sin(ph)*Math.cos(th);
-    pos[i*3+1]=r*Math.cos(ph);
-    pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
-  }
-  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:2.4,color:0xffffff,transparent:true,opacity:0.9,depthWrite:false})));
-})();
-
-// Núcleo central con tono Naranja cálido
-const coreMat=new THREE.MeshPhongMaterial({color:0xff6600,transparent:true,opacity:0.75,shininess:250});
+// Núcleo translúcido con efecto de latido
+const coreMat=new THREE.MeshPhongMaterial({color:0x111111,transparent:true,opacity:0.6,shininess:200});
 const core=new THREE.Mesh(new THREE.SphereGeometry(40,64,64),coreMat);
 scene.add(core);
 
-// Texto central
+// Mensaje "TE AMO ❤️" fijo en el centro
 function makeCenterTextTexture(msg){
   const c=document.createElement('canvas');c.width=512;c.height=512;
   const ctx=c.getContext('2d');
   ctx.clearRect(0,0,c.width,c.height);
-  ctx.font='bold 60px "Segoe UI", Roboto, Helvetica, sans-serif';
+  ctx.font='bold 80px Arial';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillStyle='#ffaa00';
-  ctx.shadowColor='#00d2ff';
-  ctx.shadowBlur=40;
+  ctx.fillStyle='#ff0033';
+  ctx.shadowColor='#ff66aa';
+  ctx.shadowBlur=50;
   ctx.fillText(msg,c.width/2,c.height/2);
   return new THREE.CanvasTexture(c);
 }
-const centerTex=makeCenterTextTexture("🌻 TE AMO BETZI 🌻");
-const centerSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:centerTex,transparent:true}));
-centerSprite.scale.set(80,80,1);
+const centerTex=makeCenterTextTexture("TE AMO ❤️");
+const centerMat=new THREE.SpriteMaterial({map:centerTex,transparent:true});
+const centerSprite=new THREE.Sprite(centerMat);
+centerSprite.scale.set(60,60,1);
 centerSprite.position.set(0,0,0);
 centerSprite.renderOrder=999;
 scene.add(centerSprite);
 
-// Brillo exterior
-function makeGlow(size=768,c1='255,136,0',c2='0,210,255'){
+// Glow exterior
+function makeGlow(size=768,c1='255,160,0',c2='255,60,0'){
   const c=document.createElement('canvas');c.width=c.height=size;
   const g=c.getContext('2d');
   const grad=g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
-  grad.addColorStop(0,'rgba('+c1+',0.85)');
-  grad.addColorStop(0.5,'rgba('+c2+',0.45)');
+  grad.addColorStop(0,'rgba('+c1+',0.9)');
+  grad.addColorStop(0.5,'rgba('+c2+',0.5)');
   grad.addColorStop(1,'rgba(0,0,0,0)');
   g.fillStyle=grad;g.fillRect(0,0,size,size);
   return new THREE.CanvasTexture(c);
 }
 const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(),transparent:true,depthWrite:false}));
-glow.scale.set(520,520,1);
+glow.scale.set(500,500,1);
 scene.add(glow);
 
 // Anillos
@@ -152,9 +172,9 @@ function ringTexture(size=768){
   const g=c.getContext('2d');g.translate(size/2,size/2);
   const r1=size*0.34, r2=size*0.49;
   const grd=g.createRadialGradient(0,0,r1*0.3,0,0,r2);
-  grd.addColorStop(0.0,'rgba(0,210,255,1)');
-  grd.addColorStop(0.3,'rgba(255,136,0,0.9)');
-  grd.addColorStop(0.65,'rgba(0,210,255,0.7)');
+  grd.addColorStop(0.0,'rgba(255,255,200,1)');
+  grd.addColorStop(0.3,'rgba(255,160,60,0.9)');
+  grd.addColorStop(0.65,'rgba(255,80,0,0.6)');
   grd.addColorStop(1.0,'rgba(0,0,0,0)');
   g.fillStyle=grd;
   g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
@@ -165,31 +185,28 @@ const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasi
 ring1.rotation.x=ring2.rotation.x=Math.PI/2;
 scene.add(ring1);scene.add(ring2);
 
-// Palabras flotantes
+// Palabras alrededor
 const WORDS=[];
 const baseWords=[
-  '💖 Te amo Betzi', '✨ Mi vida Betzi', '🧙‍♀️ Mi brujita tierna', '👑 Mi reina Betzi', 
-  '🥰 Te amo mucho', '🔥 Mi amor lindo', '🪄 Mi bruja', '❤️ Eres mi todo', 
-  '🥺 Te extraño', '🌟 Mi cielo', '💎 Mi tesoro', '🔮 Mi magia pura',
-  '🌹 Mi princesita', '🥰 Contigo siempre', '💖 Mis ojos hermosos', '✨ Mi personita',
-  '🌟 Contigo','🧸 Mi ternura','🎁 Mi razón','🌙 Mi destino','💌 Mis recuerdos',
-  '🕊️ Mi paz','🪐 Mi universo','🌊 Mi calma','💡 Mi luz','🍒 Mi dulzura','🥰 Mi vida',
-  '🎇 Mi felicidad','🌻 Mi alegría','🌺 Mi flor','💜 Mi eternidad','🌟 Mis sueños','✨ Mi magia',
-  '🎵 Mi canción','🔥 Mi pasión','⭐ Mi estrella','🌴 Mi paraíso','🌄 Mi amanecer','🌃 Mi noche contigo',
-  '🎉 Mi fiesta','💫 Mi inspiración','🌷 Siempre juntos','🎀 Mi ternura','🍀 Mi fortuna'
+  '💖 Mi amor','🌞 Mi sol','🌎 Mi mundo','✨ Brillas','❤️ Te amo','🌌 Universo',
+  '👑 Reina','🌠 Estrella','💫 Mi cielo','🔥 Siempre tú','🎶 Tu risa','🦋 Libertad',
+  '💎 Eres todo','🙏 Gracias','💕 Cariño','🌹 Amor eterno','🤗 Abrazos','🌸 Esperanza',
+  '🌈 Alegría','🌟 Contigo','🧸 Ternura','🎁 Mi razón','🌙 Mi destino','💌 Recuerdos',
+  '🕊️ Mi paz','🪐 Mi universo','🌊 Mi calma','💡 Mi luz','🍒 Dulzura','🥰 Mi vida',
+  '🎇 Felicidad','🌻 Alegría','🌺 Mi flor','💜 Eternidad','🌟 Sueños','✨ Magia',
+  '🎵 Canción','🔥 Pasión','⭐ Mi estrella','🌴 Mi paraíso','🌄 Amanecer','🌃 Noche contigo',
+  '🎉 Mi fiesta','💫 Inspiración','🌷 Siempre juntos','🎀 Mi ternura','🍀 Mi fortuna','🪞 Mi reflejo'
 ];
-for(let i=0;i<4;i++){WORDS.push(...baseWords);}
-
+for(let i=0;i<6;i++){WORDS.push(...baseWords);}
 function makeTextTexture(text,color){
   const c=document.createElement('canvas');c.width=512;c.height=128;
   const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
-  ctx.font='bold 54px "Segoe UI", Roboto, Helvetica, sans-serif';
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillStyle='#ffffff';ctx.shadowColor=color;ctx.shadowBlur=35;
+  ctx.font='bold 60px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='#fff';ctx.shadowColor=color;ctx.shadowBlur=30;
   ctx.fillText(text,c.width/2,c.height/2);
   return new THREE.CanvasTexture(c);
 }
-const COLORS=['#00d2ff','#ff9933','#38bdf8','#ffbb33','#70d6ff','#ff8800','#a0e7e5','#ffa500','#70c1b3','#ff70a6'];
+const COLORS=['#ff66ff','#66ccff','#ffd36b','#ff9966','#8df59a','#ffa0f8','#c6a7ff','#ff4444','#44ff99','#99ccff'];
 const textGroup=new THREE.Group();scene.add(textGroup);
 const sharedWordTextures=new Map();
 for(let i=0;i<WORDS.length;i++){
@@ -198,16 +215,19 @@ for(let i=0;i<WORDS.length;i++){
   const tex=sharedWordTextures.get(textureKey);
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true});
   const sp=new THREE.Sprite(mat);
-  sp.scale.set(58,16.5,1);
+  sp.scale.set(50,16,1);
   const phi=Math.acos(2*Math.random()-1);const theta=Math.random()*Math.PI*2;
-  const r=140+Math.random()*140;
+  const r=150+Math.random()*120;
   sp.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));
   sp.userData={phi:phi,theta:theta,radius:r,speed:0.001+Math.random()*0.001};
   textGroup.add(sp);
 }
 
-// Ramos ajustados a 40 unidades (fluidez máxima)
-const bouquetGroup=new THREE.Group();scene.add(bouquetGroup);
+// Ramos 360 orientados correctamente hacia afuera (Aumentado a 40)
+const bouquetGroup=new THREE.Group();
+bouquetGroup.name='Ramos abiertos 360';
+scene.add(bouquetGroup);
+
 const addedBouquets=(()=>{
 function makeGeometry(){
 let data=[];const PI=Math.PI,TAU=2*PI;let seed=13;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),mul=(a,k)=>a.map(v=>v*k),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],norm=a=>mul(a,1/(Math.hypot(...a)||1));
@@ -236,7 +256,7 @@ for(let i=0;i<8;i++)patch((u,v)=>{const a=i*TAU/8+u*TAU/8*1.15,r=.245+v*1.025;re
 patch((u,v)=>{let a=u*TAU,r=.20+v*.13;return [Math.cos(a)*r,-1.7-v*.90,Math.sin(a)*r]},30,6,[.22,.40,.22]);
 patch((u,v)=>{let a=u*TAU;return [.265*Math.cos(a),-1.69+v*.15,.265*Math.sin(a)]},48,2,[1,.72,.025]);
 for(let sign of [-1,1])patch((t,v)=>{let a=t*TAU;return [sign*(.13+.65*Math.sin(a/2)), -1.61+.24*Math.sin(a)+(v-.5)*.18, .30+.20*Math.sin(a)+.18*Math.sin(a/2)]},44,5,(t,v)=>[1,.67+.15*Math.sin(v*PI),.025]);
-for(let sign of [-1,1])patch((t,v)=>[sign*(.10+.36*t+.09*Math.sin(t*5))+(v-.5)*( .19+.06*t),-1.70-.83*t,.33+.12*Math.sin(t*7)+v*.03],24,5,[1,.73,.035]);ball([0,-1.62,.40],.16,[1,.72,.025],[1,.77,.70],18);
+for(let sign of [-1,1])patch((t,v)=>[sign*(.10+.36*t+.09*Math.sin(t*5))+(v-.5)*(.19+.06*t),-1.70-.83*t,.33+.12*Math.sin(t*7)+v*.03],24,5,[1,.73,.035]);ball([0,-1.62,.40],.16,[1,.72,.025],[1,.77,.70],18);
 
 const geometry=new THREE.BufferGeometry();
 const packed=new THREE.InterleavedBuffer(new Float32Array(data),9);
@@ -261,7 +281,7 @@ float rim=pow(1.-abs(n.z),3.);
 gl_FragColor=vec4(floralColor*(.48+.57*light)+vec3(.08,.07,.035)*rim,1.);}
 `});
 const geometry=makeGeometry();
-const totalBouquets=40; // Reducido a 40 para evitar lag
+const totalBouquets=40; // Total aumentado a 40
 const bouquetsList=[];
 for(let i=0;i<totalBouquets;i++){
  const mesh=new THREE.Mesh(geometry,material);
@@ -270,11 +290,12 @@ for(let i=0;i<totalBouquets;i++){
  const theta=i*2.3999632297;
  const x=Math.cos(theta)*radiusAtY;
  const z=Math.sin(theta)*radiusAtY;
- const dist=140+((i*31)%70);
+ const dist=165+((i*31)%35);
  
- mesh.scale.setScalar(7.5);
+ mesh.scale.setScalar((6.5+(i%3)*.65)*1.4*1.3);
  mesh.position.set(x*dist, y*dist, z*dist);
  
+ // Orientación perfecta hacia afuera
  mesh.lookAt(x*dist*2, y*dist*2, z*dist*2);
  mesh.rotateX(Math.PI/2);
  
@@ -282,7 +303,7 @@ for(let i=0;i<totalBouquets;i++){
    phi: Math.acos(y),
    theta: theta,
    radius: dist,
-   speed: 0.0005 + (i%3)*0.0002
+   speed: 0.0005 + (i%5)*0.00015
  };
  bouquetGroup.add(mesh);
  bouquetsList.push(mesh);
@@ -299,6 +320,7 @@ addEventListener('mousedown',onDown);addEventListener('mousemove',onMove);addEve
 addEventListener('touchstart',onDown,{passive:true});addEventListener('touchmove',onMove,{passive:true});addEventListener('touchend',onUp,{passive:true});
 addEventListener('wheel',(e)=>{targetDist+=e.deltaY*0.25;targetDist=Math.max(160,Math.min(600,targetDist));},{passive:true});
 
+// Zoom con pellizco en móviles
 let pinch=0;
 addEventListener('touchmove',(e)=>{
   if(e.touches && e.touches.length===2){
@@ -312,23 +334,21 @@ addEventListener('touchmove',(e)=>{
 },{passive:false});
 addEventListener('touchend',()=>{pinch=0;},{passive:true});
 
-// Animación general
+// Animación
 let t=0;
 function tick(){requestAnimationFrame(tick);t+=0.01;
   ring1.rotation.z+=0.002;ring2.rotation.z-=0.0015;
-  glow.scale.set(520*(1+Math.sin(t*0.4)*0.03),520*(1+Math.sin(t*0.4)*0.03),1);
+  glow.scale.set(500*(1+Math.sin(t*0.4)*0.03),500*(1+Math.sin(t*0.4)*0.03),1);
   const s=1.0+0.05*Math.sin(t*3);
   core.scale.set(s,s,s);
-
-  // Animar palabras flotantes
   textGroup.children.forEach(sp=>{
     sp.material.opacity=0.8+0.2*Math.sin(t*2);
     sp.userData.theta+=sp.userData.speed;
     sp.position.x=sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
     sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
   });
-
-  // Animar ramos orientados correctamente hacia afuera
+  
+  // Animación y rotación fluida de los 40 ramos
   addedBouquets.forEach((mesh)=>{
     mesh.userData.theta += mesh.userData.speed;
     const r = mesh.userData.radius;

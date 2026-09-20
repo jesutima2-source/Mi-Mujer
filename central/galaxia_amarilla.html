@@ -184,7 +184,8 @@ renderer.setSize(innerWidth, innerHeight);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 5000);
 
-let targetDist = 90, currentDist = 90, rotX = 0.2, rotY = 0;
+// Distancia inicial mayor para celulares (más alejado por defecto)
+let targetDist = 140, currentDist = 140, rotX = 0.2, rotY = 0;
 
 const loader = new THREE.TextureLoader();
 const nebulaTex = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
@@ -210,13 +211,15 @@ const coreMat = new THREE.MeshPhongMaterial({color:0xff6600, transparent:true, o
 const core = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 32), coreMat);
 scene.add(core);
 
-function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
+// Luz central con mayor protagonismo del naranja
+function makeGlow(size=1024, c1='255,110,0', c2='0,180,255'){
   const c = document.createElement('canvas'); c.width = c.height = size;
   const g = c.getContext('2d');
   g.clearRect(0, 0, size, size);
   const grad = g.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
-  grad.addColorStop(0, 'rgba('+c1+',0.85)');
-  grad.addColorStop(0.5, 'rgba('+c2+',0.45)');
+  grad.addColorStop(0, 'rgba('+c1+',0.95)');
+  grad.addColorStop(0.4, 'rgba(255,140,0,0.6)');
+  grad.addColorStop(0.7, 'rgba('+c2+',0.3)');
   grad.addColorStop(1, 'rgba(0,0,0,0)');
   g.fillStyle = grad; 
   g.beginPath();
@@ -224,8 +227,9 @@ function makeGlow(size=1024, c1='255,136,0', c2='0,210,255'){
   g.fill();
   return new THREE.CanvasTexture(c);
 }
-const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(), transparent:true, depthWrite:false}));
-glow.scale.set(520, 520, 1);
+const glowMat = new THREE.SpriteMaterial({map:makeGlow(), transparent:true, depthWrite:false, opacity:0.9});
+const glow = new THREE.Sprite(glowMat);
+glow.scale.set(580, 580, 1);
 scene.add(glow);
 
 function ringTexture(size=768){
@@ -398,7 +402,7 @@ function onMove(e){
     );
     const diff = initialPinchDist - currentPinchDist;
     targetDist += diff * 0.5;
-    targetDist = Math.max(30, Math.min(450, targetDist));
+    targetDist = Math.max(30, Math.min(550, targetDist));
     initialPinchDist = currentPinchDist;
     return;
   }
@@ -426,7 +430,7 @@ addEventListener('touchend', onUp, {passive: true});
 
 addEventListener('wheel', (e)=>{ 
   targetDist += e.deltaY * 0.25; 
-  targetDist = Math.max(30, Math.min(450, targetDist)); 
+  targetDist = Math.max(30, Math.min(550, targetDist)); 
 }, {passive:true});
 
 window.addEventListener('resize', () => {
@@ -444,10 +448,12 @@ function tick(){
   ring1.rotation.z += 0.003;
   ring2.rotation.z -= 0.002;
   
-  // Efecto de parpadeo suave original en el brillo central
-  glow.scale.set(520 * (1 + Math.sin(t*0.5)*0.03), 520 * (1 + Math.sin(t*0.5)*0.03), 1);
+  // Parpadeo y pulsación de la luz central más intenso
+  const glowPulse = 580 * (1 + Math.sin(t*1.8)*0.08);
+  glow.scale.set(glowPulse, glowPulse, 1);
+  glow.material.opacity = 0.75 + 0.25 * Math.sin(t*1.8);
   
-  const coreScale = 1.0 + 0.05 * Math.sin(t*3);
+  const coreScale = 1.0 + 0.07 * Math.sin(t*3);
   core.scale.set(coreScale, coreScale, coreScale);
 
   textGroup.children.forEach(sp => {

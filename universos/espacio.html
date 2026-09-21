@@ -76,7 +76,7 @@
     animation: floatCard 4s ease-in-out infinite;
   }
 
-  /* Desfasar la animación de flotación para cada tarjeta para que se vea orgánico */
+  /* Desfasar la animación de flotación para cada tarjeta */
   .card:nth-child(1) { animation-delay: 0s; }
   .card:nth-child(2) { animation-delay: 1.3s; }
   .card:nth-child(3) { animation-delay: 2.6s; }
@@ -116,71 +116,6 @@
     transform: scale(0.98);
   }
 
-  /* --- Reproductor Adaptable --- */
-  .player {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 85%;
-    max-width: 410px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 18px;
-    border: 1px solid rgba(255, 182, 193, 0.3);
-    border-radius: 50px;
-    background: rgba(10, 5, 20, 0.75);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    color: #ffb6c1;
-  }
-  
-  .player button {
-    background: linear-gradient(135deg, #ffb6c1, #ff69b4);
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.4);
-    transition: transform 0.2s;
-  }
-
-  .player button:hover {
-    transform: scale(1.1);
-  }
-
-  .progress {
-    flex-grow: 1;
-    height: 4px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  
-  .progress-bar {
-    height: 100%;
-    width: 0%;
-    background: #ffb6c1;
-    box-shadow: 0 0 15px #ff69b4;
-  }
-  
-  .time { 
-    font-size: 10px; 
-    min-width: 65px; 
-    text-align: right; 
-    opacity: 0.8; 
-  }
-
   /* --- Animaciones Keyframes --- */
   @keyframes floatCard {
     0%, 100% { transform: translateY(0px); }
@@ -195,14 +130,13 @@
   @media (max-width: 600px) {
     .title-container h1 { font-size: 22px; letter-spacing: 2px; }
     .card { padding: 14px 18px; font-size: 15px; }
-    .player { padding: 8px 15px; width: 90%; bottom: 20px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Audio apuntando correctamente hacia atrás desde la carpeta 'universos' -->
-<audio id="audio" src="../central/flores/sound/enamore.mp3" preload="auto" loop></audio>
+<!-- Audio que suena automáticamente al iniciar -->
+<audio id="audio" src="../central/flores/sound/musica_espacio.mp3" autoplay loop preload="auto"></audio>
 
 <div class="title-container">
   <h1>Elige tu Destino ✨</h1>
@@ -210,7 +144,7 @@
 
 <div class="menu-container">
   <!-- Tarjeta 1: Galaxia -->
-  <a href="central/Galaxia.html" class="card">
+  <a href="Galaxia.html" class="card">
     <div class="card-content">
       <span class="icon">🌌</span>
       <span>Galaxia</span>
@@ -219,7 +153,7 @@
   </a>
 
   <!-- Tarjeta 2: Saturno -->
-  <a href="central/Saturno.html" class="card">
+  <a href="Saturno.html" class="card">
     <div class="card-content">
       <span class="icon">🪐</span>
       <span>Saturno</span>
@@ -227,7 +161,7 @@
     <span class="arrow">🡺</span>
   </a>
 
-  <!-- Tarjeta 3: Galaxia Amarilla (Nueva ruta enrutada) -->
+  <!-- Tarjeta 3: Galaxia Amarilla -->
   <a href="../central/galaxia_amarilla.html" class="card">
     <div class="card-content">
       <span class="icon">⭐</span>
@@ -237,59 +171,10 @@
   </a>
 </div>
 
-<!-- Reproductor de Audio -->
-<div class="player">
-  <button id="play">▶</button>
-  <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
-  <div class="time" id="time">0:00 / 0:00</div>
-</div>
-
 <canvas id="c"></canvas>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ================= CONFIGURACIÓN AUDIO =================
-const audio = document.getElementById('audio'),
-      playBtn = document.getElementById('play'),
-      progress = document.getElementById('progress'),
-      progressBar = document.getElementById('progress-bar'),
-      timeDisplay = document.getElementById('time');
-let isPlaying = false;
-
-audio.volume = 0.6;
-
-playBtn.addEventListener('click', async () => {
-    if (isPlaying) {
-        audio.pause();
-        playBtn.textContent = '▶';
-    } else {
-        try {
-            await audio.play();
-            playBtn.textContent = 'II';
-        } catch (e) {
-            console.log("Error al reproducir audio:", e);
-        }
-    }
-    isPlaying = !isPlaying;
-});
-
-function formatTime(s) {
-    if (!isFinite(s)) return '0:00';
-    const m = Math.floor(s / 60), sec = Math.floor(s % 60).toString().padStart(2, '0');
-    return m + ':' + sec;
-}
-
-audio.addEventListener('timeupdate', () => {
-    const p = (audio.currentTime / audio.duration) * 100;
-    progressBar.style.width = (p || 0) + '%';
-    timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-});
-
-progress.addEventListener('click', e => {
-    const r = progress.getBoundingClientRect(), p = (e.clientX - r.left) / r.width;
-    if (isFinite(audio.duration)) audio.currentTime = p * audio.duration;
-});
-
 // ================= FONDO ESTELAR 3D =================
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);

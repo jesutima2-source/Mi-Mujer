@@ -30,60 +30,15 @@
             color: #fff;
         }
 
-        /* Imagen de fondo de la Galaxia con respaldo de rutas */
-        .bg-img {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -2;
-            animation: zoomFondo 22s infinite alternate linear;
-        }
-
-        @keyframes zoomFondo {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        /* Capa translúcida elegante para resaltar el contenido sobre la galaxia */
+        /* Fondo limpio y directo con color sólido y degradado sutil */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(11, 15, 25, 0.45) 0%, rgba(5, 7, 15, 0.75) 100%);
+            background: radial-gradient(circle, rgba(18, 24, 43, 1) 0%, rgba(7, 10, 19, 1) 100%);
             z-index: -1;
-        }
-
-        /* Partículas de luz brillantes animadas */
-        .particulas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .particula {
-            position: absolute;
-            background: #ffe600;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: flotarParticula linear infinite;
-            box-shadow: 0 0 10px #ffe600, 0 0 20px #00c3ff;
-        }
-
-        @keyframes flotarParticula {
-            0% { transform: translateY(105vh) scale(0.4); opacity: 0; }
-            30% { opacity: 0.9; }
-            70% { opacity: 0.7; }
-            100% { transform: translateY(-10vh) scale(1.4); opacity: 0; }
         }
 
         @keyframes pop-in {
@@ -133,18 +88,12 @@
             margin-bottom: 14px;
             font-weight: 800;
             text-shadow: 0 0 12px rgba(0, 195, 255, 0.8);
-            animation: fadeInDown 1s ease;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Paso 1: Sobre / Botón inicial súper animado */
+        /* Paso 1: Sobre / Botón inicial */
         .sobre-container {
             width: 100%;
-            background: rgba(18, 20, 32, 0.82);
+            background: rgba(18, 20, 32, 0.9);
             border: 2px solid rgba(255, 230, 0, 0.5);
             border-radius: 18px;
             padding: 24px 18px;
@@ -155,7 +104,6 @@
             align-items: center;
             margin-bottom: 15px;
             cursor: pointer;
-            backdrop-filter: blur(8px);
             transition: transform 0.2s ease;
         }
 
@@ -175,7 +123,6 @@
             font-weight: 700;
             margin-bottom: 8px;
             line-height: 1.35;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .sub-mensaje {
@@ -192,17 +139,15 @@
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
         }
 
-        /* Paso 2: Carta pequeña intermedia con animación mágica */
+        /* Paso 2: Carta pequeña intermedia */
         .small-gift-message {
             display: none;
             font-size: 4.5rem;
             cursor: pointer;
             animation: pop-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), latirSello 2s infinite ease-in-out;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 15px rgba(255, 230, 0, 0.6));
         }
 
         .texto-small-gift-message {
@@ -211,13 +156,12 @@
             color: #00c3ff;
             margin-bottom: 15px;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(0,195,255,0.5);
         }
 
-        /* Paso 3: Tarjeta de mensaje final deslumbrante */
+        /* Paso 3: Tarjeta de mensaje final */
         .mensajeFinal {
             width: 100%;
-            background: rgba(18, 20, 32, 0.9);
+            background: rgba(18, 20, 32, 0.95);
             border: 2px solid rgba(0, 195, 255, 0.6);
             border-radius: 18px;
             padding: 22px 18px;
@@ -227,7 +171,6 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
             animation: pop-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -245,7 +188,6 @@
             color: #ffe600;
             margin-bottom: 18px;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
         }
 
         .btn-siguiente-seccion {
@@ -257,36 +199,22 @@
             font-weight: 800;
             font-size: 0.85rem;
             box-shadow: 0 5px 15px rgba(255, 230, 0, 0.5);
-            transition: transform 0.2s, filter 0.2s;
         }
 
-        .btn-siguiente-seccion:active {
-            transform: scale(0.94);
-            filter: brightness(1.15);
-        }
-
-        /* Lógica de radio buttons para transiciones en cascada */
+        /* Control de estados por radio buttons */
         #paso1:checked ~ .container .paso-1-block { display: block; }
-        
         #paso2:checked ~ .container .small-gift-message,
         #paso2:checked ~ .container .texto-small-gift-message { display: block; }
-
         #paso3:checked ~ .container .mensajeFinal { display: flex; }
     </style>
 </head>
 <body>
 
-    <!-- Imagen de fondo Galaxia con respaldo de rutas -->
-    <img src="central/flores/img/galaxia.jpeg" onerror="this.onerror=null; this.src='flores/img/galaxia.jpeg';" class="bg-img" alt="Fondo Galaxia">
     <div class="bg-overlay"></div>
 
-    <!-- Audio "simplemente.mp3" reproduciéndose desde el inicio -->
-    <audio id="musicaFondo" src="central/flores/sound/simplemente.mp3" preload="auto" loop></audio>
+    <!-- Etiqueta de audio apuntando directamente al archivo de sonido -->
+    <audio id="musicaFondo" src="sound/simplemente.mp3" preload="auto" loop></audio>
 
-    <!-- Partículas de luz brillantes -->
-    <div class="particulas" id="contenedorParticulas"></div>
-
-    <!-- Inputs de control por estados -->
     <input type="radio" name="flujoCarta" id="paso1" checked>
     <input type="radio" name="flujoCarta" id="paso2">
     <input type="radio" name="flujoCarta" id="paso3">
@@ -295,9 +223,9 @@
         <div class="content">
             <div class="badge-amor">Para Betzi ♥</div>
 
-            <!-- BLOQUE 1: Sobre inicial con frase -->
+            <!-- BLOQUE 1 -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container" onclick="activarMusica()">
+                <label for="paso2" class="sobre-container" onclick="reproducirMusica()">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -305,11 +233,11 @@
                 </label>
             </div>
 
-            <!-- BLOQUE 2: Icono intermedio para revelar carta final -->
-            <label for="paso3" class="small-gift-message">✉️</label>
-            <label for="paso3" class="texto-small-gift-message">Te encontraste un sobre, tócame otra vez :3</label>
+            <!-- BLOQUE 2 -->
+            <label for="paso3" class="small-gift-message" onclick="reproducirMusica()">✉️</label>
+            <label for="paso3" class="texto-small-gift-message" onclick="reproducirMusica()">Te encontraste un sobre, tócame otra vez :3</label>
 
-            <!-- BLOQUE 3: Mensaje final + Salto a vista de flores -->
+            <!-- BLOQUE 3 -->
             <div class="mensajeFinal" id="blockFinal">
                 <span class="textoCarta">
                     Hola, mi amor. Te amo muchísimo.<br>
@@ -326,42 +254,10 @@
         const audio = document.getElementById('musicaFondo');
         audio.volume = 0.5;
 
-        // Función de respaldo por si el navegador bloquea la reproducción automática al cargar
-        let audioActivado = false;
-        function activarMusica() {
-            if (!audioActivado) {
-                audio.play().then(() => {
-                    audioActivado = true;
-                }).catch(e => console.log(e));
-            }
-        }
-
-        // Intento de reproducción automática al entrar a la página (desde el segundo 0)
-        window.addEventListener('load', () => {
-            audio.play().then(() => {
-                audioActivado = true;
-            }).catch(() => {
-                // Si el navegador bloquea el autoplay puro, se activará en automático al primer toque del sobre
+        function reproducirMusica() {
+            audio.play().catch(error => {
+                console.log("El navegador requiere interacción:", error);
             });
-        });
-
-        // Generador dinámico de partículas de luz con colores vibrantes
-        const contenedor = document.getElementById('contenedorParticulas');
-        const cantidad = 24;
-        for (let i = 0; i < cantidad; i++) {
-            const p = document.createElement('div');
-            p.classList.add('particula');
-            const size = Math.random() * 4 + 2;
-            p.style.width = `${size}px`;
-            p.style.height = `${size}px`;
-            p.style.left = `${Math.random() * 100}%`;
-            p.style.animationDuration = `${Math.random() * 4 + 3}s`;
-            p.style.animationDelay = `${Math.random() * 3}s`;
-            if (Math.random() > 0.4) {
-                p.style.background = '#00c3ff';
-                p.style.boxShadow = '0 0 10px #00c3ff, 0 0 20px #ff00aa';
-            }
-            contenedor.appendChild(p);
         }
     </script>
 </body>

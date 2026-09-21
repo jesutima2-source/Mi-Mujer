@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Exploración Espacial ✨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            background-color: #050814;
+        }
+
+        /* Canvas para las partículas del espacio */
+        #space-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Fondo radial profundo con degradado cósmico */
+        .space-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #111b33 0%, #070a14 70%, #020308 100%);
+            z-index: 0;
+        }
+
+        /* Contenedor principal centrado */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .titulo-seccion {
+            font-size: 1.4rem;
+            color: #00c3ff;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(0, 195, 255, 0.6);
+            animation: fadeInDown 1s ease-out;
+            text-align: center;
+        }
+
+        /* Contenedor de botones */
+        .buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        /* Estilo base de los 3 botones espaciales */
+        .space-btn {
+            position: relative;
+            background: rgba(18, 24, 43, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 18px 24px;
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 1s ease-out backwards;
+        }
+
+        .space-btn span {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .space-btn .icon {
+            font-size: 1.4rem;
+            transition: transform 0.4s ease;
+        }
+
+        /* Animaciones escalonadas de entrada */
+        .space-btn:nth-child(1) { animation-delay: 0.2s; }
+        .space-btn:nth-child(2) { animation-delay: 0.4s; }
+        .space-btn:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Efectos específicos por botón al pasar el mouse o presionar */
+        
+        /* 1. Botón Galaxia (Tonos Azules/Cian) */
+        .space-btn.galaxia:hover, .space-btn.galaxia:active {
+            border-color: #00c3ff;
+            background: rgba(0, 195, 255, 0.15);
+            box-shadow: 0 0 25px rgba(0, 195, 255, 0.5), inset 0 0 15px rgba(0, 195, 255, 0.2);
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        /* 2. Botón Saturno (Tonos Morados/Violetas mágicos) */
+        .space-btn.saturno:hover, .space-btn.saturno:active {
+            border-color: #9d4edd;
+            background: rgba(157, 78, 221, 0.15);
+            box-shadow: 0 0 25px rgba(157, 78, 221, 0.5), inset 0 0 15px rgba(157, 78, 221, 0.2);
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        /* 3. Botón Galaxia Amarilla (Tonos Dorados/Amarillos brillantes) */
+        .space-btn.galaxia-amarilla:hover, .space-btn.galaxia-amarilla:active {
+            border-color: #ffe600;
+            background: rgba(255, 230, 0, 0.15);
+            box-shadow: 0 0 25px rgba(255, 230, 0, 0.5), inset 0 0 15px rgba(255, 230, 0, 0.2);
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        .space-btn:hover .icon {
+            transform: scale(1.25) rotate(10deg);
+        }
+
+        /* Pequeña flecha indicadora a la derecha */
+        .space-btn::after {
+            content: '›';
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .space-btn:hover::after {
+            transform: translateX(5px);
+            color: #fff;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="space-bg"></div>
+    <canvas id="space-canvas"></canvas>
+
+    <div class="main-container">
+        <div class="titulo-seccion">Elige tu Destino ✨</div>
+
+        <div class="buttons-wrapper">
+            <!-- Botón 1 -->
+            <button class="space-btn galaxia" onclick="accionGalaxia()">
+                <span><span class="icon">🌌</span> Galaxia</span>
+            </button>
+
+            <!-- Botón 2 -->
+            <button class="space-btn saturno" onclick="accionSaturno()">
+                <span><span class="icon">🪐</span> Saturno</span>
+            </button>
+
+            <!-- Botón 3 -->
+            <button class="space-btn galaxia-amarilla" onclick="accionGalaxiaAmarilla()">
+                <span><span class="icon">⭐</span> Galaxia Amarilla</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de partículas espaciales (estrellas fugaces y polvillo estelar flotando)
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let stars = [];
+        const numStars = 60;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3 - 0.1; // Flotan suavemente hacia arriba
+                
+                // Variedad de colores estelares (Blanco, Cian, Morado, Amarillo)
+                const colors = ['rgba(255, 255, 255, ', 'rgba(0, 195, 255, ', 'rgba(157, 78, 221, ', 'rgba(255, 230, 0, '];
+                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = Math.random() * 0.8 + 0.2;
+                this.alphaSpeed = (Math.random() * 0.015 + 0.003) * (Math.random() > 0.5 ? 1 : -1);
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Efecto de parpadeo suave
+                this.alpha += this.alphaSpeed;
+                if (this.alpha > 0.95 || this.alpha < 0.15) {
+                    this.alphaSpeed = -this.alphaSpeed;
+                }
+
+                // Reposicionar si salen de los límites de la pantalla
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.colorBase + this.alpha + ')';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.colorBase + '0.8)';
+                ctx.fill();
+            }
+        }
+
+        function initSpace() {
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function animateSpace() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateSpace);
+        }
+
+        initSpace();
+        animateSpace();
+
+        // Funciones de interacción para cada botón (puedes enlazarlas a tus páginas o eventos)
+        function accionGalaxia() {
+            console.log("Navegando a Galaxia...");
+            // Ejemplo: window.location.href = "galaxia.html";
+        }
+
+        function accionSaturno() {
+            console.log("Navegando a Saturno...");
+            // Ejemplo: window.location.href = "saturno.html";
+        }
+
+        function accionGalaxiaAmarilla() {
+            console.log("Navegando a Galaxia Amarilla...");
+            // Ejemplo: window.location.href = "flower.html";
+        }
+    </script>
+</body>
+</html>

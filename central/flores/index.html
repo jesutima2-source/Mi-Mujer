@@ -30,7 +30,7 @@
             color: #fff;
         }
 
-        /* Imagen de fondo de la Galaxia con rutas de respaldo para que aparezca sí o sí */
+        /* Imagen de fondo */
         .bg-img {
             position: fixed;
             top: 0;
@@ -38,7 +38,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -2;
+            z-index: -3;
             animation: zoomFondo 22s infinite alternate linear;
         }
 
@@ -47,15 +47,26 @@
             100% { transform: scale(1.1); }
         }
 
-        /* Capa translúcida para que el texto resalte perfectamente sobre la imagen de la galaxia */
+        /* Capa translúcida para contraste */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(11, 15, 25, 0.45) 0%, rgba(5, 7, 15, 0.75) 100%);
+            background: radial-gradient(circle, rgba(11, 15, 25, 0.5) 0%, rgba(5, 7, 15, 0.8) 100%);
+            z-index: -2;
+        }
+
+        /* Canvas para las partículas mágicas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
+            pointer-events: none;
         }
 
         @keyframes pop-in {
@@ -230,11 +241,14 @@
 </head>
 <body>
 
-    <!-- Imagen de fondo Galaxia con rutas alternativas por si tu imagen está en otra carpeta -->
+    <!-- Imagen de fondo Galaxia con respaldo -->
     <img src="img/cartas.jpg" onerror="this.onerror=null; this.src='cartas.jpg'; this.onerror=function(){this.src='central/flores/img/galaxia.jpeg'};" class="bg-img" alt="Fondo Galaxia">
     <div class="bg-overlay"></div>
 
-    <!-- Audio configurado con autoplay para que intente sonar al instante -->
+    <!-- Canvas para las partículas flotantes -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Audio con reproducción automática -->
     <audio id="musicaFondo" src="sound/music1.mp3" preload="auto" autoplay loop></audio>
 
     <input type="radio" name="flujoCarta" id="paso1" checked>
@@ -276,12 +290,84 @@
         const audio = document.getElementById('musicaFondo');
         audio.volume = 0.5;
 
-        // Forzar reproducción inmediata al cargar la página
         window.addEventListener('DOMContentLoaded', () => {
             audio.play().catch(error => {
                 console.log("Reproducción automática restringida inicialmente por el navegador:", error);
             });
         });
+
+        // Script de partículas flotantes (estrellas/destellos dinámicos)
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 45;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.8;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4 - 0.2; // Tienden a subir ligeramente
+                this.color = Math.random() > 0.5 ? 'rgba(255, 230, 0, ' : 'rgba(0, 195, 255, ';
+                this.alpha = Math.random() * 0.7 + 0.3;
+                this.alphaSpeed = (Math.random() * 0.02 + 0.005) * (Math.random() > 0.5 ? 1 : -1);
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Efecto parpadeo suave
+                this.alpha += this.alphaSpeed;
+                if (this.alpha > 0.9 || this.alpha < 0.2) {
+                    this.alphaSpeed = -this.alphaSpeed;
+                }
+
+                // Reaparecer si salen de la pantalla
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.alpha + ')';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color + '1)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
     </script>
 </body>
 </html>

@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rincón de Cartas - Nuestra Historia</title>
+    <title>Nuestra Historia en Recuerdos</title>
     <style>
         :root {
-            --bg-color: #070b19;
-            --card-bg: rgba(30, 41, 59, 0.8);
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
             --accent-pink: #f43f5e;
-            --accent-light: #fb7185;
             --text-color: #f8fafc;
         }
 
@@ -27,17 +26,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 20px;
-            overflow-x: hidden;
-            position: relative;
         }
 
-        /* Botón de Volver al Inicio */
+        /* Barra superior para organizar el botón de inicio sin estorbar */
+        .top-bar {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+
         .btn-volver {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             background: var(--card-bg);
             border: 2px solid var(--accent-pink);
             color: white;
@@ -46,13 +47,12 @@
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: bold;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            z-index: 10;
         }
 
         .btn-volver:hover {
@@ -61,147 +61,145 @@
             box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
         }
 
-        /* Partículas optimizadas y ligeras */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            color: #fb7185;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-shadow: 0 0 10px rgba(244, 63, 94, 0.7), 0 0 20px rgba(251, 113, 133, 0.5);
-            animation: floatUp 9s linear infinite;
-            white-space: nowrap;
-            opacity: 0;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) scale(0.7);
-                opacity: 0;
-            }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
-            100% {
-                transform: translateY(-10vh) scale(1.1);
-                opacity: 0;
-            }
-        }
-
         header {
             text-align: center;
-            margin-bottom: 25px;
-            z-index: 1;
+            margin: 15px 0 30px 0;
         }
 
         header h1 {
-            font-size: 2rem;
-            margin-bottom: 5px;
-            background: linear-gradient(45deg, #f43f5e, #ff758c, #ff7eb3);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #f43f5e, #fb7185);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
         }
 
         header p {
-            color: #cbd5e1;
-            font-size: 0.95rem;
+            color: #94a3b8;
+            font-size: 1rem;
         }
 
-        /* Contenedor Principal */
-        .letters-container {
-            width: 100%;
-            max-width: 800px;
-            z-index: 1;
-            margin-bottom: 20px;
-        }
-
-        /* Grid de 2 columnas adaptado para celular */
-        .letters-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-        }
-
-        @media (max-width: 600px) {
-            .letters-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-        }
-
-        /* Estilo del Sobre Animado */
-        .envelope-card {
-            background: var(--card-bg);
-            border: 2px solid rgba(244, 63, 94, 0.4);
-            border-radius: 16px;
-            padding: 22px 18px;
-            backdrop-filter: blur(12px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        .nav-buttons {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            min-height: 160px;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
             justify-content: center;
         }
 
-        .envelope-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #f43f5e, #fb7185);
-        }
-
-        .envelope-card:hover {
-            transform: translateY(-5px);
-            border-color: #fb7185;
-            box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);
-            background: rgba(30, 41, 59, 0.95);
-        }
-
-        .envelope-icon {
-            font-size: 2.8rem;
-            margin-bottom: 8px;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.5));
-        }
-
-        .envelope-card:hover .envelope-icon {
-            transform: scale(1.15) rotate(5deg);
-        }
-
-        .envelope-title {
-            font-size: 1.1rem;
-            color: #fb7185;
+        .btn-profile {
+            background: var(--card-bg);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
             font-weight: bold;
-            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .envelope-hint {
+        .btn-profile:hover, .btn-profile.active {
+            border-color: var(--accent-pink);
+            background: rgba(244, 63, 94, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.2);
+        }
+
+        .section-content {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2.section-title {
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            color: #fb7185;
+            font-size: 1.5rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .photo-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.03);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-card span {
+            display: block;
+            text-align: center;
+            padding: 6px;
             font-size: 0.8rem;
             color: #94a3b8;
-            font-style: italic;
         }
 
-        /* Modal / Carta Abierta (SUPER LLAMATIVO Y ELEGANTE) */
-        #modal-carta {
+        .videos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .video-item {
+            background: var(--card-bg);
+            padding: 12px 18px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .btn-drive {
+            background: #f43f5e;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-drive:hover {
+            background: #e11d48;
+        }
+
+        #modal-lightbox {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -209,277 +207,190 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(7, 11, 25, 0.88);
-            backdrop-filter: blur(10px);
+            background-color: rgba(0, 0, 0, 0.9);
             justify-content: center;
             align-items: center;
             padding: 20px;
-            animation: fadeInModal 0.3s ease;
         }
 
-        @keyframes fadeInModal {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        #modal-lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        .carta-content {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border: 2px solid #fb7185;
-            border-radius: 22px;
-            padding: 30px 24px;
-            max-width: 480px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(244, 63, 94, 0.5), 0 0 35px rgba(251, 113, 133, 0.4);
-            position: relative;
-            animation: slideUpCarta 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes slideUpCarta {
-            from { transform: translateY(30px) scale(0.9); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
-        .carta-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid rgba(244, 63, 94, 0.4);
-            padding-bottom: 12px;
-        }
-
-        .carta-title-modal {
-            font-size: 1.4rem;
-            color: #fff;
-            font-weight: bold;
-            text-shadow: 0 0 12px rgba(251, 113, 133, 0.9);
-            letter-spacing: 0.5px;
-        }
-
-        .close-btn {
-            background: rgba(244, 63, 94, 0.2);
-            border: 1px solid #fb7185;
-            color: #fff;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            background: var(--accent-pink);
-            transform: scale(1.1);
-        }
-
-        .carta-body p {
-            font-size: 1.15rem; /* Texto más grande, visible y llamativo */
-            color: #ffffff;    /* Blanco puro brillante */
-            line-height: 1.85; /* Gran separación para leer con comodidad */
-            text-align: justify;
-            margin-bottom: 25px;
-            text-shadow: 0 0 4px rgba(255, 255, 255, 0.5); /* Efecto luminoso sutil */
-            font-weight: 400;
-        }
-
-        .carta-footer {
-            font-size: 1.05rem;
-            color: #ff8fa3;
-            text-align: right;
-            font-style: italic;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(251, 113, 133, 0.8);
-            letter-spacing: 0.5px;
-        }
-
-        /* Botón flotante de música */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 2px solid var(--accent-pink);
+        #modal-lightbox span {
+            position: absolute;
+            top: 20px;
+            right: 30px;
             color: white;
-            padding: 10px 15px;
-            border-radius: 30px;
+            font-size: 2.5rem;
             cursor: pointer;
-            z-index: 100;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(5px);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <!-- Botón de Volver al Inicio -->
-    <a href="../central/rincon.html" class="btn-volver">
-        ⬅️ Inicio
-    </a>
+    <!-- Contenedor superior para el botón de Volver -->
+    <div class="top-bar">
+        <a href="../central/rincon.html" class="btn-volver">
+            ⬅️ Inicio
+        </a>
+    </div>
 
-    <!-- Audio de fondo -->
-    <audio id="background-music" loop>
-        <source src="../central/flores/sound/tu.mp3" type="audio/mpeg">
+    <!-- Audio de fondo reproduciéndose automáticamente al iniciar -->
+    <audio id="background-music" autoplay loop>
+        <source src="../central/flores/sound/foto.mp3" type="audio/mpeg">
         Tu navegador no soporta audio.
     </audio>
 
-    <!-- Botón de control de música -->
-    <div class="music-control" onclick="toggleMusic()" id="music-btn">
-        🎵 <span>Reproducir Música</span>
-    </div>
-
-    <!-- Partículas flotantes ligeras -->
-    <div class="particles" id="particles-container"></div>
-
     <header>
-        <h1>Rincón de Cartas 💌</h1>
-        <p>Toca un sobre para abrir tu mensaje de amor 🤍</p>
+        <h1>Nuestra Historia en Recuerdos</h1>
+        <p>Cada número, un momento inolvidable 🤍</p>
     </header>
 
-    <div class="letters-container">
-        <div class="letters-grid">
-            
-            <!-- Sobre 1 -->
-            <div class="envelope-card" onclick="abrirCarta(1)">
-                <div class="envelope-icon">✉️</div>
-                <div class="envelope-title">Para mi amor 🤍</div>
-                <div class="envelope-hint">Toca para abrir</div>
-            </div>
+    <div class="nav-buttons">
+        <button class="btn-profile" onclick="switchTab('jesus', this)">Jesús (21)</button>
+        <button class="btn-profile" onclick="switchTab('betzi', this)">Betzi (23)</button>
+        <button class="btn-profile active" onclick="switchTab('juntos', this)">Nuestra Historia (8)</button>
+    </div>
 
-            <!-- Sobre 2 -->
-            <div class="envelope-card" onclick="abrirCarta(2)">
-                <div class="envelope-icon">💌</div>
-                <div class="envelope-title">Tu refugio seguro</div>
-                <div class="envelope-hint">Toca para abrir</div>
+    <!-- SECCIÓN 1: JESÚS (21) -->
+    <div id="jesus" class="section-content">
+        <h2 class="section-title">Momentos de Jesús (21)</h2>
+        <div class="gallery-grid" id="grid-jesus"></div>
+        
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Jesús</h3>
+        <div class="videos-container">
+            <div class="video-item">
+                <span>Tu Video Personal (Drive)</span>
+                <a href="https://drive.google.com/file/d/1W92TggXdqj1FcOfDbjGEk8ygv0S2vxgN/view?usp=drive_link" target="_blank" class="btn-drive">Ver Video</a>
             </div>
-
-            <!-- Sobre 3 -->
-            <div class="envelope-card" onclick="abrirCarta(3)">
-                <div class="envelope-icon">💖</div>
-                <div class="envelope-title">Nuestra complicidad</div>
-                <div class="envelope-hint">Toca para abrir</div>
-            </div>
-
-            <!-- Sobre 4 -->
-            <div class="envelope-card" onclick="abrirCarta(4)">
-                <div class="envelope-icon">✨</div>
-                <div class="envelope-title">Promesa y futuro</div>
-                <div class="envelope-hint">Toca para abrir</div>
-            </div>
-
         </div>
     </div>
 
-    <!-- Modal para leer la carta abierta -->
-    <div id="modal-carta" onclick="cerrarCartaFuera(event)">
-        <div class="carta-content">
-            <div class="carta-header">
-                <span class="carta-title-modal" id="modal-titulo">Título</span>
-                <button class="close-btn" onclick="cerrarCarta()">&times;</button>
+    <!-- SECCIÓN 2: BETZI (23) -->
+    <div id="betzi" class="section-content">
+        <h2 class="section-title">Momentos de Betzi (23)</h2>
+        <div class="gallery-grid" id="grid-betzi"></div>
+        
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Betzi</h3>
+        <div class="videos-container">
+            <div class="video-item">
+                <span>Video de Betzi (Drive)</span>
+                <a href="https://drive.google.com/file/d/14Kp570fxSLq8z3nUSbv2sUjTXwW4kgI5/view?usp=drive_link" target="_blank" class="btn-drive">Ver Video</a>
             </div>
-            <div class="carta-body">
-                <p id="modal-texto">Contenido de la carta...</p>
-            </div>
-            <div class="carta-footer" id="modal-firma">Siempre tuyo</div>
         </div>
+    </div>
+
+    <!-- SECCIÓN 3: JUNTOS (8) -->
+    <div id="juntos" class="section-content active">
+        <h2 class="section-title">Nuestra Historia - Juntos (8)</h2>
+        <div class="gallery-grid" id="grid-juntos"></div>
+        
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos en Pareja (Drive)</h3>
+        <div class="videos-container">
+            <div class="video-item">
+                <span>Viaje Juntos (Parte 1)</span>
+                <a href="https://drive.google.com/file/d/1UBVEpvUdzAPcRiBAvSDcI_i02KfOcL0k/view?usp=drive_link" target="_blank" class="btn-drive">Ver Video</a>
+            </div>
+            <div class="video-item">
+                <span>Viaje Juntos (Parte 2)</span>
+                <a href="https://drive.google.com/file/d/18_Mi3oGe43ZaqG9PPqdi1uEUoQzV29c_/view?usp=drive_link" target="_blank" class="btn-drive">Ver Video</a>
+            </div>
+            <div class="video-item">
+                <span>Video Sorpresa Especial</span>
+                <a href="https://drive.google.com/file/d/1GjI9WsLc8C9GqswqGr3erxgEC_BaS3Bj/view?usp=drive_link" target="_blank" class="btn-drive">Ver Video</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visor de imagen en grande (Lightbox) -->
+    <div id="modal-lightbox" onclick="closeModal()">
+        <span onclick="closeModal()">&times;</span>
+        <img id="img-en-grande" src="" alt="Ampliada">
     </div>
 
     <script>
-        const cartasData = {
-            1: {
-                titulo: "Para mi amor 🤍",
-                texto: "Lo siento tanto por no poder estar ahí contigo en este momento físico, pero quería entregarte este detalle con todo mi corazón para que no te sientas sola ni seas solo una espectadora. Te amo con el alma, y ten por seguro que sí quiero una vida entera a tu lado.",
-                firma: "Siempre tuyo"
-            },
-            2: {
-                titulo: "Tu refugio seguro",
-                texto: "Quiero que, cuando estés triste o hayas tenido un día pesado, puedas volver aquí, abrir este rinconcito y ver lo muchísimo que te amo para que logres relajarte o superar esos malos ratos. Estaré siempre aquí para consolarte, recordarte lo valiosa que eres y porque falta muy poquito para estar juntos de nuevo.",
-                firma: "Para cuando lo necesites"
-            },
-            3: {
-                titulo: "Nuestra complicidad",
-                texto: "A pesar de la distancia, cada risa compartida, cada mensaje y cada sueño que tejemos juntos se han convertido en mi motor diario. Eres esa casualidad más hermosa que Dios puso en mi vida y cada segundo que pasa me enamoras más. Gracias por tu paciencia, por tu amor incondicional y por caminar de la mano conmigo en esta aventura.",
-                firma: "Mi compañera de vida"
-            },
-            4: {
-                titulo: "Promesa y futuro",
-                texto: "Quiero contarte que estaré actualizando este pequeño apartado y añadiendo más sorpresas cada vez que tenga un tiempito libre, porque nuestra historia merece ser guardada en el lugar más bonito posible. Te amo muchísimo, mi amor, y ya quiero que llegue el día de abrazarte sin que ninguna pantalla nos separe.",
-                firma: "Próximamente más sorpresas"
-            }
-        };
-
-        function abrirCarta(id) {
-            const data = cartasData[id];
-            document.getElementById('modal-titulo').innerText = data.titulo;
-            document.getElementById('modal-texto').innerText = data.texto;
-            document.getElementById('modal-firma').innerText = data.firma;
-            document.getElementById('modal-carta').style.display = 'flex';
+        // Cargar fotos de Jesús (1-15 en fotosj1, 16-21 en fotosj2_r)
+        const gridJesus = document.getElementById('grid-jesus');
+        for (let i = 1; i <= 15; i++) {
+            gridJesus.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="fotosj1/j${i}.jpg" alt="Jesús ${i}">
+                    <span>Jesús #${i}</span>
+                </div>`;
+        }
+        for (let i = 16; i <= 21; i++) {
+            gridJesus.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="fotosj2_r/j${i}.jpg" alt="Jesús ${i}">
+                    <span>Jesús #${i}</span>
+                </div>`;
         }
 
-        function cerrarCarta() {
-            document.getElementById('modal-carta').style.display = 'none';
+        // Cargar fotos de Betzi (1-15 en b1, 16-23 en b2)
+        const gridBetzi = document.getElementById('grid-betzi');
+        for (let i = 1; i <= 15; i++) {
+            gridBetzi.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="b1/b${i}.jpg" alt="Betzi ${i}">
+                    <span>Betzi #${i}</span>
+                </div>`;
+        }
+        for (let i = 16; i <= 23; i++) {
+            gridBetzi.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="b2/b${i}.jpg" alt="Betzi ${i}">
+                    <span>Betzi #${i}</span>
+                </div>`;
         }
 
-        function cerrarCartaFuera(event) {
-            if (event.target.id === 'modal-carta') {
-                cerrarCarta();
-            }
+        // Cargar fotos de Juntos (1-8 en fotosj2_r)
+        const gridJuntos = document.getElementById('grid-juntos');
+        for (let i = 1; i <= 8; i++) {
+            gridJuntos.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="fotosj2_r/jr${i}.jpg" alt="Juntos ${i}">
+                    <span>Juntos #${i}</span>
+                </div>`;
         }
 
-        // Reproducir música al cargar o mediante botón
-        const music = document.getElementById('background-music');
-        const musicBtn = document.getElementById('music-btn');
-        let isPlaying = false;
-
+        // Asegurar volumen y reproducción automática al cargar
         window.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById('background-music');
             music.volume = 0.5;
-            music.play().then(() => {
-                isPlaying = true;
-                musicBtn.innerHTML = "🎵 <span>Música Sonando</span>";
-            }).catch(() => {
-                isPlaying = false;
+            music.play().catch(() => {
+                // Si el navegador bloquea el autoplay por políticas internas, se activará con el primer toque en la página
+                document.body.addEventListener('click', () => {
+                    music.play();
+                }, { once: true });
             });
         });
 
-        function toggleMusic() {
-            if (isPlaying) {
-                music.pause();
-                musicBtn.innerHTML = "🔇 <span>Activar Música</span>";
-                isPlaying = false;
-            } else {
-                music.play();
-                musicBtn.innerHTML = "🎵 <span>Música Sonando</span>";
-                isPlaying = true;
-            }
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.btn-profile').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
         }
 
-        // Generar partículas fluidas y ligeras
-        const particlesContainer = document.getElementById('particles-container');
-        const frases = ["Te amo Betzi 🤍", "Te amo Ruth ✨", "Te amo 💖", "Te amo 💫"];
-        
-        function crearParticula() {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.innerText = frases[Math.floor(Math.random() * frases.length)];
-            p.style.left = Math.random() * 85 + 'vw';
-            p.style.animationDuration = (Math.random() * 3 + 6) + 's';
-            p.style.fontSize = (Math.random() * 0.3 + 1) + 'rem';
-            particlesContainer.appendChild(p);
-
-            setTimeout(() => {
-                p.remove();
-            }, 9000);
+        function openModal(src) {
+            const modal = document.getElementById('modal-lightbox');
+            const imgGrande = document.getElementById('img-en-grande');
+            imgGrande.src = src;
+            modal.style.display = 'flex';
         }
 
-        setInterval(crearParticula, 1200);
+        function closeModal() {
+            document.getElementById('modal-lightbox').style.display = 'none';
+        }
     </script>
 </body>
 </html>

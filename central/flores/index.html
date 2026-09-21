@@ -20,7 +20,7 @@
         }
 
         body {
-            background-color: #05070f;
+            background-color: #0b0f19;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -30,7 +30,7 @@
             color: #fff;
         }
 
-        /* Imagen de fondo garantizada para celular mediante etiqueta HTML */
+        /* Imagen de fondo de alta visibilidad con respaldo de rutas */
         .bg-img {
             position: fixed;
             top: 0;
@@ -39,20 +39,26 @@
             height: 100%;
             object-fit: cover;
             z-index: -2;
+            animation: zoomFondo 20s infinite alternate linear;
         }
 
-        /* Capa oscura translúcida para que resalte el texto */
+        @keyframes zoomFondo {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* Capa translúcida suave para que la imagen se luzca y resalte el contenido */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 7, 15, 0.72);
+            background: linear-gradient(135deg, rgba(11, 15, 25, 0.45), rgba(26, 11, 46, 0.55));
             z-index: -1;
         }
 
-        /* Partículas flotantes */
+        /* Partículas de luz brillantes animadas */
         .particulas {
             position: absolute;
             top: 0;
@@ -68,19 +74,32 @@
             position: absolute;
             background: #ffe600;
             border-radius: 50%;
-            opacity: 0.3;
+            opacity: 0.6;
             animation: flotarParticula linear infinite;
+            box-shadow: 0 0 10px #ffe600, 0 0 20px #ff9900;
         }
 
         @keyframes flotarParticula {
-            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+            0% { transform: translateY(105vh) scale(0.4); opacity: 0; }
+            30% { opacity: 0.9; }
+            70% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.4); opacity: 0; }
         }
 
         @keyframes pop-in {
-            0% { transform: scale(0) rotate(180deg); }
-            100% { transform: scale(1) rotate(360deg); }
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            70% { transform: scale(1.08) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes latirSello {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 15px rgba(255, 230, 0, 0.6); }
+            50% { transform: scale(1.2); text-shadow: 0 0 25px rgba(255, 230, 0, 1); }
+        }
+
+        @keyframes glowCard {
+            0%, 100% { border-color: rgba(255, 230, 0, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px rgba(255, 230, 0, 0.2); }
+            50% { border-color: rgba(0, 195, 255, 0.8); box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(0, 195, 255, 0.4); }
         }
 
         input[type="radio"] {
@@ -107,136 +126,143 @@
         }
 
         .badge-amor {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #00c3ff;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 12px;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+            margin-bottom: 14px;
+            font-weight: 800;
+            text-shadow: 0 0 12px rgba(0, 195, 255, 0.8);
+            animation: fadeInDown 1s ease;
         }
 
-        /* Paso 1: Sobre / Botón inicial interactivo */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Paso 1: Sobre / Botón inicial súper animado */
         .sobre-container {
             width: 100%;
-            background: rgba(17, 17, 24, 0.88);
-            border: 2px solid rgba(255, 230, 0, 0.4);
-            border-radius: 14px;
-            padding: 22px 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8), 0 0 15px rgba(255, 230, 0, 0.15);
+            background: rgba(18, 20, 32, 0.82);
+            border: 2px solid rgba(255, 230, 0, 0.5);
+            border-radius: 18px;
+            padding: 24px 18px;
+            animation: glowCard 4s infinite ease-in-out, pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             margin-bottom: 15px;
             cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease;
         }
 
         .sobre-container:active {
-            transform: scale(0.97);
-            border-color: rgba(255, 230, 0, 0.9);
+            transform: scale(0.96);
         }
 
         .sobre-sello {
-            font-size: 2.4rem;
-            margin-bottom: 8px;
-            animation: latirSello 1.5s ease-in-out infinite;
-        }
-
-        @keyframes latirSello {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            animation: latirSello 1.6s ease-in-out infinite;
         }
 
         .mensaje-previo {
             color: #fff;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 6px;
-            line-height: 1.3;
+            margin-bottom: 8px;
+            line-height: 1.35;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .sub-mensaje {
-            color: #cbd5e1;
-            font-size: 0.82rem;
+            color: #e2e8f0;
+            font-size: 0.85rem;
             font-weight: 400;
-            line-height: 1.35;
+            line-height: 1.4;
         }
 
         .indicador-abrir {
-            margin-top: 10px;
-            font-size: 0.72rem;
-            color: #00c3ff;
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #ffe600;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
         }
 
-        /* Paso 2: Carta pequeña interactiva para revelar mensaje final */
+        /* Paso 2: Carta pequeña intermedia con animación mágica */
         .small-gift-message {
             display: none;
-            font-size: 4.2rem;
+            font-size: 4.5rem;
             cursor: pointer;
-            animation: pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: pop-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), latirSello 2s infinite ease-in-out;
             margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(255, 230, 0, 0.6));
         }
 
         .texto-small-gift-message {
             display: none;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: #00c3ff;
             margin-bottom: 15px;
-            font-weight: 600;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0,195,255,0.5);
         }
 
-        /* Paso 3: Tarjeta de mensaje final + Botón a Flores */
+        /* Paso 3: Tarjeta de mensaje final deslumbrante */
         .mensajeFinal {
             width: 100%;
-            background: rgba(17, 17, 24, 0.92);
-            border: 2px solid rgba(0, 195, 255, 0.4);
-            border-radius: 14px;
-            padding: 20px 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            background: rgba(18, 20, 32, 0.9);
+            border: 2px solid rgba(0, 195, 255, 0.6);
+            border-radius: 18px;
+            padding: 22px 18px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 25px rgba(0, 195, 255, 0.3);
             color: #fff;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
+            animation: pop-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .textoCarta {
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             text-align: center;
-            line-height: 1.5;
-            color: #e2e8f0;
-            margin-bottom: 10px;
+            line-height: 1.55;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
 
         .textoPd {
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: #ffe600;
-            margin-bottom: 16px;
-            font-weight: 600;
+            margin-bottom: 18px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
         }
 
         .btn-siguiente-seccion {
-            background-color: #ffe600;
+            background: linear-gradient(135deg, #ffe600, #ff9900);
             color: #000;
-            padding: 10px 24px;
-            border-radius: 22px;
+            padding: 11px 26px;
+            border-radius: 24px;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 0.82rem;
-            box-shadow: 0 4px 12px rgba(255, 230, 0, 0.4);
-            transition: transform 0.2s, background-color 0.2s;
+            font-weight: 800;
+            font-size: 0.85rem;
+            box-shadow: 0 5px 15px rgba(255, 230, 0, 0.5);
+            transition: transform 0.2s, filter 0.2s;
         }
 
         .btn-siguiente-seccion:active {
-            transform: scale(0.95);
-            background-color: #fff;
+            transform: scale(0.94);
+            filter: brightness(1.15);
         }
 
         /* Lógica de radio buttons para transiciones en cascada */
@@ -246,18 +272,42 @@
         #paso2:checked ~ .container .texto-small-gift-message { display: block; }
 
         #paso3:checked ~ .container .mensajeFinal { display: flex; }
+
+        /* Botón flotante elegante para iniciar música y saltar el silencio de forma limpia */
+        #btnAudioFlotante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 195, 255, 0.9);
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: latirSello 2s infinite;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Imagen de fondo directa para asegurar visibilidad en celulares -->
-    <img src="central/flores/img/cartas.jpg" class="bg-img" alt="Fondo">
+    <!-- Imagen de fondo con respaldo de rutas múltiples para evitar errores -->
+    <img src="central/flores/img/cartas.jpg" onerror="this.onerror=null; this.src='flores/img/cartas.jpg';" class="bg-img" alt="Fondo">
     <div class="bg-overlay"></div>
 
     <!-- Audio de fondo -->
     <audio id="musicaFondo" src="central/flores/sound/music1.mp3" preload="auto" loop></audio>
 
-    <!-- Partículas de luz de fondo -->
+    <!-- Botón interactivo para garantizar reproducción sin retrasos y saltar los 3s de silencio -->
+    <button id="btnAudioFlotante" onclick="activarMusicaMagica()">🎵 Toca para activar música</button>
+
+    <!-- Partículas de luz brillantes -->
     <div class="particulas" id="contenedorParticulas"></div>
 
     <!-- Inputs de control por estados -->
@@ -271,7 +321,7 @@
 
             <!-- BLOQUE 1: Sobre inicial con frase -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container" id="btnIniciar">
+                <label for="paso2" class="sobre-container">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -300,37 +350,30 @@
         const audio = document.getElementById('musicaFondo');
         audio.volume = 0.5;
 
-        // Función para reproducir y saltar los 3 segundos de silencio en el primer toque
-        function iniciarAudio() {
-            audio.currentTime = 3.0; // Salta el silencio de golpe
+        function activarMusicaMagica() {
+            // Salta exactamente 3 segundos para eliminar el silencio inicial del archivo de audio original
+            audio.currentTime = 3.0;
             audio.play().then(() => {
-                // Si ya arrancó con éxito, removemos los escuchas para que no se reinicie
-                document.removeEventListener('click', iniciarAudio);
-                document.removeEventListener('touchstart', iniciarAudio);
+                const btn = document.getElementById('btnAudioFlotante');
+                if(btn) btn.style.display = 'none'; // Oculta el botón una vez activada la música
             }).catch(e => console.log(e));
         }
 
-        // Registrar eventos táctiles para activar el audio al primer toque en cualquier parte del celular
-        document.addEventListener('click', iniciarAudio);
-        document.addEventListener('touchstart', iniciarAudio);
-
-        // Generador dinámico de lucecitas flotantes
+        // Generador dinámico de partículas de luz con colores vibrantes
         const contenedor = document.getElementById('contenedorParticulas');
-        const cantidad = 16;
+        const cantidad = 22;
         for (let i = 0; i < cantidad; i++) {
             const p = document.createElement('div');
             p.classList.add('particula');
-            const size = Math.random() * 3 + 1.5;
+            const size = Math.random() * 4 + 2;
             p.style.width = `${size}px`;
             p.style.height = `${size}px`;
             p.style.left = `${Math.random() * 100}%`;
-            p.style.animationDuration = `${Math.random() * 5 + 4}s`;
-            p.style.animationDelay = `${Math.random() * 4}s`;
-            if (Math.random() > 0.5) {
+            p.style.animationDuration = `${Math.random() * 4 + 3}s`;
+            p.style.animationDelay = `${Math.random() * 3}s`;
+            if (Math.random() > 0.4) {
                 p.style.background = '#00c3ff';
-                p.style.boxShadow = '0 0 6px #00c3ff';
-            } else {
-                p.style.boxShadow = '0 0 6px #ffe600';
+                p.style.boxShadow = '0 0 10px #00c3ff, 0 0 20px #0077ff';
             }
             contenedor.appendChild(p);
         }

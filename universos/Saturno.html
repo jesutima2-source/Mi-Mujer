@@ -85,7 +85,8 @@
 </head>
 <body>
 
-
+<!-- Elemento de audio con la nueva ruta -->
+<audio id="audio" src="central/flores/sound/enamore.mp3" preload="auto" loop></audio>
 
 <div class="player">
   <button id="play">▶</button>
@@ -97,12 +98,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ================= CONFIGURACIÓN AUDIO =================
-const audio=document.getElementById('audio'),playBtn=document.getElementById('play'),progress=document.getElementById('progress'),progressBar=document.getElementById('progress-bar'),timeDisplay=document.getElementById('time');
-let isPlaying=false;
-playBtn.addEventListener('click',async()=>{if(isPlaying){audio.pause();playBtn.textContent='▶';}else{await audio.play();playBtn.textContent='II';}isPlaying=!isPlaying;});
-function formatTime(s){if(!isFinite(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60).toString().padStart(2,'0');return m+':'+sec;}
-audio.addEventListener('timeupdate',()=>{const p=(audio.currentTime/audio.duration)*100;progressBar.style.width=(p||0)+'%';timeDisplay.textContent=formatTime(audio.currentTime)+' / '+formatTime(audio.duration);});
-progress.addEventListener('click',e=>{const r=progress.getBoundingClientRect(),p=(e.clientX-r.left)/r.width;if(isFinite(audio.duration))audio.currentTime=p*audio.duration;});
+const audio = document.getElementById('audio'),
+      playBtn = document.getElementById('play'),
+      progress = document.getElementById('progress'),
+      progressBar = document.getElementById('progress-bar'),
+      timeDisplay = document.getElementById('time');
+let isPlaying = false;
+
+audio.volume = 0.5;
+
+playBtn.addEventListener('click', async () => {
+    if (isPlaying) {
+        audio.pause();
+        playBtn.textContent = '▶';
+    } else {
+        try {
+            await audio.play();
+            playBtn.textContent = 'II';
+        } catch (e) {
+            console.log("Error al reproducir audio:", e);
+        }
+    }
+    isPlaying = !isPlaying;
+});
+
+function formatTime(s) {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60).toString().padStart(2, '0');
+    return m + ':' + sec;
+}
+
+audio.addEventListener('timeupdate', () => {
+    const p = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = (p || 0) + '%';
+    timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+});
+
+progress.addEventListener('click', e => {
+    const r = progress.getBoundingClientRect(), p = (e.clientX - r.left) / r.width;
+    if (isFinite(audio.duration)) audio.currentTime = p * audio.duration;
+});
 
 // ================= ESCENA 3D =================
 const scene = new THREE.Scene();
@@ -134,7 +169,6 @@ const starPos = [];
 const starCount = 25000; 
 
 for(let i=0; i<starCount; i++) {
-    // Esparcir estrellas en un área mayor para el efecto de movimiento
     starPos.push((Math.random()-0.5)*4000, (Math.random()-0.5)*4000, (Math.random()-0.5)*4000);
 }
 starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
@@ -201,7 +235,7 @@ sunLight.position.set(150, 100, 150);
 scene.add(sunLight);
 scene.add(new THREE.AmbientLight(0x442233, 0.5));
 
-// Lista de Palabras Ampliada (Más lunas/palabras)
+// Lista de Palabras Ampliada
 const words = [
     'Te amo ❤️', 'Eres mi vida ✨', 'Juntos por siempre 🌹', 'Contigo siempre 💑', 'Mi sol ☀️', 
     'Tú y yo ♾️', 'Corazón mío 💓', 'Amor eterno 💍', 'Eres magia ✨', 'Mi mundo entero 🌍', 
@@ -281,11 +315,9 @@ function animate() {
     
     saturn.rotation.y += 0.004;
     
-    // EFECTO DE VIAJE: Mover estrellas hacia la cámara y rotarlas
     stars.rotation.y += 0.0008;
     stars.rotation.x += 0.0004;
     
-    // Mover ligeramente el objeto estrellas para simular desplazamiento espacial
     stars.position.z = Math.sin(time * 0.1) * 50; 
     
     starMaterial.opacity = 0.85 + Math.sin(time * 2.5) * 0.15;

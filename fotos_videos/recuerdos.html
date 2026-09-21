@@ -104,7 +104,7 @@
         /* Grid de Fotos */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -123,7 +123,7 @@
 
         .photo-card img {
             width: 100%;
-            height: 180px;
+            height: 160px;
             object-fit: cover;
             display: block;
         }
@@ -132,15 +132,16 @@
             display: block;
             text-align: center;
             padding: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #94a3b8;
         }
 
-        /* Lista de Videos de Drive */
+        /* Contenedor de Videos de Drive */
         .videos-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-bottom: 40px;
         }
 
         .video-item {
@@ -182,80 +183,108 @@
         <button class="btn-profile" onclick="switchTab('juntos', this)">Nuestra Historia (8)</button>
     </div>
 
-    <!-- SECCIÓN 1: JESÚS (21) -->
+    <!-- SECCIÓN 1: JESÚS (21 Fotos en total distribuidas) -->
     <div id="jesus" class="section-content active">
-        <h2 class="section-title">Momentos de Jesús (21 fotos/videos)</h2>
+        <h2 class="section-title">Momentos de Jesús (21)</h2>
         <div class="gallery-grid">
-            <!-- Ejemplo de foto (reemplaza 'img/jesus_1.jpg' por tus rutas reales) -->
+            <!-- Aquí puedes cargar las fotos de 'fotosj1' y 'fotosj2_r' -->
+            <!-- Ejemplo para fotosj1 (cambia los nombres reales de tus archivos) -->
             <div class="photo-card">
-                <img src="img/jesus_1.jpg" alt="Foto 1">
-                <span>Foto #1</span>
+                <img src="fotosj1/foto1.jpg" alt="Jesús 1">
+                <span>Jesús #1</span>
             </div>
-            <div class="photo-card">
-                <img src="img/jesus_2.jpg" alt="Foto 2">
-                <span>Foto #2</span>
-            </div>
-            <!-- Agrega más según tus archivos enumerados -->
+            <!-- Agrega más de fotosj1 y las restantes de fotosj2_r -->
         </div>
         
-        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales</h3>
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Jesús</h3>
         <div class="videos-container">
             <div class="video-item">
-                <span>Video de Jesús #1</span>
-                <a href="AQUÍ_EL_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver en Drive</a>
+                <span>Video de Jesús (Drive)</span>
+                <a href="AQUÍ_TU_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver Video</a>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 2: BETZI (23) -->
+    <!-- SECCIÓN 2: BETZI (23 Fotos en total distribuidas entre b1 y b2) -->
     <div id="betzi" class="section-content">
-        <h2 class="section-title">Momentos de Betzi (23 fotos/videos)</h2>
+        <h2 class="section-title">Momentos de Betzi (23)</h2>
         <div class="gallery-grid">
+            <!-- Ejemplo de la carpeta b1 -->
             <div class="photo-card">
-                <img src="img/betzi_1.jpg" alt="Foto 1">
-                <span>Foto #1</span>
+                <img src="b1/foto1.jpg" alt="Betzi b1">
+                <span>Betzi b1 #1</span>
+            </div>
+            <!-- Ejemplo de la carpeta b2 -->
+            <div class="photo-card">
+                <img src="b2/foto1.jpg" alt="Betzi b2">
+                <span>Betzi b2 #1</span>
             </div>
         </div>
         
-        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales</h3>
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Betzi</h3>
         <div class="videos-container">
             <div class="video-item">
-                <span>Video de Betzi #1</span>
-                <a href="AQUÍ_EL_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver en Drive</a>
+                <span>Video de Betzi (Drive)</span>
+                <a href="AQUÍ_TU_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver Video</a>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 3: JUNTOS (8) -->
+    <!-- SECCIÓN 3: JUNTOS (8 Fotos de la jr1 al jr8 ubicadas en fotosj2_r) -->
     <div id="juntos" class="section-content">
-        <h2 class="section-title">Nuestros 7 a 8 Años Juntos (8 fotos/videos)</h2>
+        <h2 class="section-title">Nuestra Historia - Juntos (8)</h2>
         <div class="gallery-grid">
             <div class="photo-card">
-                <img src="img/juntos_1.jpg" alt="Foto Juntos 1">
-                <span>Recuerdo #1</span>
+                <img src="fotosj2_r/jr1.jpg" alt="Juntos 1">
+                <span>Juntos #1</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr2.jpg" alt="Juntos 2">
+                <span>Juntos #2</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr3.jpg" alt="Juntos 3">
+                <span>Juntos #3</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr4.jpg" alt="Juntos 4">
+                <span>Juntos #4</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr5.jpg" alt="Juntos 5">
+                <span>Juntos #5</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr6.jpg" alt="Juntos 6">
+                <span>Juntos #6</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr7.jpg" alt="Juntos 7">
+                <span>Juntos #7</span>
+            </div>
+            <div class="photo-card">
+                <img src="fotosj2_r/jr8.jpg" alt="Juntos 8">
+                <span>Juntos #8</span>
             </div>
         </div>
         
-        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos en Pareja</h3>
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos en Pareja (Drive)</h3>
         <div class="videos-container">
             <div class="video-item">
-                <span>Video Juntos #1</span>
-                <a href="AQUÍ_EL_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver en Drive</a>
+                <span>Video Recuerdo Juntos</span>
+                <a href="AQUÍ_TU_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver Video</a>
             </div>
         </div>
     </div>
 
     <script>
         function switchTab(tabId, btnElement) {
-            // Ocultar todas las secciones
             document.querySelectorAll('.section-content').forEach(section => {
                 section.classList.remove('active');
             });
-            // Quitar la clase active de todos los botones
             document.querySelectorAll('.btn-profile').forEach(btn => {
                 btn.classList.remove('active');
             });
-            // Mostrar la sección seleccionada y activar el botón
             document.getElementById(tabId).classList.add('active');
             btnElement.classList.add('active');
         }

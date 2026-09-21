@@ -27,6 +27,35 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+
+        /* Botón de Volver al Inicio */
+        .btn-volver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-pink);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .btn-volver:hover {
+            background: var(--accent-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
         }
 
         header {
@@ -197,9 +226,45 @@
             cursor: pointer;
             font-weight: bold;
         }
+
+        /* Botón flotante de música */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-pink);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body>
+
+    <!-- Botón de Volver al Inicio -->
+    <a href="../central/rincon.html" class="btn-volver">
+        ⬅️ Inicio
+    </a>
+
+    <!-- Audio de fondo -->
+    <audio id="background-music" loop>
+        <source src="../central/flores/sound/foto.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio.
+    </audio>
+
+    <!-- Botón de control de música -->
+    <div class="music-control" onclick="toggleMusic()" id="music-btn">
+        🎵 <span>Reproducir Música</span>
+    </div>
 
     <header>
         <h1>Nuestra Historia en Recuerdos</h1>
@@ -311,6 +376,33 @@
                     <img src="fotosj2_r/jr${i}.jpg" alt="Juntos ${i}">
                     <span>Juntos #${i}</span>
                 </div>`;
+        }
+
+        // Reproducir música al cargar o mediante botón
+        const music = document.getElementById('background-music');
+        const musicBtn = document.getElementById('music-btn');
+        let isPlaying = false;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            music.volume = 0.5;
+            music.play().then(() => {
+                isPlaying = true;
+                musicBtn.innerHTML = "🎵 <span>Música Sonando</span>";
+            }).catch(() => {
+                isPlaying = false;
+            });
+        });
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.innerHTML = "🔇 <span>Activar Música</span>";
+                isPlaying = false;
+            } else {
+                music.play();
+                musicBtn.innerHTML = "🎵 <span>Música Sonando</span>";
+                isPlaying = true;
+            }
         }
 
         function switchTab(tabId, btnElement) {

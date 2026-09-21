@@ -33,6 +33,34 @@
             position: relative;
         }
 
+        /* Botón de Volver al Inicio */
+        .btn-volver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-pink);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .btn-volver:hover {
+            background: var(--accent-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
+        }
+
         /* Partículas optimizadas y ligeras */
         .particles {
             position: fixed;
@@ -172,7 +200,7 @@
             font-style: italic;
         }
 
-        /* Modal / Carta Abierta (MEJORADO Y MÁS LLAMATIVO) */
+        /* Modal / Carta Abierta (SUPER LLAMATIVO Y ELEGANTE) */
         #modal-carta {
             display: none;
             position: fixed;
@@ -201,7 +229,7 @@
             padding: 30px 24px;
             max-width: 480px;
             width: 100%;
-            box-shadow: 0 20px 50px rgba(244, 63, 94, 0.5), 0 0 30px rgba(251, 113, 133, 0.3);
+            box-shadow: 0 20px 50px rgba(244, 63, 94, 0.5), 0 0 35px rgba(251, 113, 133, 0.4);
             position: relative;
             animation: slideUpCarta 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -216,7 +244,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid rgba(244, 63, 94, 0.3);
+            border-bottom: 2px solid rgba(244, 63, 94, 0.4);
             padding-bottom: 12px;
         }
 
@@ -224,7 +252,7 @@
             font-size: 1.4rem;
             color: #fff;
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(251, 113, 133, 0.8);
+            text-shadow: 0 0 12px rgba(251, 113, 133, 0.9);
             letter-spacing: 0.5px;
         }
 
@@ -250,22 +278,22 @@
         }
 
         .carta-body p {
-            font-size: 1.1rem; /* Letras más grandes y legibles */
-            color: #ffffff;    /* Blanco puro y brillante */
-            line-height: 1.8;  /* Mayor separación entre líneas para elegancia */
+            font-size: 1.15rem; /* Texto más grande, visible y llamativo */
+            color: #ffffff;    /* Blanco puro brillante */
+            line-height: 1.85; /* Gran separación para leer con comodidad */
             text-align: justify;
             margin-bottom: 25px;
-            text-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.5); /* Efecto luminoso sutil */
             font-weight: 400;
         }
 
         .carta-footer {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #ff8fa3;
             text-align: right;
             font-style: italic;
             font-weight: bold;
-            text-shadow: 0 0 8px rgba(251, 113, 133, 0.6);
+            text-shadow: 0 0 10px rgba(251, 113, 133, 0.8);
             letter-spacing: 0.5px;
         }
 
@@ -291,6 +319,11 @@
     </style>
 </head>
 <body>
+
+    <!-- Botón de Volver al Inicio -->
+    <a href="../central/rincon.html" class="btn-volver">
+        ⬅️ Inicio
+    </a>
 
     <!-- Audio de fondo -->
     <audio id="background-music" loop>
@@ -428,7 +461,7 @@
             }
         }
 
-        // Generar partículas fluidas
+        // Generar partículas fluidas y ligeras
         const particlesContainer = document.getElementById('particles-container');
         const frases = ["Te amo Betzi 🤍", "Te amo Ruth ✨", "Te amo 💖", "Te amo 💫"];
         

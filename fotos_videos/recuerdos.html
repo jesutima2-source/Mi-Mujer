@@ -171,7 +171,7 @@
             background: #e11d48;
         }
 
-        /* Ventana Modal para ver la foto en grande tipo galería */
+        /* Ventana Modal para ver la foto en grande */
         #modal-lightbox {
             display: none;
             position: fixed;
@@ -222,9 +222,8 @@
     <div id="jesus" class="section-content">
         <h2 class="section-title">Momentos de Jesús (21)</h2>
         <div class="gallery-grid">
-            <!-- Fotos de fotosj1 (j1 a j15) -->
+            <!-- Fotos 1 a 15 de fotosj1 -->
             <script>
-                // Generar automáticamente las 15 fotos de fotosj1
                 for (let i = 1; i <= 15; i++) {
                     document.write(`
                         <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
@@ -233,7 +232,7 @@
                         </div>
                     `);
                 }
-                // Generar automáticamente las 6 fotos restantes de fotosj2_r (j16 a j21)
+                // Fotos 16 a 21 de fotosj2_r (Rutas corregidas)
                 for (let i = 16; i <= 21; i++) {
                     document.write(`
                         <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
@@ -258,7 +257,7 @@
     <div id="betzi" class="section-content">
         <h2 class="section-title">Momentos de Betzi (23)</h2>
         <div class="gallery-grid">
-            <!-- Fotos de b1 (b1 a b15) -->
+            <!-- Fotos de b1 (1 a 15) -->
             <script>
                 for (let i = 1; i <= 15; i++) {
                     document.write(`
@@ -268,7 +267,7 @@
                         </div>
                     `);
                 }
-                // Fotos de b2 (b16 a b23)
+                // Fotos de b2 (16 a 23)
                 for (let i = 16; i <= 23; i++) {
                     document.write(`
                         <div class="photo-card" onclick="openModal(this.querySelector('img').src)">

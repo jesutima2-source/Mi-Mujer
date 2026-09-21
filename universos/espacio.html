@@ -3,219 +3,99 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Elige tu Destino - Viaje Estelar</title>
+<title>Elige tu destino</title>
 <style>
-  html, body { 
-    margin: 0; 
-    height: 100%; 
-    background: #010103; 
-    overflow: hidden; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #010103;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  
-  canvas { 
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: block; 
-    width: 100vw; 
-    height: 100vh; 
-    z-index: -1;
+    overflow: hidden;
   }
 
-  /* --- Título Principal --- */
-  .title-container {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    margin-bottom: 35px;
-    animation: fadeInDown 1.2s ease-out;
-  }
-
-  .title-container h1 {
+  h1 {
     color: #ffb6c1;
-    font-size: 26px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(255, 105, 180, 0.8), 0 0 40px rgba(255, 182, 193, 0.4);
-    margin: 0;
+    font-size: clamp(20px, 5vw, 28px);
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
   }
 
-  /* --- Contenedor de Tarjetas --- */
   .menu-container {
-    position: relative;
-    z-index: 10;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 85%;
-    max-width: 380px;
+    width: 90%;
+    max-width: 400px;
   }
 
-  /* --- Estilo Base de las Tarjetas (Con Animación de Flotación) --- */
-  .card {
+  .menu-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 22px;
-    background: rgba(15, 10, 30, 0.65);
-    border: 1.5px solid rgba(255, 182, 193, 0.35);
+    padding: 16px 24px;
+    background: rgba(15, 10, 30, 0.75);
+    border: 1.5px solid rgba(255, 182, 193, 0.4);
     border-radius: 50px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 105, 180, 0.1);
-    text-decoration: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.2);
     color: #ffb6c1;
+    text-decoration: none;
+    font-size: 18px;
     font-weight: 600;
-    font-size: 16px;
-    letter-spacing: 1px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: floatCard 4s ease-in-out infinite;
+    transition: all 0.3s ease;
   }
 
-  /* Desfasar la animación de flotación para cada tarjeta */
-  .card:nth-child(1) { animation-delay: 0s; }
-  .card:nth-child(2) { animation-delay: 1.3s; }
-  .card:nth-child(3) { animation-delay: 2.6s; }
+  .menu-btn:hover, .menu-btn:active {
+    transform: scale(1.03);
+    background: rgba(30, 15, 50, 0.9);
+    border-color: rgba(255, 105, 180, 0.9);
+    color: #ffffff;
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+  }
 
-  .card-content {
+  .btn-content {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
   }
 
-  .card span.icon {
-    font-size: 22px;
-    filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+  /* Flecha limpia que no falla en móviles */
+  .arrow {
+    font-size: 20px;
+    font-weight: bold;
+    transition: transform 0.2s ease;
   }
 
-  .card span.arrow {
-    font-size: 18px;
-    opacity: 0.7;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  /* --- Efectos Hover y Activo --- */
-  .card:hover {
-    transform: scale(1.06) translateY(-4px);
-    background: rgba(30, 15, 50, 0.85);
-    border-color: rgba(255, 105, 180, 0.9);
-    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.35), inset 0 0 20px rgba(255, 105, 180, 0.3);
-    color: #ffffff;
-  }
-
-  .card:hover span.arrow {
-    transform: translateX(6px);
-    opacity: 1;
-  }
-
-  .card:active {
-    transform: scale(0.98);
-  }
-
-  /* --- Animaciones Keyframes --- */
-  @keyframes floatCard {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
-  }
-
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 600px) {
-    .title-container h1 { font-size: 22px; letter-spacing: 2px; }
-    .card { padding: 14px 18px; font-size: 15px; }
+  .menu-btn:hover .arrow {
+    transform: translateX(4px);
   }
 </style>
 </head>
 <body>
 
-<!-- Audio que suena automáticamente al iniciar -->
-<audio id="audio" src="../central/flores/sound/musica_espacio.mp3" autoplay loop preload="auto"></audio>
+  <h1>ELIGE TU DESTINO ✨</h1>
 
-<div class="title-container">
-  <h1>Elige tu Destino ✨</h1>
-</div>
+  <div class="menu-container">
+    <a href="galaxia.html" class="menu-btn">
+      <div class="btn-content">
+        <span>🌌</span> Galaxia
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
 
-<div class="menu-container">
-  <!-- Tarjeta 1: Galaxia -->
-  <a href="Galaxia.html" class="card">
-    <div class="card-content">
-      <span class="icon">🌌</span>
-      <span>Galaxia</span>
-    </div>
-    <span class="arrow">🡺</span>
-  </a>
+    <a href="saturno.html" class="menu-btn">
+      <div class="btn-content">
+        <span>🪐</span> Saturno
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+  </div>
 
-  <!-- Tarjeta 2: Saturno -->
-  <a href="Saturno.html" class="card">
-    <div class="card-content">
-      <span class="icon">🪐</span>
-      <span>Saturno</span>
-    </div>
-    <span class="arrow">🡺</span>
-  </a>
-
-  <!-- Tarjeta 3: Galaxia Amarilla -->
-  <a href="../central/galaxia_amarilla.html" class="card">
-    <div class="card-content">
-      <span class="icon">⭐</span>
-      <span>Galaxia Amarilla</span>
-    </div>
-    <span class="arrow">🡺</span>
-  </a>
-</div>
-
-<canvas id="c"></canvas>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-// ================= FONDO ESTELAR 3D =================
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-const starGeometry = new THREE.BufferGeometry();
-const starPos = [];
-const starCount = 1500;
-
-for(let i = 0; i < starCount; i++) {
-    starPos.push((Math.random() - 0.5) * 2000, (Math.random() - 0.5) * 2000, (Math.random() - 0.5) * 2000);
-}
-starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
-
-const starMaterial = new THREE.PointsMaterial({ 
-    color: 0xffffff, 
-    size: 2.5, 
-    transparent: true, 
-    opacity: 0.8 
-});
-const stars = new THREE.Points(starGeometry, starMaterial);
-scene.add(stars);
-
-camera.position.z = 500;
-
-function animate() {
-    requestAnimationFrame(animate);
-    stars.rotation.y += 0.0005;
-    stars.rotation.x += 0.0002;
-    renderer.render(scene, camera);
-}
-
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-animate();
-</script>
 </body>
 </html>

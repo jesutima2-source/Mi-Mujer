@@ -120,7 +120,7 @@
 
 <!-- Botones de Navegación -->
 <div class="nav-buttons">
-  <a href="espacio.html" class="nav-btn"><span>⬅️</span> Atrás</a>
+  <a href="espacio.html" class="nav-btn"><span style="font-size: 16px; font-weight: bold;">&larr;</span> Atrás</a>
   <a href="../central/rincon.html" class="nav-btn"><span>🏠</span> Inicio</a>
 </div>
 
@@ -351,8 +351,8 @@ words.forEach((w, i) => {
     wordGroup.add(sprite);
 });
 
-// Interacción
-let rotY = 0, rotX = 0, targetDist = window.innerWidth < 600 ? 400 : 360, curDist = targetDist;
+// Interacción (Distancia inicial ampliada en celular a 480 para que se vea completo y permita zoom)
+let rotY = 0, rotX = 0, targetDist = window.innerWidth < 600 ? 480 : 360, curDist = targetDist;
 let isDragging = false, lastX, lastY;
 
 const onPointerDown = (x, y) => { isDragging = true; lastX = x; lastY = y; };
@@ -369,7 +369,36 @@ window.addEventListener('mouseup', () => isDragging = false);
 window.addEventListener('touchstart', e => onPointerDown(e.touches[0].clientX, e.touches[0].clientY));
 window.addEventListener('touchmove', e => onPointerMove(e.touches[0].clientX, e.touches[0].clientY));
 window.addEventListener('touchend', () => isDragging = false);
-window.addEventListener('wheel', e => { targetDist = Math.max(180, Math.min(1000, targetDist + e.deltaY * 0.5)); }, { passive: true });
+window.addEventListener('wheel', e => { targetDist = Math.max(180, Math.min(1200, targetDist + e.deltaY * 0.5)); }, { passive: true });
+
+// Soporte de Pinch-Zoom (pellizcar con dos dedos) en dispositivos móviles
+let initialPinchDist = null;
+window.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+        initialPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+    }
+});
+
+window.addEventListener('touchmove', e => {
+    if (e.touches.length === 2 && initialPinchDist !== null) {
+        const currentPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+        const diff = initialPinchDist - currentPinchDist;
+        targetDist = Math.max(180, Math.min(1200, targetDist + diff * 0.8));
+        initialPinchDist = currentPinchDist;
+    }
+});
+
+window.addEventListener('touchend', e => {
+    if (e.touches.length < 2) {
+        initialPinchDist = null;
+    }
+});
 
 // Animación
 function animate() {
@@ -405,9 +434,9 @@ window.addEventListener('resize', () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+    camera.updatePrecisionMatrix ? camera.updatePrecisionMatrix() : camera.updateProjectionMatrix();
     renderer.setSize(width, height);
-    targetDist = width < 600 ? 400 : 360;
+    targetDist = width < 600 ? 480 : 360;
 });
 
 animate();

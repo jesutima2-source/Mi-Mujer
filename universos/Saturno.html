@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Saturno Romántico - Viaje Estelar</title>
+<style>
+  html, body { margin:0; height:100%; background:#010103; overflow:hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  canvas { display:block; width: 100vw; height: 100vh; }
+
+  /* --- Reproductor Adaptable --- */
+  .player {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 450px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 182, 193, 0.3);
+    border-radius: 50px;
+    background: rgba(10, 5, 20, 0.7);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    color: #ffb6c1;
+    transition: all 0.3s ease;
+  }
+  
+  .player button {
+    background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+  }
+
+  .progress {
+    flex-grow: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #ffb6c1;
+    box-shadow: 0 0 15px #ff69b4;
+  }
+  .time { font-size: 10px; min-width: 65px; text-align: right; opacity: 0.8; }
+
+  /* --- Etiqueta informativa --- */
+  .info {
+    position: fixed;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 182, 193, 0.9);
+    font-size: 10px;
+    pointer-events: none;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+  }
+
+  @media (max-width: 600px) {
+    .player { padding: 8px 15px; width: 90%; }
+    .info { font-size: 8px; letter-spacing: 2px; }
+  } 
+</style>
+</head>
+<body>
+
+
+
+<div class="player">
+  <button id="play">▶</button>
+  <div class="progress" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="time" id="time">0:00 / 0:00</div>
+</div>
+<canvas id="c"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ================= CONFIGURACIÓN AUDIO =================
+const audio=document.getElementById('audio'),playBtn=document.getElementById('play'),progress=document.getElementById('progress'),progressBar=document.getElementById('progress-bar'),timeDisplay=document.getElementById('time');
+let isPlaying=false;
+playBtn.addEventListener('click',async()=>{if(isPlaying){audio.pause();playBtn.textContent='▶';}else{await audio.play();playBtn.textContent='II';}isPlaying=!isPlaying;});
+function formatTime(s){if(!isFinite(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60).toString().padStart(2,'0');return m+':'+sec;}
+audio.addEventListener('timeupdate',()=>{const p=(audio.currentTime/audio.duration)*100;progressBar.style.width=(p||0)+'%';timeDisplay.textContent=formatTime(audio.currentTime)+' / '+formatTime(audio.duration);});
+progress.addEventListener('click',e=>{const r=progress.getBoundingClientRect(),p=(e.clientX-r.left)/r.width;if(isFinite(audio.duration))audio.currentTime=p*audio.duration;});
+
+// ================= ESCENA 3D =================
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Función para crear textura de estrella con brillo extremo
+function createStarTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128; canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.1, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.4, 'rgba(255, 230, 255, 0.7)');
+    gradient.addColorStop(0.7, 'rgba(255, 182, 193, 0.2)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(canvas);
+}
+
+// Fondo de estrellas masivo
+const starTexture = createStarTexture();
+const starGeometry = new THREE.BufferGeometry();
+const starPos = [];
+const starCount = 25000; 
+
+for(let i=0; i<starCount; i++) {
+    // Esparcir estrellas en un área mayor para el efecto de movimiento
+    starPos.push((Math.random()-0.5)*4000, (Math.random()-0.5)*4000, (Math.random()-0.5)*4000);
+}
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+
+const starMaterial = new THREE.PointsMaterial({ 
+    color: 0xffffff, 
+    size: 12, 
+    map: starTexture,
+    transparent: true, 
+    opacity: 1.0,
+    blending: THREE.AdditiveBlending, 
+    depthWrite: false
+});
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Textura de Saturno
+function createSaturnTexture() {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 256;
+    const ctx = c.getContext('2d');
+    const grad = ctx.createLinearGradient(0, 0, 0, 256);
+    grad.addColorStop(0, '#1a0d0d');
+    grad.addColorStop(0.3, '#5c3a3a');
+    grad.addColorStop(0.5, '#a37c7c');
+    grad.addColorStop(0.7, '#5c3a3a');
+    grad.addColorStop(1, '#1a0d0d');
+    ctx.fillStyle = grad; ctx.fillRect(0, 0, 512, 256);
+    return new THREE.CanvasTexture(c);
+}
+
+const planetGeom = new THREE.SphereGeometry(50, 64, 64);
+const planetMat = new THREE.MeshPhongMaterial({ map: createSaturnTexture(), shininess: 15 });
+const saturn = new THREE.Mesh(planetGeom, planetMat);
+saturn.rotation.z = 0.4;
+scene.add(saturn);
+
+// Anillos
+function createRingTexture() {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 64;
+    const ctx = c.getContext('2d');
+    for(let i=0; i<512; i++) {
+        const op = 0.2 + Math.abs(Math.sin(i * 0.08)) * 0.4;
+        const color = (i > 320 && i < 340) ? 'rgba(0,0,0,0)' : `rgba(255, 182, 193, ${op})`;
+        ctx.fillStyle = color;
+        ctx.fillRect(i, 0, 1, 64);
+    }
+    return new THREE.CanvasTexture(c);
+}
+
+const ringGeom = new THREE.RingGeometry(65, 125, 128);
+const pos = ringGeom.attributes.position;
+const v3 = new THREE.Vector3();
+for (let i = 0; i < pos.count; i++) {
+    v3.fromBufferAttribute(pos, i);
+    ringGeom.attributes.uv.setXY(i, (v3.length() - 65) / (125 - 65), 0);
+}
+const ringMat = new THREE.MeshBasicMaterial({ map: createRingTexture(), transparent: true, side: THREE.DoubleSide, opacity: 0.85 });
+const rings = new THREE.Mesh(ringGeom, ringMat);
+rings.rotation.x = Math.PI/2;
+saturn.add(rings);
+
+const sunLight = new THREE.DirectionalLight(0xffffff, 1.8);
+sunLight.position.set(150, 100, 150);
+scene.add(sunLight);
+scene.add(new THREE.AmbientLight(0x442233, 0.5));
+
+// Lista de Palabras Ampliada (Más lunas/palabras)
+const words = [
+    'Te amo ❤️', 'Eres mi vida ✨', 'Juntos por siempre 🌹', 'Contigo siempre 💑', 'Mi sol ☀️', 
+    'Tú y yo ♾️', 'Corazón mío 💓', 'Amor eterno 💍', 'Eres magia ✨', 'Mi mundo entero 🌍', 
+    'Das color a mi vida 🌈', 'Bajo las estrellas 🌠', 'Tu sonrisa 😁', 'Felicidad 😊', 
+    'En mi mente 🧠', 'Amor puro 🤍', 'Sueño real 💭', 'Destino 🧬', 'Me faltas 🥺', 
+    'Te extraño 🫂', 'Besos infinitos 💋', 'Abrazos 🤗', 'Eres perfecta 👸', 'Mi tesoro 💎', 
+    'Sin fin 🏹', 'Toda una vida ⏳', 'Dulce amor 🍭', 'Mi paz 🕊️', 'Mi refugio 🏠', 
+    'Mi melón 🍈', 'Te quiero 🎈', 'Estrella fugaz ☄️', 'Inseparables ⛓️', 'Mi alma 🧩', 
+    'Cada segundo ⏱️', 'Nuestra historia 📖', 'Amor verdadero 💘', 'Inspiración 🎨', 
+    'Late por ti 🥁', 'Luz de mis ojos 👁️', 'Mi todo 🌌', 'Cerca 📍', 'Te adoro 🧸', 
+    'Cielito ☁️', 'Fuego 🔥', 'Cuento de hadas 🏰', 'Mi reina 👑', 'Mil años más 🍷', 
+    'Mi puerto 🚢', 'Viviendo un sueño 🛌', 'Miel 🍯', 'Noche mágica 🌙', 'Universo 🌌', 
+    'Valiente 🦁', 'Solo tú ☝️', 'Eternamente 🔒', 'Mariposa 🦋', 'Suspiros 💨', 
+    'Alegría🌻', 'Mar profundo 🌊', 'Razón de ser 🌟', 'A tu lado 🤝', 'Hogar 🏡', 
+    'Mi pedacito 🌤️', 'Amándote 📅', 'Única 🥇', 'Gran amor 💖', 'Incondicional ⚓', 
+    'Bailando 💃', 'Calma 🌊', 'Película 🎬', 'Mi luz 🔦', 'Aventura 🎒', 
+    'Elegiría mil veces 🔁', 'Favorita 🥇', 'Cómplices 🤫', 'Infinito ♾️', 'Bendición 🙏', 
+    'Contento 😄', 'Vida entera 🧬', 'Feliz 😍', 'Presente y futuro 🔮', 'Ternura 🥰', 
+    'Debilidad 🍫', 'Fuerza 💪', 'Mi luna 🌙', 'Dulce mitad 🍓', 'Sol de invierno ❄️', 
+    'Caminando 👣', 'Mi regalo 🎁', 'Alma gemela 👻', 'Mi cielo 🌌', 'Para siempre 💖'
+];
+
+function makeTextSprite(message) {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+    const ctx = c.getContext('2d');
+    ctx.font = 'Bold 46px Arial';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'white';
+    ctx.shadowColor = '#ff69b4'; ctx.shadowBlur = 18;
+    ctx.fillText(message, 256, 64);
+    const tex = new THREE.CanvasTexture(c);
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+    return new THREE.Sprite(mat);
+}
+
+const wordGroup = new THREE.Group();
+scene.add(wordGroup);
+
+words.forEach((w, i) => {
+    const sprite = makeTextSprite(w);
+    const isMobile = window.innerWidth < 600;
+    const scale = isMobile ? 68 : 58; 
+    sprite.scale.set(scale, scale/4, 1);
+    
+    const angle = (i / words.length) * Math.PI * 2;
+    const radius = (isMobile ? 140 : 170) + Math.random() * 120;
+    const height = (Math.random() - 0.5) * 180;
+    
+    sprite.userData = { angle, radius, height, speed: 0.0005 + Math.random()*0.0012 };
+    wordGroup.add(sprite);
+});
+
+// Interacción
+let rotY = 0, rotX = 0, targetDist = window.innerWidth < 600 ? 400 : 360, curDist = targetDist;
+let isDragging = false, lastX, lastY;
+
+const onPointerDown = (x, y) => { isDragging = true; lastX = x; lastY = y; };
+const onPointerMove = (x, y) => {
+    if(!isDragging) return;
+    rotY += (x - lastX) * 0.005;
+    rotX = Math.max(-Math.PI/3, Math.min(Math.PI/3, rotX + (y - lastY) * 0.005));
+    lastX = x; lastY = y;
+};
+
+window.addEventListener('mousedown', e => onPointerDown(e.clientX, e.clientY));
+window.addEventListener('mousemove', e => onPointerMove(e.clientX, e.clientY));
+window.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('touchstart', e => onPointerDown(e.touches[0].clientX, e.touches[0].clientY));
+window.addEventListener('touchmove', e => onPointerMove(e.touches[0].clientX, e.touches[0].clientY));
+window.addEventListener('touchend', () => isDragging = false);
+window.addEventListener('wheel', e => { targetDist = Math.max(180, Math.min(1000, targetDist + e.deltaY * 0.5)); }, { passive: true });
+
+// Animación
+function animate() {
+    requestAnimationFrame(animate);
+    const time = Date.now() * 0.001;
+    
+    saturn.rotation.y += 0.004;
+    
+    // EFECTO DE VIAJE: Mover estrellas hacia la cámara y rotarlas
+    stars.rotation.y += 0.0008;
+    stars.rotation.x += 0.0004;
+    
+    // Mover ligeramente el objeto estrellas para simular desplazamiento espacial
+    stars.position.z = Math.sin(time * 0.1) * 50; 
+    
+    starMaterial.opacity = 0.85 + Math.sin(time * 2.5) * 0.15;
+    
+    wordGroup.children.forEach(sprite => {
+        sprite.userData.angle += sprite.userData.speed;
+        sprite.position.x = Math.cos(sprite.userData.angle) * sprite.userData.radius;
+        sprite.position.z = Math.sin(sprite.userData.angle) * sprite.userData.radius;
+        sprite.position.y = sprite.userData.height + Math.sin(time * 0.6 + sprite.userData.angle) * 20;
+    });
+
+    curDist += (targetDist - curDist) * 0.08;
+    camera.position.x = curDist * Math.sin(rotY) * Math.cos(rotX);
+    camera.position.z = curDist * Math.cos(rotY) * Math.cos(rotX);
+    camera.position.y = curDist * Math.sin(rotX);
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+    targetDist = width < 600 ? 400 : 360;
+});
+
+animate();
+</script>
+</body>
+</html>

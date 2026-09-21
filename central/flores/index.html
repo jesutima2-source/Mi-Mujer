@@ -30,14 +30,31 @@
             color: #fff;
         }
 
-        /* Fondo limpio y directo con color sólido y degradado sutil */
+        /* Imagen de fondo de la Galaxia con rutas de respaldo para que aparezca sí o sí */
+        .bg-img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            animation: zoomFondo 22s infinite alternate linear;
+        }
+
+        @keyframes zoomFondo {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Capa translúcida para que el texto resalte perfectamente sobre la imagen de la galaxia */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(18, 24, 43, 1) 0%, rgba(7, 10, 19, 1) 100%);
+            background: radial-gradient(circle, rgba(11, 15, 25, 0.45) 0%, rgba(5, 7, 15, 0.75) 100%);
             z-index: -1;
         }
 
@@ -93,7 +110,7 @@
         /* Paso 1: Sobre / Botón inicial */
         .sobre-container {
             width: 100%;
-            background: rgba(18, 20, 32, 0.9);
+            background: rgba(18, 20, 32, 0.85);
             border: 2px solid rgba(255, 230, 0, 0.5);
             border-radius: 18px;
             padding: 24px 18px;
@@ -104,6 +121,7 @@
             align-items: center;
             margin-bottom: 15px;
             cursor: pointer;
+            backdrop-filter: blur(8px);
             transition: transform 0.2s ease;
         }
 
@@ -148,6 +166,7 @@
             cursor: pointer;
             animation: pop-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), latirSello 2s infinite ease-in-out;
             margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(255, 230, 0, 0.6));
         }
 
         .texto-small-gift-message {
@@ -161,7 +180,7 @@
         /* Paso 3: Tarjeta de mensaje final */
         .mensajeFinal {
             width: 100%;
-            background: rgba(18, 20, 32, 0.95);
+            background: rgba(18, 20, 32, 0.9);
             border: 2px solid rgba(0, 195, 255, 0.6);
             border-radius: 18px;
             padding: 22px 18px;
@@ -171,6 +190,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(8px);
             animation: pop-in 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -210,10 +230,12 @@
 </head>
 <body>
 
+    <!-- Imagen de fondo Galaxia con rutas alternativas por si tu imagen está en otra carpeta -->
+    <img src="img/galaxia.jpeg" onerror="this.onerror=null; this.src='galaxia.jpeg'; this.onerror=function(){this.src='central/flores/img/galaxia.jpeg'};" class="bg-img" alt="Fondo Galaxia">
     <div class="bg-overlay"></div>
 
-    <!-- Etiqueta de audio apuntando directamente al archivo de sonido -->
-    <audio id="musicaFondo" src="sound/simplemente.mp3" preload="auto" loop></audio>
+    <!-- Audio configurado con autoplay para que intente sonar al instante -->
+    <audio id="musicaFondo" src="sound/music1.mp3" preload="auto" autoplay loop></audio>
 
     <input type="radio" name="flujoCarta" id="paso1" checked>
     <input type="radio" name="flujoCarta" id="paso2">
@@ -225,7 +247,7 @@
 
             <!-- BLOQUE 1 -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container" onclick="reproducirMusica()">
+                <label for="paso2" class="sobre-container">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -234,8 +256,8 @@
             </div>
 
             <!-- BLOQUE 2 -->
-            <label for="paso3" class="small-gift-message" onclick="reproducirMusica()">✉️</label>
-            <label for="paso3" class="texto-small-gift-message" onclick="reproducirMusica()">Te encontraste un sobre, tócame otra vez :3</label>
+            <label for="paso3" class="small-gift-message">✉️</label>
+            <label for="paso3" class="texto-small-gift-message">Te encontraste un sobre, tócame otra vez :3</label>
 
             <!-- BLOQUE 3 -->
             <div class="mensajeFinal" id="blockFinal">
@@ -254,11 +276,12 @@
         const audio = document.getElementById('musicaFondo');
         audio.volume = 0.5;
 
-        function reproducirMusica() {
+        // Forzar reproducción inmediata al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
             audio.play().catch(error => {
-                console.log("El navegador requiere interacción:", error);
+                console.log("Reproducción automática restringida inicialmente por el navegador:", error);
             });
-        }
+        });
     </script>
 </body>
 </html>

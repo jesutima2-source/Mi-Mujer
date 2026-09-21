@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Galería de Recuerdos</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-pink: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --text-color: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #f43f5e, #fb7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Menú de Botones Principales */
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-profile {
+            background: var(--card-bg);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-profile:hover, .btn-profile.active {
+            border-color: var(--accent-pink);
+            background: rgba(244, 63, 94, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.2);
+        }
+
+        /* Secciones de Contenido */
+        .section-content {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2.section-title {
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            color: #fb7185;
+        }
+
+        /* Grid de Fotos */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .photo-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.03);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-card span {
+            display: block;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* Lista de Videos de Drive */
+        .videos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .video-item {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-drive {
+            background: #f43f5e;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-drive:hover {
+            background: #e11d48;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nuestra Historia en Recuerdos</h1>
+        <p>Cada número, un momento inolvidable 🤍</p>
+    </header>
+
+    <!-- Botones de Navegación -->
+    <div class="nav-buttons">
+        <button class="btn-profile active" onclick="switchTab('jesus', this)">Jesús (21)</button>
+        <button class="btn-profile" onclick="switchTab('betzi', this)">Betzi (23)</button>
+        <button class="btn-profile" onclick="switchTab('juntos', this)">Nuestra Historia (8)</button>
+    </div>
+
+    <!-- SECCIÓN 1: JESÚS (21) -->
+    <div id="jesus" class="section-content active">
+        <h2 class="section-title">Momentos de Jesús (21 fotos/videos)</h2>
+        <div class="gallery-grid">
+            <!-- Ejemplo de foto (reemplaza 'img/jesus_1.jpg' por tus rutas reales) -->
+            <div class="photo-card">
+                <img src="img/jesus_1.jpg" alt="Foto 1">
+                <span>Foto #1</span>
+            </div>
+            <div class="photo-card">
+                <img src="img/jesus_2.jpg" alt="Foto 2">
+                <span>Foto #2</span>
+            </div>
+            <!-- Agrega más según tus archivos enumerados -->
+        </div>
+        
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales</h3>
+        <div class="videos-container">
+            <div class="video-item">
+                <span>Video de Jesús #1</span>
+                <a href="AQUÍ_EL_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver en Drive</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: BETZI (23) -->
+    <div id="betzi" class="section-content">
+        <h2 class="section-title">Momentos de Betzi (23 fotos/videos)</h2>
+        <div class="gallery-grid">
+            <div class="photo-card">
+                <img src="img/betzi_1.jpg" alt="Foto 1">
+                <span>Foto #1</span>
+            </div>
+        </div>
+        
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales</h3>
+        <div class="videos-container">
+            <div class="video-item">
+                <span>Video de Betzi #1</span>
+                <a href="AQUÍ_EL_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver en Drive</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: JUNTOS (8) -->
+    <div id="juntos" class="section-content">
+        <h2 class="section-title">Nuestros 7 a 8 Años Juntos (8 fotos/videos)</h2>
+        <div class="gallery-grid">
+            <div class="photo-card">
+                <img src="img/juntos_1.jpg" alt="Foto Juntos 1">
+                <span>Recuerdo #1</span>
+            </div>
+        </div>
+        
+        <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos en Pareja</h3>
+        <div class="videos-container">
+            <div class="video-item">
+                <span>Video Juntos #1</span>
+                <a href="AQUÍ_EL_LINK_DE_DRIVE" target="_blank" class="btn-drive">Ver en Drive</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, btnElement) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            // Quitar la clase active de todos los botones
+            document.querySelectorAll('.btn-profile').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Mostrar la sección seleccionada y activar el botón
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -30,7 +30,7 @@
             color: #fff;
         }
 
-        /* Imagen de fondo de alta visibilidad con respaldo de rutas */
+        /* Imagen de fondo asegurada con la ruta exacta de tu estructura */
         .bg-img {
             position: fixed;
             top: 0;
@@ -47,14 +47,14 @@
             100% { transform: scale(1.08); }
         }
 
-        /* Capa translúcida suave para que la imagen se luzca y resalte el contenido */
+        /* Capa translúcida suave para que la imagen se luzca */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(11, 15, 25, 0.45), rgba(26, 11, 46, 0.55));
+            background: linear-gradient(135deg, rgba(11, 15, 25, 0.4), rgba(26, 11, 46, 0.5));
             z-index: -1;
         }
 
@@ -144,7 +144,7 @@
         /* Paso 1: Sobre / Botón inicial súper animado */
         .sobre-container {
             width: 100%;
-            background: rgba(18, 20, 32, 0.82);
+            background: rgba(18, 20, 32, 0.85);
             border: 2px solid rgba(255, 230, 0, 0.5);
             border-radius: 18px;
             padding: 24px 18px;
@@ -217,7 +217,7 @@
         /* Paso 3: Tarjeta de mensaje final deslumbrante */
         .mensajeFinal {
             width: 100%;
-            background: rgba(18, 20, 32, 0.9);
+            background: rgba(18, 20, 32, 0.92);
             border: 2px solid rgba(0, 195, 255, 0.6);
             border-radius: 18px;
             padding: 22px 18px;
@@ -272,40 +272,16 @@
         #paso2:checked ~ .container .texto-small-gift-message { display: block; }
 
         #paso3:checked ~ .container .mensajeFinal { display: flex; }
-
-        /* Botón flotante elegante para iniciar música y saltar el silencio de forma limpia */
-        #btnAudioFlotante {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 195, 255, 0.9);
-            color: #000;
-            border: none;
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            z-index: 999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            animation: latirSello 2s infinite;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Imagen de fondo con respaldo de rutas múltiples para evitar errores -->
+    <!-- Imagen de fondo directa con respaldo de rutas -->
     <img src="central/flores/img/cartas.jpg" onerror="this.onerror=null; this.src='flores/img/cartas.jpg';" class="bg-img" alt="Fondo">
     <div class="bg-overlay"></div>
 
-    <!-- Audio de fondo -->
+    <!-- Audio de fondo con la ruta exacta que me diste -->
     <audio id="musicaFondo" src="central/flores/sound/music1.mp3" preload="auto" loop></audio>
-
-    <!-- Botón interactivo para garantizar reproducción sin retrasos y saltar los 3s de silencio -->
-    <button id="btnAudioFlotante" onclick="activarMusicaMagica()">🎵 Toca para activar música</button>
 
     <!-- Partículas de luz brillantes -->
     <div class="particulas" id="contenedorParticulas"></div>
@@ -321,7 +297,7 @@
 
             <!-- BLOQUE 1: Sobre inicial con frase -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container">
+                <label for="paso2" class="sobre-container" onclick="reproducirAudioAlTocar()">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -350,14 +326,26 @@
         const audio = document.getElementById('musicaFondo');
         audio.volume = 0.5;
 
-        function activarMusicaMagica() {
-            // Salta exactamente 3 segundos para eliminar el silencio inicial del archivo de audio original
+        // Función que salta los 3 segundos de silencio del archivo original y reproduce al instante con el primer toque
+        let audioActivado = false;
+        function reproducirAudioAlTocar() {
+            if (!audioActivado) {
+                audio.currentTime = 3.0; // Salta los 3s de silencio por dentro
+                audio.play().then(() => {
+                    audioActivado = true;
+                }).catch(e => console.log(e));
+            }
+        }
+
+        // Intento de reproducción automática al cargar la página
+        window.addEventListener('load', () => {
             audio.currentTime = 3.0;
             audio.play().then(() => {
-                const btn = document.getElementById('btnAudioFlotante');
-                if(btn) btn.style.display = 'none'; // Oculta el botón una vez activada la música
-            }).catch(e => console.log(e));
-        }
+                audioActivado = true;
+            }).catch(() => {
+                // Si el navegador bloquea la reproducción automática, se activará en automático al primer toque del sobre
+            });
+        });
 
         // Generador dinámico de partículas de luz con colores vibrantes
         const contenedor = document.getElementById('contenedorParticulas');

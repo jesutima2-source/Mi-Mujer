@@ -30,7 +30,7 @@
             color: #fff;
         }
 
-        /* Imagen de fondo asegurada con la ruta exacta de tu estructura */
+        /* Imagen de fondo de la Galaxia con respaldo de rutas */
         .bg-img {
             position: fixed;
             top: 0;
@@ -39,22 +39,22 @@
             height: 100%;
             object-fit: cover;
             z-index: -2;
-            animation: zoomFondo 20s infinite alternate linear;
+            animation: zoomFondo 22s infinite alternate linear;
         }
 
         @keyframes zoomFondo {
             0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
+            100% { transform: scale(1.1); }
         }
 
-        /* Capa translúcida suave para que la imagen se luzca */
+        /* Capa translúcida elegante para resaltar el contenido sobre la galaxia */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(11, 15, 25, 0.4), rgba(26, 11, 46, 0.5));
+            background: radial-gradient(circle, rgba(11, 15, 25, 0.45) 0%, rgba(5, 7, 15, 0.75) 100%);
             z-index: -1;
         }
 
@@ -76,7 +76,7 @@
             border-radius: 50%;
             opacity: 0.6;
             animation: flotarParticula linear infinite;
-            box-shadow: 0 0 10px #ffe600, 0 0 20px #ff9900;
+            box-shadow: 0 0 10px #ffe600, 0 0 20px #00c3ff;
         }
 
         @keyframes flotarParticula {
@@ -98,8 +98,8 @@
         }
 
         @keyframes glowCard {
-            0%, 100% { border-color: rgba(255, 230, 0, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px rgba(255, 230, 0, 0.2); }
-            50% { border-color: rgba(0, 195, 255, 0.8); box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(0, 195, 255, 0.4); }
+            0%, 100% { border-color: rgba(255, 230, 0, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 230, 0, 0.2); }
+            50% { border-color: rgba(0, 195, 255, 0.8); box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 30px rgba(0, 195, 255, 0.4); }
         }
 
         input[type="radio"] {
@@ -144,7 +144,7 @@
         /* Paso 1: Sobre / Botón inicial súper animado */
         .sobre-container {
             width: 100%;
-            background: rgba(18, 20, 32, 0.85);
+            background: rgba(18, 20, 32, 0.82);
             border: 2px solid rgba(255, 230, 0, 0.5);
             border-radius: 18px;
             padding: 24px 18px;
@@ -217,7 +217,7 @@
         /* Paso 3: Tarjeta de mensaje final deslumbrante */
         .mensajeFinal {
             width: 100%;
-            background: rgba(18, 20, 32, 0.92);
+            background: rgba(18, 20, 32, 0.9);
             border: 2px solid rgba(0, 195, 255, 0.6);
             border-radius: 18px;
             padding: 22px 18px;
@@ -276,12 +276,12 @@
 </head>
 <body>
 
-    <!-- Imagen de fondo directa con respaldo de rutas -->
-    <img src="central/flores/img/cartas.jpg" onerror="this.onerror=null; this.src='flores/img/cartas.jpg';" class="bg-img" alt="Fondo">
+    <!-- Imagen de fondo Galaxia con respaldo de rutas -->
+    <img src="central/flores/img/galaxia.jpeg" onerror="this.onerror=null; this.src='flores/img/galaxia.jpeg';" class="bg-img" alt="Fondo Galaxia">
     <div class="bg-overlay"></div>
 
-    <!-- Audio de fondo con la ruta exacta que me diste -->
-    <audio id="musicaFondo" src="central/flores/sound/music1.mp3" preload="auto" loop></audio>
+    <!-- Audio "simplemente.mp3" reproduciéndose desde el inicio -->
+    <audio id="musicaFondo" src="central/flores/sound/simplemente.mp3" preload="auto" loop></audio>
 
     <!-- Partículas de luz brillantes -->
     <div class="particulas" id="contenedorParticulas"></div>
@@ -297,7 +297,7 @@
 
             <!-- BLOQUE 1: Sobre inicial con frase -->
             <div class="paso-1-block" style="width: 100%;">
-                <label for="paso2" class="sobre-container" onclick="reproducirAudioAlTocar()">
+                <label for="paso2" class="sobre-container" onclick="activarMusica()">
                     <div class="sobre-sello">💌</div>
                     <div class="mensaje-previo">Siete años caminando de la mano...</div>
                     <div class="sub-mensaje">y para mí, cada día sigue siendo el reflejo de la alegría que traes a mi vida.</div>
@@ -326,30 +326,28 @@
         const audio = document.getElementById('musicaFondo');
         audio.volume = 0.5;
 
-        // Función que salta los 3 segundos de silencio del archivo original y reproduce al instante con el primer toque
+        // Función de respaldo por si el navegador bloquea la reproducción automática al cargar
         let audioActivado = false;
-        function reproducirAudioAlTocar() {
+        function activarMusica() {
             if (!audioActivado) {
-                audio.currentTime = 3.0; // Salta los 3s de silencio por dentro
                 audio.play().then(() => {
                     audioActivado = true;
                 }).catch(e => console.log(e));
             }
         }
 
-        // Intento de reproducción automática al cargar la página
+        // Intento de reproducción automática al entrar a la página (desde el segundo 0)
         window.addEventListener('load', () => {
-            audio.currentTime = 3.0;
             audio.play().then(() => {
                 audioActivado = true;
             }).catch(() => {
-                // Si el navegador bloquea la reproducción automática, se activará en automático al primer toque del sobre
+                // Si el navegador bloquea el autoplay puro, se activará en automático al primer toque del sobre
             });
         });
 
         // Generador dinámico de partículas de luz con colores vibrantes
         const contenedor = document.getElementById('contenedorParticulas');
-        const cantidad = 22;
+        const cantidad = 24;
         for (let i = 0; i < cantidad; i++) {
             const p = document.createElement('div');
             p.classList.add('particula');
@@ -361,7 +359,7 @@
             p.style.animationDelay = `${Math.random() * 3}s`;
             if (Math.random() > 0.4) {
                 p.style.background = '#00c3ff';
-                p.style.boxShadow = '0 0 10px #00c3ff, 0 0 20px #0077ff';
+                p.style.boxShadow = '0 0 10px #00c3ff, 0 0 20px #ff00aa';
             }
             contenedor.appendChild(p);
         }

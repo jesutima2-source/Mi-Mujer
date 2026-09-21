@@ -222,12 +222,27 @@
     <div id="jesus" class="section-content">
         <h2 class="section-title">Momentos de Jesús (21)</h2>
         <div class="gallery-grid">
-            <!-- Carpeta fotosj1 y fotosj2_r (ajusta los nombres exactos de tus archivos) -->
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj1/1.jpg" alt="Jesús 1">
-                <span>Jesús #1</span>
-            </div>
-            <!-- Puedes duplicar esta estructura para tus 21 fotos combinadas -->
+            <!-- Fotos de fotosj1 (j1 a j15) -->
+            <script>
+                // Generar automáticamente las 15 fotos de fotosj1
+                for (let i = 1; i <= 15; i++) {
+                    document.write(`
+                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                            <img src="fotos_videos/fotosj1/j${i}.jpg" alt="Jesús ${i}">
+                            <span>Jesús #${i}</span>
+                        </div>
+                    `);
+                }
+                // Generar automáticamente las 6 fotos restantes de fotosj2_r (j16 a j21)
+                for (let i = 16; i <= 21; i++) {
+                    document.write(`
+                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                            <img src="fotos_videos/fotosj2_r/j${i}.jpg" alt="Jesús ${i}">
+                            <span>Jesús #${i}</span>
+                        </div>
+                    `);
+                }
+            </script>
         </div>
         
         <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Jesús</h3>
@@ -243,12 +258,26 @@
     <div id="betzi" class="section-content">
         <h2 class="section-title">Momentos de Betzi (23)</h2>
         <div class="gallery-grid">
-            <!-- Carpeta b1 y b2 -->
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="b1/b1.jpg" alt="Betzi 1">
-                <span>Betzi #1</span>
-            </div>
-            <!-- Duplica para las 23 fotos de b1 y b2 -->
+            <!-- Fotos de b1 (b1 a b15) -->
+            <script>
+                for (let i = 1; i <= 15; i++) {
+                    document.write(`
+                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                            <img src="fotos_videos/b1/b${i}.jpg" alt="Betzi ${i}">
+                            <span>Betzi #${i}</span>
+                        </div>
+                    `);
+                }
+                // Fotos de b2 (b16 a b23)
+                for (let i = 16; i <= 23; i++) {
+                    document.write(`
+                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                            <img src="fotos_videos/b2/b${i}.jpg" alt="Betzi ${i}">
+                            <span>Betzi #${i}</span>
+                        </div>
+                    `);
+                }
+            </script>
         </div>
         
         <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Betzi</h3>
@@ -264,38 +293,16 @@
     <div id="juntos" class="section-content active">
         <h2 class="section-title">Nuestra Historia - Juntos (8)</h2>
         <div class="gallery-grid">
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr1.jpg" alt="Juntos 1">
-                <span>Juntos #1</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr2.jpg" alt="Juntos 2">
-                <span>Juntos #2</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr3.jpg" alt="Juntos 3">
-                <span>Juntos #3</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr4.jpg" alt="Juntos 4">
-                <span>Juntos #4</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr5.jpg" alt="Juntos 5">
-                <span>Juntos #5</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr6.jpg" alt="Juntos 6">
-                <span>Juntos #6</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr7.jpg" alt="Juntos 7">
-                <span>Juntos #7</span>
-            </div>
-            <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                <img src="fotosj2_r/jr8.jpg" alt="Juntos 8">
-                <span>Juntos #8</span>
-            </div>
+            <script>
+                for (let i = 1; i <= 8; i++) {
+                    document.write(`
+                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                            <img src="fotos_videos/fotosj2_r/jr${i}.jpg" alt="Juntos ${i}">
+                            <span>Juntos #${i}</span>
+                        </div>
+                    `);
+                }
+            </script>
         </div>
         
         <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos en Pareja (Drive)</h3>

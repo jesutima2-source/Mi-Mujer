@@ -47,7 +47,6 @@
             font-size: 1rem;
         }
 
-        /* Botones Principales */
         .nav-buttons {
             display: flex;
             gap: 15px;
@@ -76,7 +75,6 @@
             box-shadow: 0 10px 20px rgba(244, 63, 94, 0.2);
         }
 
-        /* Secciones de Contenido */
         .section-content {
             display: none;
             width: 100%;
@@ -101,7 +99,6 @@
             font-size: 1.5rem;
         }
 
-        /* Grid de Fotos */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -137,7 +134,6 @@
             color: #94a3b8;
         }
 
-        /* Contenedor de Videos */
         .videos-container {
             display: flex;
             flex-direction: column;
@@ -171,7 +167,6 @@
             background: #e11d48;
         }
 
-        /* Ventana Modal para ver la foto en grande */
         #modal-lightbox {
             display: none;
             position: fixed;
@@ -211,7 +206,6 @@
         <p>Cada número, un momento inolvidable 🤍</p>
     </header>
 
-    <!-- Botones de Navegación -->
     <div class="nav-buttons">
         <button class="btn-profile" onclick="switchTab('jesus', this)">Jesús (21)</button>
         <button class="btn-profile" onclick="switchTab('betzi', this)">Betzi (23)</button>
@@ -221,28 +215,7 @@
     <!-- SECCIÓN 1: JESÚS (21) -->
     <div id="jesus" class="section-content">
         <h2 class="section-title">Momentos de Jesús (21)</h2>
-        <div class="gallery-grid">
-            <!-- Fotos 1 a 15 de fotosj1 -->
-            <script>
-                for (let i = 1; i <= 15; i++) {
-                    document.write(`
-                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                            <img src="fotos_videos/fotosj1/j${i}.jpg" alt="Jesús ${i}">
-                            <span>Jesús #${i}</span>
-                        </div>
-                    `);
-                }
-                // Fotos 16 a 21 de fotosj2_r (Rutas corregidas)
-                for (let i = 16; i <= 21; i++) {
-                    document.write(`
-                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                            <img src="fotos_videos/fotosj2_r/j${i}.jpg" alt="Jesús ${i}">
-                            <span>Jesús #${i}</span>
-                        </div>
-                    `);
-                }
-            </script>
-        </div>
+        <div class="gallery-grid" id="grid-jesus"></div>
         
         <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Jesús</h3>
         <div class="videos-container">
@@ -256,28 +229,7 @@
     <!-- SECCIÓN 2: BETZI (23) -->
     <div id="betzi" class="section-content">
         <h2 class="section-title">Momentos de Betzi (23)</h2>
-        <div class="gallery-grid">
-            <!-- Fotos de b1 (1 a 15) -->
-            <script>
-                for (let i = 1; i <= 15; i++) {
-                    document.write(`
-                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                            <img src="fotos_videos/b1/b${i}.jpg" alt="Betzi ${i}">
-                            <span>Betzi #${i}</span>
-                        </div>
-                    `);
-                }
-                // Fotos de b2 (16 a 23)
-                for (let i = 16; i <= 23; i++) {
-                    document.write(`
-                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                            <img src="fotos_videos/b2/b${i}.jpg" alt="Betzi ${i}">
-                            <span>Betzi #${i}</span>
-                        </div>
-                    `);
-                }
-            </script>
-        </div>
+        <div class="gallery-grid" id="grid-betzi"></div>
         
         <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos Especiales de Betzi</h3>
         <div class="videos-container">
@@ -291,18 +243,7 @@
     <!-- SECCIÓN 3: JUNTOS (8) -->
     <div id="juntos" class="section-content active">
         <h2 class="section-title">Nuestra Historia - Juntos (8)</h2>
-        <div class="gallery-grid">
-            <script>
-                for (let i = 1; i <= 8; i++) {
-                    document.write(`
-                        <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
-                            <img src="fotos_videos/fotosj2_r/jr${i}.jpg" alt="Juntos ${i}">
-                            <span>Juntos #${i}</span>
-                        </div>
-                    `);
-                }
-            </script>
-        </div>
+        <div class="gallery-grid" id="grid-juntos"></div>
         
         <h3 style="margin: 20px 0 10px; color: #fb7185;">Videos en Pareja (Drive)</h3>
         <div class="videos-container">
@@ -328,6 +269,50 @@
     </div>
 
     <script>
+        // Cargar fotos de Jesús (1-15 en fotosj1, 16-21 en fotosj2_r)
+        const gridJesus = document.getElementById('grid-jesus');
+        for (let i = 1; i <= 15; i++) {
+            gridJesus.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="fotosj1/j${i}.jpg" alt="Jesús ${i}">
+                    <span>Jesús #${i}</span>
+                </div>`;
+        }
+        for (let i = 16; i <= 21; i++) {
+            gridJesus.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="fotosj2_r/j${i}.jpg" alt="Jesús ${i}">
+                    <span>Jesús #${i}</span>
+                </div>`;
+        }
+
+        // Cargar fotos de Betzi (1-15 en b1, 16-23 en b2)
+        const gridBetzi = document.getElementById('grid-betzi');
+        for (let i = 1; i <= 15; i++) {
+            gridBetzi.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="b1/b${i}.jpg" alt="Betzi ${i}">
+                    <span>Betzi #${i}</span>
+                </div>`;
+        }
+        for (let i = 16; i <= 23; i++) {
+            gridBetzi.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="b2/b${i}.jpg" alt="Betzi ${i}">
+                    <span>Betzi #${i}</span>
+                </div>`;
+        }
+
+        // Cargar fotos de Juntos (1-8 en fotosj2_r)
+        const gridJuntos = document.getElementById('grid-juntos');
+        for (let i = 1; i <= 8; i++) {
+            gridJuntos.innerHTML += `
+                <div class="photo-card" onclick="openModal(this.querySelector('img').src)">
+                    <img src="fotosj2_r/jr${i}.jpg" alt="Juntos ${i}">
+                    <span>Juntos #${i}</span>
+                </div>`;
+        }
+
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.section-content').forEach(section => {
                 section.classList.remove('active');
